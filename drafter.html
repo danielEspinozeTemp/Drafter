@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PureMD Group LLC - Agreement Generator</title>
+    <!-- html2pdf.js CDN for client-side PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #000000; 
+            --secondary-color: #222222;
+            --light-bg: #f4f6f8;
+            --accent-blue: #1e3a8a;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #cbd5e1;
+            color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 430px 1fr;
+            gap: 20px;
+        }
+
+        /* Input Form panel styling */
+        .form-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            height: fit-content;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #111;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .service-toggle-block {
+            background: var(--light-bg); 
+            padding: 12px; 
+            border-radius: 4px; 
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 6px;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #172554;
+        }
+
+        /* Preview Panel Wrapper */
+        .preview-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* EXACT TARGET CONTENT HOOK FOR PDF ENGINE */
+        #contract-pdf {
+            background: white;
+            padding: 20px 40px; /* Reduced vertical padding to fix top clipping gap */
+            box-sizing: border-box;
+            color: #000000;
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+
+        /* Crisp Page Break Handling to avoid cutting half lines */
+        .pdf-page-section {
+            page-break-inside: avoid;
+            margin-bottom: 15px;
+        }
+
+        /* Document Header Layout Structuring */
+        .contract-header {
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            margin-top: 0; /* Forced to absolute top */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .company-title {
+            font-size: 22pt;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .header-address {
+            text-align: right;
+            font-size: 9pt;
+            line-height: 1.3;
+        }
+
+        .document-main-title {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 13pt;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-heading {
+            font-size: 10.5pt;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 1px;
+        }
+
+        /* Custom Agreement Matrix Styling */
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 9.5pt;
+        }
+
+        .fee-table th, .fee-table td {
+            border: 1px solid #000;
+            padding: 6px 10px;
+            text-align: left;
+        }
+
+        .fee-table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Fixed Signature Frame Layout */
+        .signature-section {
+            margin-top: 35px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            page-break-inside: avoid;
+        }
+
+        .sig-container {
+            margin-top: 10px;
+        }
+
+        .sig-line-block {
+            margin-top: 15px;
+            font-size: 9.5pt;
+            line-height: 1.8;
+        }
+
+        /* Fallback dynamic script font structure for Elijah's execution block */
+        .presigned-script-text {
+            font-family: 'Brush Script MT', 'Comic Sans MS', cursive, sans-serif;
+            font-size: 24pt;
+            color: #000000;
+            display: inline-block;
+            margin-top: -5px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- INPUT FORM CONTROL BOARD -->
+    <div class="form-panel">
+        <h2>Agreement Matrix Settings</h2>
+        <form id="agreementForm">
+            <div class="form-group">
+                <label>Agreement Date</label>
+                <input type="date" id="paramDate" value="2026-06-16" required>
+            </div>
+            <div class="form-group">
+                <label>Client Practice Name</label>
+                <input type="text" id="paramPractice" placeholder="e.g., Collazo Chiropractic" value="Collazo Chiropractic" required>
+            </div>
+            <div class="form-group">
+                <label>Practice Principal Office Address</label>
+                <input type="text" id="paramAddress" placeholder="e.g., 400 N Ford Blvd Los Angeles, CA 90022" value="400 N Ford Blvd Los Angeles, CA 90022" required>
+            </div>
+            <div class="form-group">
+                <label>Authorized Doctor / Owner Name</label>
+                <input type="text" id="paramDoctor" placeholder="e.g., Dr. Jean Collazo" value="Dr. Jean Collazo" required>
+            </div>
+            
+            <!-- FLEXIBLE CONFIGURATION OPTIONS -->
+            <div class="service-toggle-block">
+                <label class="checkbox-label" style="color: var(--accent-blue);">
+                    <input type="checkbox" id="includeCollections" checked> Enable Collections Row
+                </label>
+                <div style="margin-left: 20px; margin-bottom: 10px;">
+                    <label style="font-weight:normal; font-size:0.8rem;">Description Title:</label>
+                    <input type="text" id="descCollections" value="Workers’ Compensation Claims Collection">
+                    <label style="font-weight:normal; font-size:0.8rem; margin-top:4px;">Percentage Rate (%):</label>
+                    <input type="number" id="rateCollections" value="10" step="0.1">
+                </div>
+
+                <label class="checkbox-label" style="color: var(--accent-blue);">
+                    <input type="checkbox" id="includeBilling" checked> Enable Billing Row
+                </label>
+                <div style="margin-left: 20px;">
+                    <label style="font-weight:normal; font-size:0.8rem;">Description Title:</label>
+                    <input type="text" id="descBilling" value="Workers’ Compensation Claims Billing">
+                    <label style="font-weight:normal; font-size:0.8rem; margin-top:4px;">Percentage Rate (%):</label>
+                    <input type="number" id="rateBilling" value="5" step="0.1">
+                </div>
+            </div>
+
+            <button type="button" onclick="generatePDF()">Download Pristine PDF</button>
+        </form>
+    </div>
+
+    <!-- DOCUMENT PREVIEW WRAPPER -->
+    <div class="preview-panel">
+        <h2>Pristine Live View</h2>
+        <div style="border: 1px solid #bbb; max-height: 800px; overflow-y: auto; background: #666; padding: 10px;">
+            
+            <div id="contract-pdf">
+                
+                <!-- Page Section Wrapper 1 -->
+                <div class="pdf-page-section">
+                    <!-- Header Structural Fixes -->
+                    <div class="contract-header">
+                        <div class="company-title">PUREMD GROUP LLC</div>
+                        <div class="header-address">
+                            <strong>PureMD Group LLC</strong><br>
+                            100 N Brand Blvd S-522<br>
+                            Glendale, CA 91203
+                        </div>
+                    </div>
+
+                    <div class="document-main-title">Agreement for Collection & Billing Services</div>
+
+                    <p>This Agreement for collection services is made today, dated: <strong><span id="viewDate">06/16/2026</span></strong> between <strong>“PureMD Group LLC”</strong> having its principal office at “100 N Brand Blvd S-522 Glendale, CA 91203” and <strong>“<span id="viewPractice">Collazo Chiropractic</span>”</strong> having its principal office at “<span id="viewAddress">400 N Ford Blvd Los Angeles, CA 90022</span>” the <strong>“Client”</strong>[cite: 1].</p>
+
+                    <p><strong>WHEREAS</strong>, PUREMD GROUP, LLC is a medical billing & collections services company that provides computerized claims, billing, coding, credentialing, collections and administrative services to healthcare providers; and[cite: 1]</p>
+                    <p><strong>WHEREAS</strong>, Client wishes to retain PUREMD GROUP, LLC to provide Account payable and receivable services for (“Outstanding”) pursuant to the terms and conditions of this Agreement[cite: 1].</p>
+                    <p><strong>NOW, THEREFORE</strong>, in consideration of the foregoing promises and mutual covenants set forth herein, the parties agree as follows;[cite: 1]</p>
+
+                    <div class="section-heading">Services</div>
+                    <p><strong>Collections:</strong> The client hereby expressly authorizes PUREMD GROUP to prepare, collect and negotiate Liens/outstanding balance on behalf of “Provider”[cite: 1]. PUREMD GROUP will apply its best efforts to obtain reimbursement for Client charges for all clinical procedures and medical services provided to patients[cite: 1]. All such Workers Compensation claims shall be collected by PUREMD GROUP in the Client’s name and utilize provider numbers assigned to the Client for checks collections[cite: 1]. Payment of all claims collected on behalf of Client shall be directed to such accounts to which Client has control[cite: 1]. PUREMD GROUP shall post payments received from the law firms/Insurance to the patient's file[cite: 1]. PUREMD GROUP will apply its best efforts to collect and negotiate account receivable on maximum level to get you the reimbursement[cite: 1]. We have experts to work with insurances, TPA’s and Attorneys and get you maximum collections[cite: 1]. Our experts keep engaged with the insurance and provide all necessary documents to them, so we won’t lose money at the end of the day[cite: 1]. We will apply all possible ways to collect your account receivable and get you maximum revenue[cite: 1]. We do Aggressive follow ups with concerned parties as per the requirement[cite: 1].</p>
+                </div>
+
+                <!-- Page Section Wrapper 2 -->
+                <div class="pdf-page-section">
+                    <div class="section-heading">Client Responsibilities</div>
+                    <p><strong>Reasonable Assistance:</strong> The client agrees to provide PUREMD GROUP, LLC with all necessary records, information, and assistance to enable PUREMD GROUP, LLC to provide such Services[cite: 1]. The client shall be responsible for ensuring the accuracy and completeness of medical reports associated with claims and for ensuring the medical necessity and appropriateness of the Services for which a bill will be submitted to the insurance companies[cite: 1]. The client also agrees to promptly provide PUREMD GROUP, LLC all copies of payments received directly from insurances or law firms[cite: 1].</p>
+                    <p><strong>Client Acknowledgement:</strong> The client acknowledges and agrees that the ultimate responsibility for all documentation submitted to the law office[cite: 1]. The client shall be responsible for maintaining all original source documents to enable it to verify and document the claims submitted to third-party payors[cite: 1]. PUREMD GROUP, LLC shall have no liability or responsibility whatsoever regarding the accuracy or completeness of the coding or determinations regarding medical necessity[cite: 1].</p>
+
+                    <div class="section-heading">Fees</div>
+                    <p><strong>Setup Cost:</strong> There is no charge for the initial set up of the Collection services[cite: 1].</p>
+                    <p><strong>Net Collections:</strong> The client shall pay PUREMD GROUP, LLC for medical collections services based on its total dollar amount of monthly net collections[cite: 1]. The client agrees to pay PUREMD GROUP, LLC below rates[cite: 1].</p>
+                    
+                    <table class="fee-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">SERVICES</th>
+                                <th style="width: 55%;">DESCRIPTION</th>
+                                <th style="width: 20%;">FEE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="viewRowCollections">
+                                <td><strong>A/R Collection</strong></td>
+                                <td><span id="viewDescCollections">Workers’ Compensation Claims Collection</span></td>
+                                <td><strong><span id="viewRateCollections">10</span>%</strong></td>
+                            </tr>
+                            <tr id="viewRowBilling">
+                                <td><strong>Billing</strong></td>
+                                <td><span id="viewDescBilling">Workers’ Compensation Claims Billing</span></td>
+                                <td><strong><span id="viewRateBilling">5</span>%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Terms of Payment:</strong> PUREMD GROUP, LLC shall invoice Client at the beginning of each month for the prior month’s Services by electronic or US mail[cite: 1]. The invoice will summarize the cost based on the mutual understanding between both parties[cite: 1]. Payments are due within fifteen (15) days of receipt of the invoice[cite: 1]. The client agrees to pay PUREMD GROUP, LLC via bank ACH auto-pay or online wire[cite: 1].</p>
+                </div>
+
+                <!-- Page Section Wrapper 3 -->
+                <div class="pdf-page-section">
+                    <div class="section-heading">Confidentiality and HIPAA</div>
+                    <p><strong>Business Associate Agreement:</strong> PUREMD GROUP, LLC and Client will abide by the covenants and provisions of the “Business Associates Agreement”, which is incorporated herein by reference[cite: 1].</p>
+
+                    <div class="section-heading">Term and Termination</div>
+                    <p><strong>Term:</strong> The term of this Agreement shall be for three (3) months commencing on the Effective Date[cite: 1]. Unless sooner terminated per the terms herein, the term shall renew automatically for a successive three (3) months period following the expiration of the initial term unless and until either party elects to terminate the agreement[cite: 1].</p>
+                    <p><strong>Termination:</strong> This Agreement shall remain in effect until terminated by either party[cite: 1]. This Agreement may be terminated if there is a breach in contract or for simple convenience[cite: 1]. The terminating party is responsible to provide Thirty (30) days written notice to the other party along with any explanation for the termination[cite: 1].</p>
+                    <p><strong>Rights on Termination:</strong> Upon termination, the Client shall be permitted to terminate PUREMD GROUP, LLC’s access to its systems[cite: 1]. The client shall be required to pay all fees accrued as of the date of termination plus any claims or charges that are pending or in-transit[cite: 1].</p>
+                </div>
+
+                <!-- Page Section Wrapper 4 -->
+                <div class="pdf-page-section">
+                    <div class="section-heading">Limitations of Warranty and Liability</div>
+                    <p><strong>Limited Warranty:</strong> Other than the foregoing limited warranty, all Services are provided "as is", without any warranty whatsoever, whether express or implied, including but not limited to the warranties of merchantability and fitness for a particular purpose[cite: 1].</p>
+                    <p><strong>Limitation of Liability:</strong> The client hereby agrees to indemnify and hold PUREMD GROUP, LLC and its owners, directors, employees, and contractors harmless from and against all liability, claims, causes of action, damages, fines, assessments, penalties, costs (including reasonable attorney fees) and responsibility of any kind arising from the performance or non-performance of this agreement or any acts or omissions associated[cite: 1]. Client shall hold PUREMD GROUP, LLC and its owners, directors, employees, and contractors harmless from and against any claims submitted on behalf of and in the name of the Client for which client has provided PUREMD GROUP, LLC false, fraudulent, incomplete, misleading, or otherwise incorrect information or data, including but not limited to, the coding of claims according to contract provisions[cite: 1].</p>
+                    <p>To the maximum extent permitted by applicable law, in no event shall either party be liable for special, indirect, incidental, punitive, or consequential damages, whether arising under contract, warranty, or tort (including negligence or strict liability) or any other theory of liability[cite: 1].</p>
+                    <p>The submission of false, fraudulent, or misleading data, information, or statements to the government and/or commercial third-party payors in connection with health insurance coding, billing, collections and claims submission is a crime and can subject the violator to imprisonment and fines[cite: 1].</p>
+                    <p>Client expressly acknowledges and agrees that in no case shall PUREMD GROUP, LLCs liability for damages, regardless of the form of the action, exceed the amount of fees paid by a client hereunder during the most recent three (3) months period immediately preceding the event giving rise to the claim[cite: 1]. Notwithstanding anything to the contrary contained in this Agreement, neither party shall be liable to the other for any third-party claims even if a party has been apprised of the likelihood of such damages[cite: 1].</p>
+                    <p>The parties will not incur liability to each other for failing to perform any obligation under this Agreement if such failure results from a force majeure event or any force beyond their reasonable control[cite: 1].</p>
+                </div>
+
+                <!-- Page Section Wrapper 5 -->
+                <div class="pdf-page-section">
+                    <div class="section-heading">General</div>
+                    <p><strong>Choice of Law and Jurisdiction:</strong> This agreement is governed by the laws of California, without regard to its conflict of law provisions[cite: 1].</p>
+                    <p><strong>Entire Agreement:</strong> This Agreement constitutes the entire agreement and understanding between the parties concerning the subject matter of this Agreement and supersedes all prior agreements or understandings[cite: 1].</p>
+                    <p><strong>Notices:</strong> All communications or notices permitted or required to be given or served under this Agreement shall be in writing via email or postal mailed to the addresses set forth on the first page of this Agreement[cite: 1].</p>
+                    <p><strong>Counterparts:</strong> This Agreement may be executed in one or more counterparts, each of which shall constitute all of which shall constitute the same document[cite: 1]. Facsimile signatures on any such counterpart shall be binding as originals[cite: 1].</p>
+                    <p><strong>Important:</strong> If the client does not settle outstanding dues within three months, PureMD Group, LLC will begin applying penalties and interest to the invoice[cite: 1].</p>
+                    
+                    <p style="margin-top:20px;"><em>IN WITNESS WHEREOF, the parties hereto have caused this Agreement to be executed by their respective duly authorized representative as of the Effective Date[cite: 1].</em></p>
+
+                    <!-- HIGHLY STABILIZED CRASH-PROOF SIGNATURE BLOCKS -->
+                    <div class="signature-section">
+                        <!-- Client Side -->
+                        <div class="sig-container">
+                            <strong>CLIENT:</strong><br>
+                            <span style="font-size: 9pt; color:#333;"><span id="viewDocTitle">Dr. Jean Collazo</span>. owner of “<span id="viewPracticeSig">Collazo Chiropractic</span>.”</span>[cite: 1]
+                            <div class="sig-line-block">
+                                NAME: ___________________________<br>
+                                DATE: ___________________________<br>
+                                SIGNATURE: _______________________
+                            </div>
+                        </div>
+                        
+                        <!-- Fixed Service Provider Presigned Side -->
+                        <div class="sig-container">
+                            <strong>SERVICE PROVIDER:</strong><br>
+                            <span style="font-size: 9pt; color:#333;">“PUREMD GROUP LLC”</span>[cite: 1]
+                            <div class="sig-line-block">
+                                NAME: ELIJAH PEREZ VP at PUREMD GROUP<br>[cite: 1]
+                                DATE: <span id="viewDateSig">06/16/2026</span><br>[cite: 1]
+                                SIGNATURE: <span class="presigned-script-text">Elijah Perez</span>[cite: 1]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Robust date transformation tool
+    function formatInputDate(dateStr) {
+        if(!dateStr) return "__/__/____";
+        const parts = dateStr.split('-');
+        if(parts.length !== 3) return dateStr;
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;
+    }
+
+    // Interactive Field Realtime Synchronization
+    document.getElementById('paramDate').addEventListener('input', function() {
+        const formatted = formatInputDate(this.value);
+        document.getElementById('viewDate').innerText = formatted;
+        document.getElementById('viewDateSig').innerText = formatted;
+    });
+
+    document.getElementById('paramPractice').addEventListener('input', function() {
+        const val = this.value || '___________';
+        document.getElementById('viewPractice').innerText = val;
+        document.getElementById('viewPracticeSig').innerText = val;
+    });
+
+    document.getElementById('paramAddress').addEventListener('input', function() {
+        document.getElementById('viewAddress').innerText = this.value || '___________';
+    });
+
+    document.getElementById('paramDoctor').addEventListener('input', function() {
+        document.getElementById('viewDocTitle').innerText = this.value || '___________';
+    });
+
+    document.getElementById('descCollections').addEventListener('input', function() {
+        document.getElementById('viewDescCollections').innerText = this.value || 'Custom Collections Suite';
+    });
+
+    document.getElementById('rateCollections').addEventListener('input', function() {
+        document.getElementById('viewRateCollections').innerText = this.value || '0';
+    });
+
+    document.getElementById('descBilling').addEventListener('input', function() {
+        document.getElementById('viewDescBilling').innerText = this.value || 'Custom Billing Suite';
+    });
+
+    document.getElementById('rateBilling').addEventListener('input', function() {
+        document.getElementById('viewRateBilling').innerText = this.value || '0';
+    });
+
+    // Display Table Row Switchboards
+    function forceVisibilityStates() {
+        const showCollections = document.getElementById('includeCollections').checked;
+        const showBilling = document.getElementById('includeBilling').checked;
+
+        document.getElementById('viewRowCollections').style.display = showCollections ? 'table-row' : 'none';
+        document.getElementById('viewRowBilling').style.display = showBilling ? 'table-row' : 'none';
+    }
+
+    document.getElementById('includeCollections').addEventListener('change', forceVisibilityStates);
+    document.getElementById('includeBilling').addEventListener('change', forceVisibilityStates);
+
+    // Initial state setup run on initialization
+    function init() {
+        const dateInput = document.getElementById('paramDate').value;
+        document.getElementById('viewDate').innerText = formatInputDate(dateInput);
+        document.getElementById('viewDateSig').innerText = formatInputDate(dateInput);
+        forceVisibilityStates();
+    }
+    
+    init();
+
+    // High fidelity PDF processing engine configuration settings
+    function generatePDF() {
+        const element = document.getElementById('contract-pdf');
+        const filePractice = document.getElementById('paramPractice').value || 'Agreement';
+        
+        const opt = {
+            margin:       [0.4, 0.5, 0.4, 0.5], // Restructured margins to prevent cropping splits
+            filename:     `PureMD_Agreement_${filePractice.replace(/\s+/g, '_')}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, logging: false }, 
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css'] } // Tells engine to never cut paragraphs across white spaces
+        };
+
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+
+</body>
+</html>
