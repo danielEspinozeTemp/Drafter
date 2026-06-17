@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Add Google Font for the Handwritten Signature Style -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PureMD Group LLC — Agreement Generator</title>
@@ -69,14 +73,16 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
 .scroll{border:1px solid #999;max-height:860px;overflow-y:auto;background:#5a6070;padding:10px;border-radius:4px}
 
 /* ===== CONTRACT DOCUMENT ===== */
-#contract-pdf{
-  background:#fff;
-  padding:28px 44px 32px;
-  font-family:Arial,sans-serif;
-  font-size:9.5pt;
-  line-height:1.45;
-  color:#111;
-  width:100%;
+#contract-pdf {
+  background: #fff;
+  padding: 28px 44px 32px;
+  font-family: Arial, sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.45;
+  color: #111;
+  width: 100%;
+  margin: 0; /* Ensures no outer container shifts the element down */
+  box-sizing: border-box;
 }
 
 /* HEADER */
@@ -117,8 +123,26 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
 .sig-canvas-lbl{font-size:8.5pt;font-weight:700;color:#0F2561;margin-bottom:3px}
 .sig-canvas{display:block;width:100%;height:52px;border-bottom:1px solid #aab}
 
-/* Elijah handwritten SVG signature */
-.elijah-sig svg{width:200px;height:52px;display:block}
+/* Elijah handwritten signature typography */
+.elijah-sig-block {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+.elijah-sig-font {
+  font-family: 'Great Vibes', cursive;
+  font-size: 36pt; /* Scaled script look */
+  color: #0F2561;  /* Matching dark blue ink */
+  line-height: 1;
+  margin-left: 10px;
+  transform: rotate(-3deg); /* Subtle signature slant */
+  margin-bottom: -5px;
+}
+.digital-sig-label {
+  font-size: 7.5pt;
+  color: #777;
+  font-style: italic;
+}
 
 /* WITNESS LINE */
 .witness{font-size:8.5pt;color:#555;font-style:italic;margin:16px 0 14px}
@@ -282,7 +306,7 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
             <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val" id="vSigName">Dr. Jean Collazo</span></div>
             <div class="sig-row"><span class="sig-lbl">Practice:</span><span class="sig-val" id="vSigPractice">Collazo Chiropractic</span></div>
             <div class="sig-row"><span class="sig-lbl">Address:</span><span class="sig-val" id="vSigAddr">400 N Ford Blvd, Los Angeles, CA 90022</span></div>
-            <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val">&nbsp;</span></div>
+            <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val" id="vDateClient">&nbsp;</span></div>
             <div class="sig-canvas-wrap">
               <div class="sig-canvas-lbl">Signature:</div>
               <div class="sig-canvas"></div>
@@ -297,46 +321,21 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
             <div class="sig-row"><span class="sig-lbl">Title:</span><span class="sig-val">Vice President, PureMD Group LLC</span></div>
             <div class="sig-row"><span class="sig-lbl">Address:</span><span class="sig-val">100 N Brand Blvd S-522, Glendale, CA 91203</span></div>
             <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val" id="vDateSig">06/16/2026</span></div>
-            <div class="sig-canvas-wrap">
+<div class="sig-canvas-wrap">
               <div class="sig-canvas-lbl">Signature:</div>
-              <div class="elijah-sig">
-                <svg viewBox="0 0 220 52" xmlns="http://www.w3.org/2000/svg" style="width:220px;height:52px">
-                  <path d="M8,38 C10,30 14,22 19,18 C21,16 23,16 24,19 C25,22 23,28 21,34 C20,37 20,40 22,40 C25,40 28,36 30,31"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M30,31 C32,26 34,20 36,18 C37,17 39,18 39,21 C39,25 37,31 37,35 C37,38 39,40 41,38 C44,35 46,29 47,24"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M44,24 L49,10" stroke="#0a1f6e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                  <path d="M47,24 C50,19 53,15 56,14 C58,13 59,15 59,18 C59,22 57,28 56,33 C55,37 56,40 58,39 C61,38 64,33 66,28"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M60,22 C63,20 66,19 68,20" stroke="#0a1f6e" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                  <path d="M66,28 C67,25 68,22 70,20 C72,18 74,19 74,22 C74,26 72,32 72,36 C72,39 74,41 76,40 C79,38 82,32 83,26"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M80,28 C84,22 88,18 91,17 C93,16 95,18 95,22 C95,26 93,31 92,35 C91,38 92,41 95,40 C98,39 101,34 103,28"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M92,24 C95,22 99,21 102,22" stroke="#0a1f6e" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                  <path d="M103,28 C106,22 110,17 114,15 C116,14 117,16 117,19 C117,23 115,29 114,33 C113,37 113,41 115,41 C118,41 122,36 124,30"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M126,30 C128,24 131,18 134,15 C136,13 138,14 138,18 C138,22 137,28 137,33 C137,37 138,40 140,39 C143,38 145,33 146,28"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M146,28 C148,22 150,18 152,17 C154,16 156,18 156,22 C156,27 154,33 155,37 C156,40 159,40 162,37 C165,33 167,26 168,20"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M160,16 C163,14 167,13 169,14" stroke="#0a1f6e" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                  <path d="M168,20 C170,15 173,11 176,10 C178,9 179,11 179,14 C179,18 178,23 178,28 C178,32 180,35 183,34 C186,33 189,28 191,22 C193,17 193,12 191,10"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M191,22 C193,18 196,15 199,14 C201,13 203,15 203,18 C203,22 201,27 200,32 C200,35 201,38 203,37"
-                    stroke="#0a1f6e" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M6,46 C40,46 100,47 210,46" stroke="#0a1f6e" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.4"/>
-                </svg>
+              <div class="elijah-sig-block">
+                <div class="elijah-sig-font">Elijah Perez</div>
               </div>
             </div>
           </div>
-        </div>
 
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
+        </div> <!-- End of .sig-section -->
+      </div> <!-- End of #contract-pdf -->
+      </div> <!-- End of .scroll -->
+    </div> <!-- End of Preview Panel -->
+
+  </div> <!-- End of .wrap -->
+</div> <!-- End of #appContent -->
 
 <script>
 // Authentication Engine
@@ -349,8 +348,9 @@ function checkLogin() {
   if (usr === "PureMdDr@ft@gr33ment" && psw === "PureMD Group#$") {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appContent').style.display = 'block';
-    // Initialize standard sync logic
-    sync();
+    
+    // Force immediate UI replication on login success
+    sync(); 
   } else {
     errorDiv.style.display = 'block';
   }
@@ -374,6 +374,7 @@ function sync(){
 
   document.getElementById('vDate').textContent=date;
   document.getElementById('vDateSig').textContent=date;
+  document.getElementById('vDateClient').textContent=date; // <-- ADD THIS LINE
   document.getElementById('vPractice').textContent=practice;
   document.getElementById('vPracticeSig').textContent=practice;
   document.getElementById('vAddr').textContent=addr;
@@ -400,15 +401,23 @@ function sync(){
 });
 
 function genPDF(){
-  const el=document.getElementById('contract-pdf');
-  const name=document.getElementById('pPractice').value||'Agreement';
+  const el = document.getElementById('contract-pdf');
+  const name = document.getElementById('pPractice').value || 'Agreement';
+  
   html2pdf().set({
-    margin:[0.42,0.48,0.42,0.48],
-    filename:'PureMD_Agreement_'+name.replace(/\s+/g,'_')+'.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,logging:false,allowTaint:true},
-    jsPDF:{unit:'in',format:'letter',orientation:'portrait'},
-    pagebreak:{mode:['avoid-all','css']}
+    margin: [0.42, 0.48, 0.42, 0.48],
+    filename: 'PureMD_Agreement_' + name.replace(/\s+/g, '_') + '.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 2, 
+      useCORS: true, 
+      logging: false, 
+      allowTaint: true,
+      scrollY: 0, // Fixes potential white space caused by parent scroll positions
+      scrollX: 0
+    },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] } // Prevents forced empty page injection at initialization
   }).from(el).save();
 }
 </script>
