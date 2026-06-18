@@ -1,152 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Add Google Font for the Handwritten Signature Style -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PureMD Group LLC — Agreement Generator</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;font-size:13px}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureMD Group LLC — Agreement Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;font-size:13px}
 
-/* ===== LOGIN SCREEN GRAPHICS ===== */
-.login-screen {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: #c8d4e8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-.login-card {
-  background: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 400px;
-}
-.login-card h2 {
-  font-size: 1.2rem;
-  color: #1B3A8A;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
-.login-card p {
-  color: #666;
-  font-size: 0.85rem;
-  margin-bottom: 20px;
-}
-.error-msg {
-  color: #dc2626;
-  font-weight: bold;
-  font-size: 0.8rem;
-  margin-bottom: 10px;
-  display: none;
-}
+  /* ===== LOGIN SCREEN ===== */
+  .login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#c8d4e8;display:flex;align-items:center;justify-content:center;z-index:9999}
+  .login-card{background:#fff;padding:30px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2);width:100%;max-width:400px}
+  .login-card h2{font-size:1.2rem;color:#1B3A8A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+  .login-card p{color:#666;font-size:.85rem;margin-bottom:20px}
+  .error-msg{color:#dc2626;font-weight:700;font-size:.8rem;margin-bottom:10px;display:none}
 
-/* ===== APP CONTENT (HIDDEN BY DEFAULT) ===== */
-.app-content {
-  display: none;
-}
-.wrap{max-width:1340px;margin:0 auto;display:grid;grid-template-columns:390px 1fr;gap:16px;align-items:start}
+  /* ===== APP CONTENT ===== */
+  .app-content{display:none}
+  .wrap{max-width:1340px;margin:0 auto;display:grid;grid-template-columns:390px 1fr;gap:16px;align-items:start}
 
-/* PANEL */
-.panel{background:#fff;padding:22px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-.panel h2{font-size:1rem;color:#1B3A8A;border-bottom:2px solid #1B3A8A;padding-bottom:6px;margin-bottom:14px;letter-spacing:.3px}
-.fg{margin-bottom:10px}
-.fg label{display:block;font-size:.75rem;font-weight:700;color:#444;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
-.fg input[type=text],.fg input[type=date],.fg input[type=number],.fg input[type=password]{width:100%;padding:7px 9px;border:1px solid #b0b8cc;border-radius:4px;font-size:.82rem;color:#222;background:#fafbff}
-.fg input:focus{outline:none;border-color:#1B3A8A;box-shadow:0 0 0 2px rgba(27,58,138,.12)}
-.tog{background:#EEF2FB;border:1px solid #c5d0eb;border-radius:5px;padding:10px 12px;margin-bottom:10px}
-.ck-row{display:flex;align-items:center;gap:7px;font-weight:700;color:#1B3A8A;cursor:pointer;font-size:.82rem;margin-bottom:6px}
-.sub label{font-weight:600;font-size:.75rem;color:#555;margin-top:5px;display:block;margin-bottom:2px}
-.sub input{width:100%;padding:5px 8px;border:1px solid #b0b8cc;border-radius:3px;font-size:.8rem}
-.btn{display:block;width:100%;background:#1B3A8A;color:#fff;border:none;padding:12px;font-size:.9rem;font-weight:700;border-radius:5px;cursor:pointer;margin-top:12px;letter-spacing:.4px;transition:background .2s}
-.btn:hover{background:#0F2561}
-.scroll{border:1px solid #999;max-height:860px;overflow-y:auto;background:#5a6070;padding:10px;border-radius:4px}
+  /* PANEL */
+  .panel{background:#fff;padding:22px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .panel h2{font-size:1rem;color:#1B3A8A;border-bottom:2px solid #1B3A8A;padding-bottom:6px;margin-bottom:14px;letter-spacing:.3px}
+  .panel h3{font-size:.8rem;color:#1B3A8A;text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;padding-top:10px;border-top:1px solid #dde4f0}
+  .fg{margin-bottom:10px}
+  .fg label{display:block;font-size:.75rem;font-weight:700;color:#444;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+  .fg input[type=text],.fg input[type=date],.fg input[type=number],.fg input[type=password]{width:100%;padding:7px 9px;border:1px solid #b0b8cc;border-radius:4px;font-size:.82rem;color:#222;background:#fafbff}
+  .fg input:focus{outline:none;border-color:#1B3A8A;box-shadow:0 0 0 2px rgba(27,58,138,.12)}
+  
+  /* DYNAMIC SERVICE BUILDER CARDS */
+  .service-block{background:#EEF2FB;border:1px solid #c5d0eb;border-radius:5px;padding:12px;margin-bottom:10px;position:relative}
+  .service-block .remove-btn{position:absolute;top:10px;right:12px;background:none;border:none;color:#dc2626;font-weight:bold;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.3px}
+  .service-block .remove-btn:hover{text-decoration:underline}
+  .add-btn{background:#fff;color:#1B3A8A;border:1px dashed #1B3A8A;padding:8px;font-size:.8rem;font-weight:700;border-radius:4px;cursor:pointer;width:100%;margin-bottom:12px;transition:all .2s}
+  .add-btn:hover{background:#1B3A8A;color:#fff}
 
-/* ===== CONTRACT DOCUMENT ===== */
-#contract-pdf {
-  background: #fff;
-  padding: 28px 44px 32px;
-  font-family: Arial, sans-serif;
-  font-size: 9.5pt;
-  line-height: 1.45;
-  color: #111;
-  width: 100%;
-  margin: 0; /* Ensures no outer container shifts the element down */
-  box-sizing: border-box;
-}
+  .sub label{font-weight:600;font-size:.75rem;color:#555;margin-top:5px;display:block;margin-bottom:2px}
+  .sub input{width:100%;padding:5px 8px;border:1px solid #b0b8cc;border-radius:3px;font-size:.8rem}
+  .btn{display:block;width:100%;background:#1B3A8A;color:#fff;border:none;padding:12px;font-size:.9rem;font-weight:700;border-radius:5px;cursor:pointer;margin-top:12px;letter-spacing:.4px;transition:background .2s}
+  .btn:hover{background:#0F2561}
+  .scroll{border:1px solid #999;max-height:860px;overflow-y:auto;background:#5a6070;padding:10px;border-radius:4px}
 
-/* HEADER */
-.doc-header{display:flex;align-items:center;gap:14px;padding-bottom:8px;margin-bottom:6px;border-bottom:3px solid #1B3A8A}
-.doc-header img{width:62px;height:62px;object-fit:contain;flex-shrink:0}
-.hdr-text{flex:1}
-.hdr-company{font-size:20pt;font-weight:900;color:#1B3A8A;letter-spacing:.5px;line-height:1.1}
-.hdr-sub{font-size:8pt;color:#555;margin-top:2px}
-.hdr-addr{text-align:right;font-size:8pt;color:#444;line-height:1.5}
+  /* ===== PROVIDER SECTION HIGHLIGHT ===== */
+  .provider-section{background:#f0f4ff;border:1px solid #b0c0e8;border-radius:5px;padding:10px 12px;margin-bottom:10px}
 
-/* DOC TITLE */
-.doc-title{text-align:center;font-size:12.5pt;font-weight:800;color:#1B3A8A;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 12px;padding-bottom:8px;border-bottom:1px solid #c8d4ea}
+  /* ===== CONTRACT DOCUMENT ===== */
+  #contract-pdf{background:#fff;padding:28px 44px 32px;font-family:Arial,sans-serif;font-size:9.5pt;line-height:1.45;color:#111;width:100%;margin:0;box-sizing:border-box}
 
-/* SECTIONS */
-.sec-head{font-size:10pt;font-weight:800;color:#fff;background:#1B3A8A;text-transform:uppercase;letter-spacing:.5px;padding:4px 10px;margin:14px 0 7px;border-radius:2px}
+  /* HEADER */
+  .doc-header{display:flex;align-items:center;gap:14px;padding-bottom:8px;margin-bottom:6px;border-bottom:3px solid #1B3A8A}
+  .doc-header img{width:62px;height:62px;object-fit:contain;flex-shrink:0}
+  .hdr-text{flex:1}
+  .hdr-company{font-size:20pt;font-weight:900;color:#1B3A8A;letter-spacing:.5px;line-height:1.1}
+  .hdr-sub{font-size:8pt;color:#555;margin-top:2px}
+  .hdr-addr{text-align:right;font-size:8pt;color:#444;line-height:1.5}
 
-/* BODY TEXT */
-.doc-p{margin-bottom:7px;font-size:9.5pt;line-height:1.45;color:#111}
-.doc-p strong{color:#0F2561}
+  /* DOC TITLE */
+  .doc-title{text-align:center;font-size:12.5pt;font-weight:800;color:#1B3A8A;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 12px;padding-bottom:8px;border-bottom:1px solid #c8d4ea}
 
-/* FEE TABLE */
-.fee-tbl{width:100%;border-collapse:collapse;margin:8px 0 10px;font-size:9pt}
-.fee-tbl th{background:#1B3A8A;color:#fff;padding:6px 10px;text-align:left;font-size:9pt;font-weight:700}
-.fee-tbl td{border:1px solid #c0cce0;padding:6px 10px;font-size:9pt}
-.fee-tbl tr:nth-child(even) td{background:#EEF2FB}
-.fee-tbl .svc-name{font-weight:700;color:#0F2561}
-.fee-tbl .rate{font-weight:800;color:#1B3A8A;font-size:10pt}
+  /* SECTIONS */
+  .sec-head{font-size:10pt;font-weight:800;color:#fff;background:#1B3A8A;text-transform:uppercase;letter-spacing:.5px;padding:4px 10px;margin:14px 0 7px;border-radius:2px}
 
-/* SIGNATURE SECTION */
-.sig-section{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:28px;page-break-inside:avoid}
-.sig-blk{border-top:3px solid #1B3A8A;padding-top:10px}
-.sig-blk-title{font-size:10.5pt;font-weight:800;color:#1B3A8A;margin-bottom:1px;text-transform:uppercase}
-.sig-blk-sub{font-size:8pt;color:#666;margin-bottom:10px}
-.sig-row{display:flex;align-items:baseline;gap:6px;margin-bottom:6px;border-bottom:1px solid #d0d8e8;padding-bottom:3px}
-.sig-lbl{font-size:8.5pt;font-weight:700;color:#0F2561;white-space:nowrap;min-width:70px}
-.sig-val{font-size:9pt;color:#111;flex:1}
-.sig-canvas-wrap{margin-top:10px}
-.sig-canvas-lbl{font-size:8.5pt;font-weight:700;color:#0F2561;margin-bottom:3px}
-.sig-canvas{display:block;width:100%;height:52px;border-bottom:1px solid #aab}
+  /* BODY TEXT */
+  .doc-p{margin-bottom:7px;font-size:9.5pt;line-height:1.45;color:#111}
+  .doc-p strong{color:#0F2561}
 
-/* Elijah handwritten signature typography */
-.elijah-sig-block {
-  display: flex;
-  flex-direction: column;
-  margin-top: 12px;
-}
-.elijah-sig-font {
-  font-family: 'Great Vibes', cursive;
-  font-size: 36pt; /* Scaled script look */
-  color: #0F2561;  /* Matching dark blue ink */
-  line-height: 1;
-  margin-left: 10px;
-  transform: rotate(-3deg); /* Subtle signature slant */
-  margin-bottom: -5px;
-}
-.digital-sig-label {
-  font-size: 7.5pt;
-  color: #777;
-  font-style: italic;
-}
+  /* FEE TABLE */
+  .fee-tbl{width:100%;border-collapse:collapse;margin:8px 0 10px;font-size:9pt}
+  .fee-tbl th{background:#1B3A8A;color:#fff;padding:6px 10px;text-align:left;font-size:9pt;font-weight:700}
+  .fee-tbl td{border:1px solid #c0cce0;padding:6px 10px;font-size:9pt}
+  .fee-tbl tr:nth-child(even) td{background:#EEF2FB}
+  .fee-tbl .svc-name{font-weight:700;color:#0F2561}
+  .fee-tbl .rate{font-weight:800;color:#1B3A8A;font-size:10pt}
 
-/* WITNESS LINE */
-.witness{font-size:8.5pt;color:#555;font-style:italic;margin:16px 0 14px}
-</style>
+  /* SIGNATURE SECTION */
+  .sig-section{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:28px;page-break-inside:avoid}
+  .sig-blk{border-top:3px solid #1B3A8A;padding-top:10px}
+  .sig-blk-title{font-size:10.5pt;font-weight:800;color:#1B3A8A;margin-bottom:1px;text-transform:uppercase}
+  .sig-blk-sub{font-size:8pt;color:#666;margin-bottom:10px}
+  .sig-row{display:flex;align-items:baseline;gap:6px;margin-bottom:6px;border-bottom:1px solid #d0d8e8;padding-bottom:3px}
+  .sig-lbl{font-size:8.5pt;font-weight:700;color:#0F2561;white-space:nowrap;min-width:70px}
+  .sig-val{font-size:9pt;color:#111;flex:1}
+  .sig-canvas-wrap{margin-top:10px}
+  .sig-canvas-lbl{font-size:8.5pt;font-weight:700;color:#0F2561;margin-bottom:3px}
+  .sig-canvas{display:block;width:100%;height:52px;border-bottom:1px solid #aab}
+
+  /* Dynamic handwritten signature */
+  .provider-sig-block{display:flex;flex-direction:column;margin-top:12px}
+  .provider-sig-font{font-family:'Great Vibes',cursive;font-size:36pt;color:#0F2561;line-height:1;margin-left:10px;transform:rotate(-3deg);margin-bottom:-5px}
+  .digital-sig-label{font-size:7.5pt;color:#777;font-style:italic}
+
+  /* WITNESS LINE */
+  .witness{font-size:8.5pt;color:#555;font-style:italic;margin:16px 0 14px}
+  </style>
 </head>
 <body>
 
@@ -155,49 +105,46 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
   <div class="login-card">
     <h2>PureMD Portal</h2>
     <p>Please log in to access the Agreement Generator.</p>
-    
     <div id="loginError" class="error-msg">Invalid username or password.</div>
-    
     <div class="fg">
       <label>Username</label>
       <input type="text" id="usernameInput" placeholder="Enter username">
     </div>
-    <div class="fg" style="margin-bottom: 20px;">
+    <div class="fg" style="margin-bottom:20px">
       <label>Password</label>
       <input type="password" id="passwordInput" placeholder="Enter password">
     </div>
-    
     <button class="btn" onclick="checkLogin()">Sign In</button>
   </div>
 </div>
 
-<!-- WORKSPACE CONTAINER -->
+<!-- WORKSPACE -->
 <div id="appContent" class="app-content">
   <div class="wrap">
 
     <!-- FORM PANEL -->
     <div class="panel">
       <h2>⚙ Agreement Settings</h2>
+
+      <!-- CLIENT FIELDS -->
       <div class="fg"><label>Agreement Date</label><input type="date" id="pDate" value="2026-06-16"></div>
-      <div class="fg"><label>Client Practice Name</label><input type="text" id="pPractice" value="Practice Name"></div>
-      <div class="fg"><label>Client Address</label><input type="text" id="pAddr" value="Client Address"></div>
-      <div class="fg"><label>Authorized Doctor / Owner</label><input type="text" id="pDoctor" value="Provider Name"></div>
+      <div class="fg"><label>Client Practice Name</label><input type="text" id="pPractice" value="Collazo Chiropractic"></div>
+      <div class="fg"><label>Client Address</label><input type="text" id="pAddr" value="400 N Ford Blvd, Los Angeles, CA 90022"></div>
+      <div class="fg"><label>Authorized Doctor / Owner</label><input type="text" id="pDoctor" value="Dr. Jean Collazo"></div>
 
-      <div class="tog">
-        <label class="ck-row"><input type="checkbox" id="chkCol" checked> A/R Collection Row</label>
-        <div class="sub">
-          <label>Description</label><input type="text" id="dCol" value="Workers' Compensation Claims Collection">
-          <label>Rate (%)</label><input type="number" id="rCol" value="10" step="0.1" style="width:80px">
-        </div>
+      <!-- SERVICE PROVIDER FIELDS -->
+      <h3>🏢 Service Provider (Pre-signed By)</h3>
+      <div class="provider-section">
+        <div class="fg"><label>Provider Signatory Name</label><input type="text" id="pProviderName" value="Elijah Perez"></div>
+        <div class="fg"><label>Provider Title / Position</label><input type="text" id="pProviderTitle" value="Vice President, PureMD Group LLC"></div>
       </div>
 
-      <div class="tog">
-        <label class="ck-row"><input type="checkbox" id="chkBil" checked> Billing Row</label>
-        <div class="sub">
-          <label>Description</label><input type="text" id="dBil" value="Workers' Compensation Claims Billing">
-          <label>Rate (%)</label><input type="number" id="rBil" value="5" step="0.1" style="width:80px">
-        </div>
+      <!-- DYNAMIC SERVICES MANAGEMENT -->
+      <h3>🛠 Services Configuration</h3>
+      <div id="servicesFormContainer">
+        <!-- Javascript renders blocks seamlessly right here -->
       </div>
+      <button type="button" class="add-btn" onclick="addServiceRow()">＋ Add Custom Service Row</button>
 
       <button class="btn" onclick="genPDF()">⬇ Download PDF Agreement</button>
     </div>
@@ -215,10 +162,7 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
             <div class="hdr-company">PUREMD GROUP LLC</div>
             <div class="hdr-sub">Medical Billing &amp; Collections Services</div>
           </div>
-          <div class="hdr-addr">
-            100 N Brand Blvd S-522<br>
-            Glendale, CA 91203
-          </div>
+          <div class="hdr-addr">100 N Brand Blvd S-522<br>Glendale, CA 91203</div>
         </div>
 
         <div class="doc-title">Agreement for Collection &amp; Billing Services</div>
@@ -251,22 +195,13 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
         <table class="fee-tbl">
           <thead>
             <tr>
-              <th style="width:20%;border:1px solid #0F2561">SERVICES</th>
-              <th style="width:56%;border:1px solid #0F2561">DESCRIPTION</th>
-              <th style="width:24%;border:1px solid #0F2561">FEE</th>
+              <th style="width:25%;border:1px solid #0F2561">SERVICES</th>
+              <th style="width:55%;border:1px solid #0F2561">DESCRIPTION</th>
+              <th style="width:20%;border:1px solid #0F2561">FEE</th>
             </tr>
           </thead>
-          <tbody>
-            <tr id="rowCol">
-              <td class="svc-name">A/R Collection</td>
-              <td><span id="vDescCol">Workers' Compensation Claims Collection</span></td>
-              <td class="rate"><span id="vRateCol">10</span>%</td>
-            </tr>
-            <tr id="rowBil">
-              <td class="svc-name">Billing</td>
-              <td><span id="vDescBil">Workers' Compensation Claims Billing</span></td>
-              <td class="rate"><span id="vRateBil">5</span>%</td>
-            </tr>
+          <tbody id="feeTableBody">
+            <!-- Dynamic elements load seamlessly inside table here -->
           </tbody>
         </table>
 
@@ -313,111 +248,177 @@ body{font-family:Arial,sans-serif;background:#c8d4e8;padding:16px;color:#222;fon
             </div>
           </div>
 
-          <!-- SERVICE PROVIDER -->
+          <!-- SERVICE PROVIDER (DYNAMIC) -->
           <div class="sig-blk">
             <div class="sig-blk-title">Service Provider</div>
             <div class="sig-blk-sub">PureMD Group LLC — Glendale, CA 91203</div>
-            <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val">Elijah Perez</span></div>
-            <div class="sig-row"><span class="sig-lbl">Title:</span><span class="sig-val">Vice President, PureMD Group LLC</span></div>
+            <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val" id="vProviderName">Elijah Perez</span></div>
+            <div class="sig-row"><span class="sig-lbl">Title:</span><span class="sig-val" id="vProviderTitle">Vice President, PureMD Group LLC</span></div>
             <div class="sig-row"><span class="sig-lbl">Address:</span><span class="sig-val">100 N Brand Blvd S-522, Glendale, CA 91203</span></div>
             <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val" id="vDateSig">06/16/2026</span></div>
-<div class="sig-canvas-wrap">
+            <div class="sig-canvas-wrap">
               <div class="sig-canvas-lbl">Signature:</div>
-              <div class="elijah-sig-block">
-                <div class="elijah-sig-font">Elijah Perez</div>
+              <div class="provider-sig-block">
+                <div class="provider-sig-font" id="vProviderSig">Elijah Perez</div>
               </div>
             </div>
           </div>
 
-        </div> <!-- End of .sig-section -->
-      </div> <!-- End of #contract-pdf -->
-      </div> <!-- End of .scroll -->
-    </div> <!-- End of Preview Panel -->
+        </div><!-- End .sig-section -->
+      </div><!-- End #contract-pdf -->
+      </div><!-- End .scroll -->
+    </div><!-- End Preview Panel -->
 
-  </div> <!-- End of .wrap -->
-</div> <!-- End of #appContent -->
+  </div><!-- End .wrap -->
+</div><!-- End #appContent -->
 
 <script>
-// Authentication Engine
-function checkLogin() {
-  const usr = document.getElementById('usernameInput').value;
-  const psw = document.getElementById('passwordInput').value;
-  const errorDiv = document.getElementById('loginError');
-
-  // Exact credentials check
-  if (usr === "PureMdDr@ft@gr33ment" && psw === "PureMD Group#$") {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appContent').style.display = 'block';
-    
-    // Force immediate UI replication on login success
-    sync(); 
+// ===== AUTH =====
+function checkLogin(){
+  const usr=document.getElementById('usernameInput').value;
+  const psw=document.getElementById('passwordInput').value;
+  const err=document.getElementById('loginError');
+  if(usr==="PureMdDr@ft@gr33ment" && psw==="PureMD Group#$"){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appContent').style.display='block';
+    renderServiceConfiguration();
+    sync();
   } else {
-    errorDiv.style.display = 'block';
+    err.style.display='block';
   }
 }
+document.getElementById('passwordInput').addEventListener('keyup',function(e){if(e.key==='Enter')checkLogin();});
 
-// Support hitting 'Enter' key inside password box to sign in
-document.getElementById('passwordInput').addEventListener('keyup', function(event) {
-  if (event.key === 'Enter') {
-    checkLogin();
+// ===== DYNAMIC SERVICES STATE RECORD =====
+let servicesData = [
+  { id: 'col', name: 'A/R Collection', desc: "Workers' Compensation Claims Collection", fee: "10" },
+  { id: 'bil', name: 'Billing', desc: "Workers' Compensation Claims Billing", fee: "5" }
+];
+
+function renderServiceConfiguration() {
+  const container = document.getElementById('servicesFormContainer');
+  container.innerHTML = '';
+
+  servicesData.forEach((svc, index) => {
+    const div = document.createElement('div');
+    div.className = 'service-block sub';
+    div.innerHTML = `
+      <button type="button" class="remove-btn" onclick="removeServiceRow('${svc.id}')">Remove</button>
+      <div style="font-weight:700; color:#1B3A8A; font-size:0.8rem; margin-bottom:6px;">Service Unit #${index + 1}</div>
+      
+      <label>Service Name</label>
+      <input type="text" value="${svc.name}" oninput="updateServiceField('${svc.id}', 'name', this.value)">
+      
+      <label>Description</label>
+      <input type="text" value="${svc.desc}" oninput="updateServiceField('${svc.id}', 'desc', this.value)">
+      
+      <label>Fee Rate structure / Percentage</label>
+      <input type="text" value="${svc.fee}" oninput="updateServiceField('${svc.id}', 'fee', this.value)">
+    `;
+    container.appendChild(div);
+  });
+}
+
+function addServiceRow() {
+  const uniqueId = 'custom_' + Date.now();
+  servicesData.push({
+    id: uniqueId,
+    name: 'Custom Service Option',
+    desc: 'Enter descriptive terms here...',
+    fee: '0%'
+  });
+  renderServiceConfiguration();
+  sync();
+}
+
+function removeServiceRow(id) {
+  servicesData = servicesData.filter(item => item.id !== id);
+  renderServiceConfiguration();
+  sync();
+}
+
+function updateServiceField(id, field, value) {
+  const target = servicesData.find(item => item.id === id);
+  if (target) {
+    target[field] = value;
   }
-});
+  sync(); // Instantly update view markup fields
+}
 
-// Original Document Processing Core Logic
+// ===== SYNC ENGINE =====
 function fmtDate(s){if(!s)return'__/__/____';const p=s.split('-');return p.length===3?p[1]+'/'+p[2]+'/'+p[0]:s}
 
 function sync(){
-  const date=fmtDate(document.getElementById('pDate').value);
-  const practice=document.getElementById('pPractice').value||'___________';
-  const addr=document.getElementById('pAddr').value||'___________';
-  const doctor=document.getElementById('pDoctor').value||'___________';
+  const date     = fmtDate(document.getElementById('pDate').value);
+  const practice = document.getElementById('pPractice').value || '___________';
+  const addr     = document.getElementById('pAddr').value     || '___________';
+  const doctor   = document.getElementById('pDoctor').value   || '___________';
+  const provName = document.getElementById('pProviderName').value  || '___________';
+  const provTitle= document.getElementById('pProviderTitle').value || '___________';
 
-  document.getElementById('vDate').textContent=date;
-  document.getElementById('vDateSig').textContent=date;
-  document.getElementById('vDateClient').textContent=date; // <-- ADD THIS LINE
-  document.getElementById('vPractice').textContent=practice;
-  document.getElementById('vPracticeSig').textContent=practice;
-  document.getElementById('vAddr').textContent=addr;
-  document.getElementById('vDoctor').textContent=doctor;
-  document.getElementById('vSigName').textContent=doctor;
-  document.getElementById('vSigPractice').textContent=practice;
-  document.getElementById('vSigAddr').textContent=addr;
+  // Client fields
+  document.getElementById('vDate').textContent         = date;
+  document.getElementById('vDateSig').textContent      = date;
+  document.getElementById('vDateClient').textContent   = date;
+  document.getElementById('vPractice').textContent     = practice;
+  document.getElementById('vPracticeSig').textContent  = practice;
+  document.getElementById('vAddr').textContent         = addr;
+  document.getElementById('vDoctor').textContent       = doctor;
+  document.getElementById('vSigName').textContent      = doctor;
+  document.getElementById('vSigPractice').textContent  = practice;
+  document.getElementById('vSigAddr').textContent      = addr;
 
-  document.getElementById('vDescCol').textContent=document.getElementById('dCol').value||'—';
-  document.getElementById('vRateCol').textContent=document.getElementById('rCol').value||'0';
-  document.getElementById('vDescBil').textContent=document.getElementById('dBil').value||'—';
-  document.getElementById('vRateBil').textContent=document.getElementById('rBil').value||'0';
+  // Service Provider fields (dynamic)
+  document.getElementById('vProviderName').textContent = provName;
+  document.getElementById('vProviderTitle').textContent= provTitle;
+  document.getElementById('vProviderSig').textContent  = provName;
 
-  document.getElementById('rowCol').style.display=document.getElementById('chkCol').checked?'':'none';
-  document.getElementById('rowBil').style.display=document.getElementById('chkBil').checked?'':'none';
+  // Re-build contract document fee rows live
+  const tbody = document.getElementById('feeTableBody');
+  tbody.innerHTML = '';
+  
+  if(servicesData.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999; font-style:italic; padding:12px;">No active services configured.</td></tr>`;
+  } else {
+    servicesData.forEach(svc => {
+      const tr = document.createElement('tr');
+      
+      // Clean rate visualization check (append % sign only if it's purely a bare digit/number)
+      let feeDisplay = svc.fee || '0';
+      if (/^\d+(\.\d+)?$/.test(feeDisplay.trim())) {
+        feeDisplay += '%';
+      }
+
+      tr.innerHTML = `
+        <td class="svc-name">${svc.name || '—'}</td>
+        <td>${svc.desc || '—'}</td>
+        <td class="rate">${feeDisplay}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
 }
 
-['pDate','pPractice','pAddr','pDoctor','dCol','rCol','dBil','rBil','chkCol','chkBil'].forEach(id=>{
+// Attach static baseline input event listeners
+['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle'].forEach(id=>{
   const el=document.getElementById(id);
-  if(el) {
+  if(el){
     el.addEventListener('input',sync);
     el.addEventListener('change',sync);
   }
 });
 
+// ===== PDF =====
 function genPDF(){
-  const el = document.getElementById('contract-pdf');
-  const name = document.getElementById('pPractice').value || 'Agreement';
-  
+  const el=document.getElementById('contract-pdf');
+  const name=document.getElementById('pPractice').value||'Agreement';
   html2pdf().set({
-    margin: [0.42, 0.48, 0.42, 0.48],
-    filename: 'PureMD_Agreement_' + name.replace(/\s+/g, '_') + '.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-      scale: 2, 
-      useCORS: true, 
-      logging: false, 
-      allowTaint: true,
-      scrollY: 0, // Fixes potential white space caused by parent scroll positions
-      scrollX: 0
-    },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'] } // Prevents forced empty page injection at initialization
+    margin:[0.42,0.48,0.42,0.48],
+    filename:'PureMD_Agreement_'+name.replace(/\s+/g,'_')+'.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,logging:false,allowTaint:true,scrollY:0,scrollX:0},
+    jsPDF:{unit:'in',format:'letter',orientation:'portrait'},
+    pagebreak:{mode:['css','legacy']}
   }).from(el).save();
 }
 </script>
