@@ -32,6 +32,11 @@
   .fg input[type=text],.fg input[type=date],.fg input[type=number],.fg input[type=password]{width:100%;padding:7px 9px;border:1px solid #b0b8cc;border-radius:4px;font-size:.82rem;color:#222;background:#fafbff}
   .fg input:focus{outline:none;border-color:#1B3A8A;box-shadow:0 0 0 2px rgba(27,58,138,.12)}
   
+  /* TEMPLATE SELECTOR CONTAINER */
+  .template-select-box {background:#f8fafc;border:1px dashed #1B3A8A;border-radius:6px;padding:12px;margin:14px 0 4px}
+  .cb-label {display:flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:bold;color:#1B3A8A;margin-bottom:6px;cursor:pointer}
+  .cb-label input {width:15px;height:15px;cursor:pointer}
+
   /* DYNAMIC SERVICE BUILDER CARDS */
   .service-block{background:#EEF2FB;border:1px solid #c5d0eb;border-radius:5px;padding:12px;margin-bottom:10px;position:relative}
   .service-block .remove-btn{position:absolute;top:10px;right:12px;background:none;border:none;color:#dc2626;font-weight:bold;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.3px}
@@ -160,12 +165,25 @@
         <div class="fg"><label>Provider Title / Position</label><input type="text" id="pProviderTitle" value="Vice President, PureMD Group LLC"></div>
       </div>
 
-      <!-- DYNAMIC SERVICES MANAGEMENT -->
-      <h3>🛠 Services Configuration</h3>
-      <div id="servicesFormContainer">
-        <!-- Javascript renders blocks seamlessly right here -->
+      <!-- AGREEMENT TYPE SELECTOR checkboxes -->
+      <h3>📋 Select Agreement Document Type</h3>
+      <div class="template-select-box">
+        <label class="cb-label">
+          <input type="checkbox" id="cbBusiness" checked onclick="switchTemplate('business')"> 
+          Business Agreement
+        </label>
+        <label class="cb-label" style="margin-bottom:0;">
+          <input type="checkbox" id="cbHIPAA" onclick="switchTemplate('hipaa')"> 
+          HIPAA Confidentiality Agreement
+        </label>
       </div>
-      <button type="button" class="add-btn" onclick="addServiceRow()">＋ Add Custom Service Row</button>
+
+      <!-- DYNAMIC SERVICES MANAGEMENT (Only visible when active setup fits) -->
+      <div id="servicesConfigWrapper">
+        <h3>🛠 Services Configuration</h3>
+        <div id="servicesFormContainer"></div>
+        <button type="button" class="add-btn" onclick="addServiceRow()">＋ Add Custom Service Row</button>
+      </div>
 
       <button class="btn" onclick="genPDF()">⬇ Download PDF Agreement</button>
     </div>
@@ -180,18 +198,16 @@
       </button>
 
       <div class="scroll">
-        <!-- Agreement template is injected here at runtime from Bagreement.html -->
         <div id="agreementMount"></div>
       </div>
-    </div><!-- End Preview Panel -->
+    </div>
 
-  </div><!-- End .wrap -->
-</div><!-- End #appContent -->
+  </div>
+</div>
 
-<!-- Agreement template lives in Bagreement.html as a JS string (AGREEMENT_TEMPLATE).
-     Loading it via <script src> (instead of fetch) means this works even when
-     index.html is opened directly as a local file — no server required. -->
+<!-- Agreement templates live as JS strings within their respective files. -->
 <script src="Bagreement.html"></script>
+<script src="Hagreement.html"></script>
 
 <script>
 // ===== AUTH =====
@@ -203,23 +219,50 @@ function checkLogin(){
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('appContent').style.display='block';
 
-    if(typeof AGREEMENT_TEMPLATE !== 'undefined'){
-      document.getElementById('agreementMount').innerHTML = AGREEMENT_TEMPLATE;
-    } else {
-      document.getElementById('agreementMount').innerHTML =
-        '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">' +
-        'Could not load Bagreement.html.<br>Make sure it is saved in the same folder as index.html.' +
-        '</div>';
-      return;
-    }
-
-    renderServiceConfiguration();
-    sync();
+    // Initialize layout default view
+    switchTemplate('business');
   } else {
     err.style.display='block';
   }
 }
 document.getElementById('passwordInput').addEventListener('keyup',function(e){if(e.key==='Enter')checkLogin();});
+
+// ===== TEMPLATE SELECTION SYSTEM =====
+let currentActiveTemplate = 'business';
+
+function switchTemplate(type) {
+  const cbBus = document.getElementById('cbBusiness');
+  const cbHip = document.getElementById('cbHIPAA');
+  const svcWrap = document.getElementById('servicesConfigWrapper');
+  const mount = document.getElementById('agreementMount');
+
+  if(type === 'business') {
+    cbBus.checked = true;
+    cbHip.checked = false;
+    currentActiveTemplate = 'business';
+    svcWrap.style.display = 'block'; // Show services config for business model
+
+    if(typeof AGREEMENT_TEMPLATE !== 'undefined'){
+      mount.innerHTML = AGREEMENT_TEMPLATE;
+    } else {
+      mount.innerHTML = '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">Could not find AGREEMENT_TEMPLATE.</div>';
+    }
+  } else if(type === 'hipaa') {
+    cbBus.checked = false;
+    cbHip.checked = true;
+    currentActiveTemplate = 'hipaa';
+    svcWrap.style.display = 'none'; // Hide services configuration for HIPAA document
+
+    if(typeof HIPAA_TEMPLATE !== 'undefined'){
+      mount.innerHTML = HIPAA_TEMPLATE;
+    } else {
+      mount.innerHTML = '<div style="padding:40px;text-align:center;color:#1B3A8A;font-weight:700">[ HIPAA Confidentiality Agreement Placeholder ]<br><span style="font-weight:normal; font-size:11px; color:#555;">(We will configure this content layout engine soon!)</span></div>';
+    }
+  }
+  
+  renderServiceConfiguration();
+  sync();
+}
 
 // ===== EDITABLE WORDING TOGGLE ENGINE =====
 let isEditingMode = false;
@@ -252,6 +295,7 @@ let servicesData = [
 
 function renderServiceConfiguration() {
   const container = document.getElementById('servicesFormContainer');
+  if(!container) return;
   container.innerHTML = '';
 
   servicesData.forEach((svc, index) => {
@@ -286,6 +330,7 @@ function addServiceRow() {
   sync();
 }
 
+// ... Keep existing script operations (removeServiceRow, updateServiceField, fmtDate) intact ...
 function removeServiceRow(id) {
   servicesData = servicesData.filter(item => item.id !== id);
   renderServiceConfiguration();
@@ -294,15 +339,13 @@ function removeServiceRow(id) {
 
 function updateServiceField(id, field, value) {
   const target = servicesData.find(item => item.id === id);
-  if (target) {
-    target[field] = value;
-  }
+  if (target) target[field] = value;
   sync();
 }
 
-// ===== SYNC ENGINE =====
 function fmtDate(s){if(!s)return'__/__/____';const p=s.split('-');return p.length===3?p[1]+'/'+p[2]+'/'+p[0]:s}
 
+// ===== SYNC ENGINE =====
 function sync(){
   const date     = fmtDate(document.getElementById('pDate').value);
   const practice = document.getElementById('pPractice').value || '___________';
@@ -311,25 +354,25 @@ function sync(){
   const provName = document.getElementById('pProviderName').value  || '___________';
   const provTitle= document.getElementById('pProviderTitle').value || '___________';
 
-  // Client fields
-  document.getElementById('vDate').textContent         = date;
-  document.getElementById('vDateSig').textContent      = date;
-  document.getElementById('vDateClient').textContent   = date;
-  document.getElementById('vPractice').textContent     = practice;
-  document.getElementById('vPracticeSig').textContent  = practice;
-  document.getElementById('vAddr').textContent         = addr;
-  document.getElementById('vDoctor').textContent       = doctor;
-  document.getElementById('vSigName').textContent      = doctor;
-  document.getElementById('vSigPractice').textContent  = practice;
-  document.getElementById('vSigAddr').textContent      = addr;
+  // Core Data Element Safe Injection Checks
+  if (document.getElementById('vDate')) document.getElementById('vDate').textContent = date;
+  if (document.getElementById('vDateSig')) document.getElementById('vDateSig').textContent = date;
+  if (document.getElementById('vDateClient')) document.getElementById('vDateClient').textContent = date;
+  if (document.getElementById('vPractice')) document.getElementById('vPractice').textContent = practice;
+  if (document.getElementById('vPracticeSig')) document.getElementById('vPracticeSig').textContent = practice;
+  if (document.getElementById('vAddr')) document.getElementById('vAddr').textContent = addr;
+  if (document.getElementById('vDoctor')) document.getElementById('vDoctor').textContent = doctor;
+  if (document.getElementById('vSigName')) document.getElementById('vSigName').textContent = doctor;
+  if (document.getElementById('vSigPractice')) document.getElementById('vSigPractice').textContent = practice;
+  if (document.getElementById('vSigAddr')) document.getElementById('vSigAddr').textContent = addr;
 
-  // Service Provider fields (dynamic)
-  document.getElementById('vProviderName').textContent = provName;
-  document.getElementById('vProviderTitle').textContent= provTitle;
-  document.getElementById('vProviderSig').textContent  = provName;
+  if (document.getElementById('vProviderName')) document.getElementById('vProviderName').textContent = provName;
+  if (document.getElementById('vProviderTitle')) document.getElementById('vProviderTitle').textContent = provTitle;
+  if (document.getElementById('vProviderSig')) document.getElementById('vProviderSig').textContent = provName;
 
-  // Re-build contract document fee rows live
+  // Build contract document table content conditionally
   const tbody = document.getElementById('feeTableBody');
+  if(!tbody) return;
   tbody.innerHTML = '';
   
   if(servicesData.length === 0) {
@@ -337,11 +380,8 @@ function sync(){
   } else {
     servicesData.forEach(svc => {
       const tr = document.createElement('tr');
-      
       let feeDisplay = svc.fee || '0';
-      if (/^\d+(\.\d+)?$/.test(feeDisplay.trim())) {
-        feeDisplay += '%';
-      }
+      if (/^\d+(\.\d+)?$/.test(feeDisplay.trim())) feeDisplay += '%';
 
       tr.innerHTML = `
         <td class="svc-name">${svc.name || '—'}</td>
@@ -353,7 +393,7 @@ function sync(){
   }
 }
 
-// Attach static baseline input event listeners
+// Input listeners
 ['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle'].forEach(id=>{
   const el=document.getElementById(id);
   if(el){
@@ -364,14 +404,12 @@ function sync(){
 
 // ===== PDF =====
 function genPDF(){
-  // Force turn off editing layout modes right before capturing document print coordinates
   if (isEditingMode) toggleTextEditing();
-
   const el=document.getElementById('contract-pdf');
   const name=document.getElementById('pPractice').value||'Agreement';
   html2pdf().set({
     margin:[0.42,0.48,0.42,0.48],
-    filename:'PureMD_Agreement_'+name.replace(/\s+/g,'_')+'.pdf',
+    filename: currentActiveTemplate === 'business' ? 'PureMD_Business_Agreement_'+name.replace(/\s+/g,'_')+'.pdf' : 'PureMD_HIPAA_Agreement_'+name.replace(/\s+/g,'_')+'.pdf',
     image:{type:'jpeg',quality:0.98},
     html2canvas:{scale:2,useCORS:true,logging:false,allowTaint:true,scrollY:0,scrollX:0},
     jsPDF:{unit:'in',format:'letter',orientation:'portrait'},
