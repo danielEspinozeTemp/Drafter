@@ -637,6 +637,8 @@ function sync() {
   if (currentActiveTemplate === 'settlement') {
     const sDate = fmtDate(document.getElementById('pDate2').value);
     set('vDate', sDate);
+    set('vDateAdjuster', sDate);
+    set('vDateClient', sDate);
     set('vDrName', document.getElementById('sDrName').value || '___________');
     const licVal = document.getElementById('sDrLicense').value;
     set('vDcLicense', licVal || '');
