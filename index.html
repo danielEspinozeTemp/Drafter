@@ -390,6 +390,29 @@ body {
           <div class="fg"><label>Settlement Amount ($)</label><input type="text" id="sAmount" value="2,125.00"></div>
           <div class="fg"><label>Adjuster Name (signature)</label><input type="text" id="sAdjusterName" value="Seth Morgan"></div>
 
+          <div class="section-label">📅 Dates of Service</div>
+          <div style="margin-bottom:8px">
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
+              <input type="radio" name="dateRangeOption" value="all" checked onchange="handleDateRangeChange()">
+              All dates of service
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
+              <input type="radio" name="dateRangeOption" value="specific" onchange="handleDateRangeChange()">
+              Specific date
+            </label>
+            <div id="specificDateWrapper" style="display:none;margin-left:24px;margin-bottom:8px">
+              <div class="fg"><label>Date of Service</label><input type="date" id="sSpecificDate"></div>
+            </div>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
+              <input type="radio" name="dateRangeOption" value="range" onchange="handleDateRangeChange()">
+              Date range
+            </label>
+            <div id="dateRangeWrapper" style="display:none;margin-left:24px;margin-bottom:8px">
+              <div class="fg"><label>From</label><input type="date" id="sDateFrom"></div>
+              <div class="fg"><label>To</label><input type="date" id="sDateTo"></div>
+            </div>
+          </div>
+
           <div class="section-label">💳 Payment Instructions</div>
           <div class="fg"><label>Payable To (Name)</label><input type="text" id="sPayeeName" value="Prospice Medical Centers"></div>
           <div class="fg"><label>Delivery Address</label><input type="text" id="sPayeeAddr" value="PO BOX 25551, SANTA ANA, CA 92799"></div>
@@ -557,6 +580,14 @@ function fmtDate(s) {
   return p.length === 3 ? `${p[1]}/${p[2]}/${p[0]}` : s;
 }
 
+// ===== DATE RANGE TOGGLE (Settlement) =====
+function handleDateRangeChange() {
+  const val = document.querySelector('input[name="dateRangeOption"]:checked').value;
+  document.getElementById('specificDateWrapper').style.display = val === 'specific' ? 'block' : 'none';
+  document.getElementById('dateRangeWrapper').style.display = val === 'range' ? 'block' : 'none';
+  sync();
+}
+
 // ===== SYNC =====
 function sync() {
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -606,7 +637,10 @@ function sync() {
     const sDate = fmtDate(document.getElementById('pDate2').value);
     set('vDate', sDate);
     set('vDrName', document.getElementById('sDrName').value || '___________');
-    set('vDcLicense', document.getElementById('sDrLicense').value || '');
+    const licVal = document.getElementById('sDrLicense').value;
+    set('vDcLicense', licVal || '');
+    const licBlock = document.getElementById('vLicenseBlock');
+    if (licBlock) licBlock.style.display = licVal.trim() ? '' : 'none';
     set('vTaxId', document.getElementById('sTaxId').value || '');
     set('vDrAddr', document.getElementById('sDrAddr').value || '');
     set('vDrPhone', document.getElementById('sDrPhone').value || '');
@@ -620,13 +654,33 @@ function sync() {
     set('vAdjusterSig', document.getElementById('sAdjusterName').value || '___________');
     set('vPayeeName', document.getElementById('sPayeeName').value || '___________');
     set('vPayeeAddr', document.getElementById('sPayeeAddr').value || '___________');
+
+    // Dates of Service text
+    const opt = document.querySelector('input[name="dateRangeOption"]:checked');
+    let dateText = 'for all dates of service';
+    if (opt) {
+      if (opt.value === 'specific') {
+        const d = fmtDate(document.getElementById('sSpecificDate').value);
+        if (d && d !== '__/__/____') dateText = 'for the date of service: ' + d;
+      } else if (opt.value === 'range') {
+        const from = fmtDate(document.getElementById('sDateFrom').value);
+        const to = fmtDate(document.getElementById('sDateTo').value);
+        const hasFrom = from && from !== '__/__/____';
+        const hasTo = to && to !== '__/__/____';
+        if (hasFrom && hasTo) dateText = 'for dates of service: ' + from + ' to ' + to;
+        else if (hasFrom) dateText = 'for dates of service starting ' + from;
+        else if (hasTo) dateText = 'for dates of service through ' + to;
+      }
+    }
+    set('vDateRangeText', dateText);
   }
 }
 
 // Input listeners
 ['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle',
  'pDate2','sDrName','sDrLicense','sTaxId','sDrAddr','sDrPhone','sDrFax',
- 'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName','sPayeeName','sPayeeAddr'].forEach(id => {
+ 'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName','sPayeeName','sPayeeAddr',
+ 'sSpecificDate','sDateFrom','sDateTo'].forEach(id => {
   const el = document.getElementById(id);
   if (el) { el.addEventListener('input', sync); el.addEventListener('change', sync); }
 });
