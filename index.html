@@ -389,6 +389,7 @@ body {
           <div class="fg"><label>Claim #</label><input type="text" id="sClaimNumber" value="SAC0000158836"></div>
           <div class="fg"><label>Settlement Amount ($)</label><input type="text" id="sAmount" value="2,125.00"></div>
           <div class="fg"><label>Adjuster Name (signature)</label><input type="text" id="sAdjusterName" value="Seth Morgan"></div>
+          <div class="fg"><label>Accepted By (Name)</label><input type="text" id="sAcceptedByName" value=""></div>
 
           <div class="section-label">📅 Dates of Service</div>
           <div style="margin-bottom:8px">
@@ -654,6 +655,7 @@ function sync() {
     set('vAdjusterSig', document.getElementById('sAdjusterName').value || '___________');
     set('vPayeeName', document.getElementById('sPayeeName').value || '___________');
     set('vPayeeAddr', document.getElementById('sPayeeAddr').value || '___________');
+    set('vAcceptedByName', document.getElementById('sAcceptedByName').value || '___________');
 
     // Dates of Service text
     const opt = document.querySelector('input[name="dateRangeOption"]:checked');
@@ -680,7 +682,7 @@ function sync() {
 ['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle',
  'pDate2','sDrName','sDrLicense','sTaxId','sDrAddr','sDrPhone','sDrFax',
  'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName','sPayeeName','sPayeeAddr',
- 'sSpecificDate','sDateFrom','sDateTo'].forEach(id => {
+ 'sSpecificDate','sDateFrom','sDateTo','sAcceptedByName'].forEach(id => {
   const el = document.getElementById(id);
   if (el) { el.addEventListener('input', sync); el.addEventListener('change', sync); }
 });
