@@ -3,7 +3,7 @@ const AGREEMENT_TEMPLATE = `
 
   <!-- HEADER -->
   <div class="doc-header">
-    <img src="https://raw.githubusercontent.com/danielEspinozeTemp/Drafter/main/logo.png" alt="PureMD Logo">
+    <img src="logo.png" alt="PureMD Logo">
     <div class="hdr-text">
       <div class="hdr-company">PUREMD GROUP LLC</div>
       <div class="hdr-sub">Medical Billing &amp; Collections Services</div>

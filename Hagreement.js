@@ -3,7 +3,7 @@ const HIPAA_TEMPLATE = `
 
   <!-- HEADER -->
   <div class="doc-header" style="margin: 0; padding: 0; border-bottom: 3px solid #1B3A8A; display: flex; align-items: center; gap: 14px;">
-    <img src="https://raw.githubusercontent.com/danielEspinozeTemp/Drafter/main/logo.png" alt="PureMD Logo" style="width:55px; height:55px; object-fit:contain; margin: 0; padding: 0;">
+    <img src="logo.png" alt="PureMD Logo" style="width:55px; height:55px; object-fit:contain; margin: 0; padding: 0;">
     <div class="hdr-text" style="flex: 1; margin: 0; padding: 0;">
       <div class="hdr-company" style="font-size:18pt; font-weight:900; color:#1B3A8A; line-height:1.1;">PUREMD GROUP LLC</div>
       <div class="hdr-sub" style="font-size:8pt; color:#555;">Medical Billing &amp; Collections Services</div>
