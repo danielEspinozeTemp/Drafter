@@ -1,356 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PureMD Group LLC — Agreement Generator</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PureMD Group LLC — Agreement Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --brand: #1B3A8A;
+  --brand-dk: #0F2561;
+  --brand-lt: #EEF2FB;
+  --accent: #2563EB;
+  --red: #DC2626;
+  --bg: #CBD5E8;
+  --panel: #FFFFFF;
+  --border: #D1D9EE;
+  --text: #1E2740;
+  --muted: #64748B;
+  --radius: 6px;
+  --shadow: 0 2px 12px rgba(15,37,97,.12);
+}
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: var(--bg);
+  padding: 16px;
+  color: var(--text);
+  font-size: 13px;
+  min-height: 100vh;
+}
+/* ===== LOGIN ===== */
+.login-screen {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, #1B3A8A 0%, #0F2561 100%);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.login-card {
+  background: #fff;
+  padding: 40px 36px 36px;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.3);
+  width: 100%; max-width: 420px;
+}
+.login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.login-logo-mark {
+  width: 44px; height: 44px;
+  background: var(--brand);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 16px; letter-spacing: -1px;
+}
+.login-logo-text h2 { font-size: 1rem; font-weight: 700; color: var(--brand); line-height: 1.2; }
+.login-logo-text p { font-size: .72rem; color: var(--muted); }
+.login-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 24px; }
+.error-msg { color: var(--red); font-weight: 600; font-size: .78rem; margin-bottom: 12px; display: none; background: #FEF2F2; border: 1px solid #FECACA; padding: 8px 10px; border-radius: var(--radius); }
+/* ===== APP ===== */
+.app-content { display: none; }
+.topbar {
+  max-width: 1360px; margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--brand); color: #fff;
+  padding: 10px 18px; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.topbar-brand { display: flex; align-items: center; gap: 10px; }
+.topbar-mark { font-size: 11px; font-weight: 800; letter-spacing: .5px; opacity: .9; }
+.topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,.25); }
+.topbar-title { font-size: .82rem; font-weight: 500; opacity: .8; }
+.topbar-badge { font-size: .7rem; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); padding: 3px 9px; border-radius: 20px; }
+.wrap {
+  max-width: 1360px; margin: 0 auto;
+  display: grid; grid-template-columns: 380px 1fr;
+  gap: 14px; align-items: start;
+}
+/* PANEL */
+.panel { background: var(--panel); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
+.panel-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: #F8FAFF;
+  display: flex; align-items: center; gap: 8px;
+}
+.panel-head h2 { font-size: .82rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .5px; }
+.panel-body { padding: 18px; }
+/* FORM FIELDS */
+.section-label {
+  font-size: .68rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .6px;
+  margin: 18px 0 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 6px;
+}
+.section-label:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.fg { margin-bottom: 10px; }
+.fg label { display: block; font-size: .72rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.fg input[type=text],
+.fg input[type=date],
+.fg input[type=number],
+.fg input[type=password] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: .82rem; font-family: inherit;
+  color: var(--text); background: #FAFBFF;
+  transition: border-color .15s, box-shadow .15s;
+}
+.fg input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); background: #fff; }
+/* PROVIDER BOX */
+.provider-box { background: #F0F4FF; border: 1.5px solid #C5D0EB; border-radius: var(--radius); padding: 12px; margin-bottom: 2px; }
+/* TEMPLATE SELECTOR */
+.doc-type-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+.doc-type-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 10px 9px;
+  cursor: pointer;
+  transition: all .15s;
+  background: #FAFBFF;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.doc-type-card:hover { border-color: var(--accent); background: #F0F5FF; }
+.doc-type-card.selected { border-color: var(--brand); background: #EEF2FB; box-shadow: 0 0 0 1px var(--brand); }
+.doc-type-card .card-icon { font-size: 16px; }
+.doc-type-card .card-name { font-size: .75rem; font-weight: 700; color: var(--brand); }
+.doc-type-card .card-desc { font-size: .67rem; color: var(--muted); line-height: 1.3; }
+/* SERVICES BUILDER */
+.service-block { background: var(--brand-lt); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 12px; margin-bottom: 8px; position: relative; }
+.service-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.service-block-title { font-size: .72rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .3px; }
+.remove-btn { background: none; border: none; color: var(--red); font-size: .7rem; font-weight: 600; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background .12s; }
+.remove-btn:hover { background: #FEF2F2; }
+.sub-label { display: block; font-size: .7rem; font-weight: 600; color: var(--muted); margin-bottom: 3px; margin-top: 6px; }
+.sub-input { width: 100%; padding: 6px 8px; border: 1.5px solid var(--border); border-radius: 4px; font-size: .78rem; font-family: inherit; background: #fff; color: var(--text); transition: border-color .15s; }
+.sub-input:focus { outline: none; border-color: var(--accent); }
+.add-btn {
+  width: 100%; padding: 9px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: none; color: var(--muted);
+  font-size: .78rem; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all .15s;
+  margin-bottom: 4px;
+}
+.add-btn:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-lt); }
+/* BUTTONS */
+.btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; background: var(--brand);
+  color: #fff; border: none;
+  padding: 11px; font-size: .85rem; font-weight: 700;
+  font-family: inherit; border-radius: var(--radius);
+  cursor: pointer; letter-spacing: .3px;
+  transition: background .15s, transform .1s;
+  margin-top: 16px;
+}
+.btn-primary:hover { background: var(--brand-dk); }
+.btn-primary:active { transform: scale(.99); }
+.btn-primary.loading { opacity: .7; pointer-events: none; }
+/* LOGIN BUTTON */
+.btn-login {
+  display: block; width: 100%;
+  background: var(--brand); color: #fff; border: none;
+  padding: 12px; font-size: .88rem; font-weight: 700;
+  font-family: inherit; border-radius: var(--radius);
+  cursor: pointer; letter-spacing: .3px;
+  transition: background .15s;
+}
+.btn-login:hover { background: var(--brand-dk); }
+/* PREVIEW PANEL */
+.preview-panel { position: relative; }
+.preview-head-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: #F8FAFF;
+}
+.preview-head-row h2 { font-size: .82rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .5px; }
+.edit-toggle-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px;
+  background: #fff; border: 1.5px solid var(--border);
+  color: var(--brand); font-size: .75rem; font-weight: 700;
+  font-family: inherit; border-radius: var(--radius);
+  cursor: pointer; transition: all .15s;
+}
+.edit-toggle-btn:hover { border-color: var(--brand); background: var(--brand-lt); }
+.edit-toggle-btn.active-edit { background: #FEF2F2; border-color: var(--red); color: var(--red); }
+.scroll { padding: 12px; background: #5A6070; min-height: 600px; }
+.scroll-inner { background: #fff; border-radius: 2px; box-shadow: 0 2px 20px rgba(0,0,0,.3); }
+/* ===== CONTRACT DOCUMENT ===== */
+#contract-pdf { background: #fff; padding: 0 44px 22px; font-family: Arial, sans-serif; font-size: 9.5pt; line-height: 1.4; color: #111; width: 100%; }
+.doc-header { display: flex; align-items: center; gap: 12px; padding-bottom: 5px; margin-bottom: 4px; border-bottom: 3px solid #1B3A8A; }
+.doc-header img { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
+.hdr-text { flex: 1; }
+.hdr-company { font-size: 20pt; font-weight: 900; color: #1B3A8A; letter-spacing: .4px; line-height: 1.1; }
+.hdr-sub { font-size: 8pt; color: #666; margin-top: 2px; }
+.hdr-addr { text-align: right; font-size: 8pt; color: #555; line-height: 1.6; }
+.doc-title { text-align: center; font-size: 12.5pt; font-weight: 800; color: #1B3A8A; text-transform: uppercase; letter-spacing: .6px; margin: 10px 0 10px; padding-bottom: 7px; border-bottom: 1px solid #C8D4EA; }
+.sec-head { font-size: 9.5pt; font-weight: 800; color: #fff; background: #1B3A8A; text-transform: uppercase; letter-spacing: .5px; padding: 4px 10px; margin: 10px 0 5px; border-radius: 2px; }
+.doc-p { margin-bottom: 5px; font-size: 9.5pt; line-height: 1.45; color: #111; }
+.doc-p strong { color: #0F2561; }
+.hipaa-clauses { margin-left: 10px; }
+.editable-text[contenteditable="true"] { outline: 1px dashed #1B3A8A; background: #FFFBEA; padding: 1px 3px; border-radius: 2px; }
+.fee-tbl { width: 100%; border-collapse: collapse; margin: 8px 0 10px; font-size: 9pt; }
+.fee-tbl th { background: #1B3A8A; color: #fff; padding: 6px 10px; text-align: left; font-size: 9pt; font-weight: 700; }
+.fee-tbl td { border: 1px solid #C0CCE0; padding: 6px 10px; font-size: 9pt; }
+.fee-tbl tr:nth-child(even) td { background: #EEF2FB; }
+.fee-tbl .svc-name { font-weight: 700; color: #0F2561; }
+.fee-tbl .rate { font-weight: 800; color: #1B3A8A; font-size: 10pt; }
+.witness { font-size: 8.5pt; color: #666; font-style: italic; margin: 10px 0 8px; }
+.sig-section { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; page-break-inside: avoid; }
+.sig-blk { border-top: 3px solid #1B3A8A; padding-top: 7px; }
+.sig-blk-title { font-size: 10.5pt; font-weight: 800; color: #1B3A8A; margin-bottom: 1px; text-transform: uppercase; }
+.sig-blk-sub { font-size: 8pt; color: #777; margin-bottom: 6px; }
+.sig-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 3px; border-bottom: 1px solid #D8E0EE; padding-bottom: 2px; }
+.sig-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; white-space: nowrap; min-width: 68px; }
+.sig-val { font-size: 9pt; color: #111; flex: 1; }
+.sig-canvas-wrap { margin-top: 6px; }
+.sig-canvas-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; margin-bottom: 2px; }
+.sig-canvas { display: block; width: 100%; height: 46px; border-bottom: 1px solid #AAB; }
+.provider-sig-block { margin-top: 4px; }
+.provider-sig-font { font-family: 'Great Vibes', cursive; font-size: 30pt; color: #0F2561; line-height: 1; margin-left: 8px; transform: rotate(-2.5deg); display: inline-block; }
 
-  :root {
-    --brand:    #1B3A8A;
-    --brand-dk: #0F2561;
-    --brand-lt: #EEF2FB;
-    --accent:   #2563EB;
-    --red:      #DC2626;
-    --bg:       #CBD5E8;
-    --panel:    #FFFFFF;
-    --border:   #D1D9EE;
-    --text:     #1E2740;
-    --muted:    #64748B;
-    --radius:   6px;
-    --shadow:   0 2px 12px rgba(15,37,97,.12);
-  }
+/* ===== FOOTER CREDIT ===== */
+.app-footer {
+  max-width: 1360px; margin: 18px auto 4px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: .72rem; color: var(--muted);
+  padding: 10px;
+}
+.app-footer .credit-mark {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--brand); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; letter-spacing: -.5px;
+  flex-shrink: 0;
+}
 
-  body {
-    font-family: 'Inter', Arial, sans-serif;
-    background: var(--bg);
-    padding: 16px;
-    color: var(--text);
-    font-size: 13px;
-    min-height: 100vh;
-  }
+/* ===== SETTLEMENT — single-page letter layout ===== */
+#contract-pdf.doc-settlement {
+  height: 9.9in;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0 60px 30px;
+}
+.doc-settlement .doc-header { padding-bottom: 12px; margin-bottom: 0; }
+.doc-settlement .hdr-company { font-size: 21pt; }
+.doc-settlement .hdr-sub { font-size: 8.5pt; margin-top: 3px; }
+.doc-settlement .hdr-addr { font-size: 8.5pt; line-height: 1.7; }
 
-  /* ===== LOGIN ===== */
-  .login-screen {
-    position: fixed; inset: 0;
-    background: linear-gradient(135deg, #1B3A8A 0%, #0F2561 100%);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 9999;
-  }
-  .login-card {
-    background: #fff;
-    padding: 40px 36px 36px;
-    border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0,0,0,.3);
-    width: 100%; max-width: 420px;
-  }
-  .login-logo {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 28px;
-  }
-  .login-logo-mark {
-    width: 44px; height: 44px;
-    background: var(--brand);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 800; font-size: 16px; letter-spacing: -1px;
-  }
-  .login-logo-text h2 { font-size: 1rem; font-weight: 700; color: var(--brand); line-height: 1.2; }
-  .login-logo-text p  { font-size: .72rem; color: var(--muted); }
-  .login-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 24px; }
-  .error-msg { color: var(--red); font-weight: 600; font-size: .78rem; margin-bottom: 12px; display: none; background: #FEF2F2; border: 1px solid #FECACA; padding: 8px 10px; border-radius: var(--radius); }
+.doc-subhead {
+  border-bottom: 1px solid #C8D4EA;
+  padding: 10px 0 12px;
+  margin-bottom: 14px;
+}
+.doc-subhead .subhead-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.doc-subhead .subhead-name { font-size: 12.5pt; font-weight: 800; color: #0F2561; }
+.doc-subhead .subhead-meta { font-size: 8.5pt; color: #555; font-weight: 600; }
+.doc-subhead .subhead-addr { font-size: 8.5pt; color: #555; margin-top: 3px; }
 
-  /* ===== APP ===== */
-  .app-content { display: none; }
-  .topbar {
-    max-width: 1360px; margin: 0 auto 14px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--brand); color: #fff;
-    padding: 10px 18px; border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
-  .topbar-brand { display: flex; align-items: center; gap: 10px; }
-  .topbar-mark { font-size: 11px; font-weight: 800; letter-spacing: .5px; opacity: .9; }
-  .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,.25); }
-  .topbar-title { font-size: .82rem; font-weight: 500; opacity: .8; }
-  .topbar-badge { font-size: .7rem; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); padding: 3px 9px; border-radius: 20px; }
+.settlement-meta { margin: 4px 0 16px; }
+.settlement-meta td { padding: 7px 12px; font-size: 9.5pt; }
 
-  .wrap {
-    max-width: 1360px; margin: 0 auto;
-    display: grid; grid-template-columns: 380px 1fr;
-    gap: 14px; align-items: start;
-  }
-
-  /* PANEL */
-  .panel {
-    background: var(--panel);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-  .panel-head {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    background: #F8FAFF;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .panel-head h2 {
-    font-size: .82rem; font-weight: 700; color: var(--brand);
-    text-transform: uppercase; letter-spacing: .5px;
-  }
-  .panel-body { padding: 18px; }
-
-  /* FORM FIELDS */
-  .section-label {
-    font-size: .68rem; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: .6px;
-    margin: 18px 0 10px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    display: flex; align-items: center; gap: 6px;
-  }
-  .section-label:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-
-  .fg { margin-bottom: 10px; }
-  .fg label {
-    display: block; font-size: .72rem; font-weight: 600;
-    color: var(--text); margin-bottom: 4px;
-  }
-  .fg input[type=text],
-  .fg input[type=date],
-  .fg input[type=number],
-  .fg input[type=password] {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    font-size: .82rem; font-family: inherit;
-    color: var(--text); background: #FAFBFF;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .fg input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-    background: #fff;
-  }
-
-  /* PROVIDER BOX */
-  .provider-box {
-    background: #F0F4FF;
-    border: 1.5px solid #C5D0EB;
-    border-radius: var(--radius);
-    padding: 12px;
-    margin-bottom: 2px;
-  }
-
-  /* TEMPLATE SELECTOR */
-  .doc-type-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 8px; margin-bottom: 4px;
-  }
-  .doc-type-card {
-    border: 2px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 10px 9px;
-    cursor: pointer;
-    transition: all .15s;
-    background: #FAFBFF;
-    display: flex; flex-direction: column; gap: 3px;
-  }
-  .doc-type-card:hover { border-color: var(--accent); background: #F0F5FF; }
-  .doc-type-card.selected {
-    border-color: var(--brand);
-    background: #EEF2FB;
-    box-shadow: 0 0 0 1px var(--brand);
-  }
-  .doc-type-card .card-icon { font-size: 16px; }
-  .doc-type-card .card-name { font-size: .75rem; font-weight: 700; color: var(--brand); }
-  .doc-type-card .card-desc { font-size: .67rem; color: var(--muted); line-height: 1.3; }
-
-  /* SERVICES BUILDER */
-  .service-block {
-    background: var(--brand-lt);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
-    margin-bottom: 8px;
-    position: relative;
-  }
-  .service-block-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  .service-block-title { font-size: .72rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .3px; }
-  .remove-btn {
-    background: none; border: none;
-    color: var(--red); font-size: .7rem; font-weight: 600;
-    cursor: pointer; padding: 2px 6px;
-    border-radius: 4px;
-    transition: background .12s;
-  }
-  .remove-btn:hover { background: #FEF2F2; }
-  .sub-label { display: block; font-size: .7rem; font-weight: 600; color: var(--muted); margin-bottom: 3px; margin-top: 6px; }
-  .sub-input {
-    width: 100%; padding: 6px 8px;
-    border: 1.5px solid var(--border); border-radius: 4px;
-    font-size: .78rem; font-family: inherit;
-    background: #fff; color: var(--text);
-    transition: border-color .15s;
-  }
-  .sub-input:focus { outline: none; border-color: var(--accent); }
-
-  .add-btn {
-    width: 100%; padding: 9px;
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    background: none; color: var(--muted);
-    font-size: .78rem; font-weight: 600; font-family: inherit;
-    cursor: pointer; transition: all .15s;
-    margin-bottom: 4px;
-  }
-  .add-btn:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-lt); }
-
-  /* BUTTONS */
-  .btn-primary {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; background: var(--brand);
-    color: #fff; border: none;
-    padding: 11px; font-size: .85rem; font-weight: 700;
-    font-family: inherit; border-radius: var(--radius);
-    cursor: pointer; letter-spacing: .3px;
-    transition: background .15s, transform .1s;
-    margin-top: 16px;
-  }
-  .btn-primary:hover { background: var(--brand-dk); }
-  .btn-primary:active { transform: scale(.99); }
-  .btn-primary.loading { opacity: .7; pointer-events: none; }
-
-  /* LOGIN BUTTON */
-  .btn-login {
-    display: block; width: 100%;
-    background: var(--brand); color: #fff; border: none;
-    padding: 12px; font-size: .88rem; font-weight: 700;
-    font-family: inherit; border-radius: var(--radius);
-    cursor: pointer; letter-spacing: .3px;
-    transition: background .15s;
-  }
-  .btn-login:hover { background: var(--brand-dk); }
-
-  /* PREVIEW PANEL */
-  .preview-panel { position: relative; }
-  .preview-head-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    background: #F8FAFF;
-  }
-  .preview-head-row h2 {
-    font-size: .82rem; font-weight: 700; color: var(--brand);
-    text-transform: uppercase; letter-spacing: .5px;
-  }
-  .edit-toggle-btn {
-    display: flex; align-items: center; gap: 5px;
-    padding: 6px 12px;
-    background: #fff; border: 1.5px solid var(--border);
-    color: var(--brand); font-size: .75rem; font-weight: 700;
-    font-family: inherit; border-radius: var(--radius);
-    cursor: pointer; transition: all .15s;
-  }
-  .edit-toggle-btn:hover { border-color: var(--brand); background: var(--brand-lt); }
-  .edit-toggle-btn.active-edit {
-    background: #FEF2F2; border-color: var(--red); color: var(--red);
-  }
-
-  .scroll {
-    padding: 12px;
-    background: #5A6070;
-    min-height: 600px;
-  }
-  .scroll-inner {
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 20px rgba(0,0,0,.3);
-  }
-
-  /* ===== CONTRACT DOCUMENT ===== */
-  #contract-pdf {
-    background: #fff;
-    padding: 0 44px 22px;
-    font-family: Arial, sans-serif;
-    font-size: 9.5pt;
-    line-height: 1.4;
-    color: #111;
-    width: 100%;
-  }
-
-  .doc-header {
-    display: flex; align-items: center; gap: 12px;
-    padding-bottom: 5px; margin-bottom: 4px;
-    border-bottom: 3px solid #1B3A8A;
-  }
-  .doc-header img { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
-  .hdr-text { flex: 1; }
-  .hdr-company { font-size: 20pt; font-weight: 900; color: #1B3A8A; letter-spacing: .4px; line-height: 1.1; }
-  .hdr-sub { font-size: 8pt; color: #666; margin-top: 2px; }
-  .hdr-addr { text-align: right; font-size: 8pt; color: #555; line-height: 1.6; }
-
-  .doc-title {
-    text-align: center; font-size: 12.5pt; font-weight: 800;
-    color: #1B3A8A; text-transform: uppercase; letter-spacing: .6px;
-    margin: 10px 0 10px;
-    padding-bottom: 7px;
-    border-bottom: 1px solid #C8D4EA;
-  }
-
-  .sec-head {
-    font-size: 9.5pt; font-weight: 800; color: #fff;
-    background: #1B3A8A; text-transform: uppercase;
-    letter-spacing: .5px; padding: 4px 10px;
-    margin: 10px 0 5px; border-radius: 2px;
-  }
-
-  .doc-p { margin-bottom: 5px; font-size: 9.5pt; line-height: 1.45; color: #111; }
-  .doc-p strong { color: #0F2561; }
-
-  .hipaa-clauses { margin-left: 10px; }
-
-  /* Editable highlight */
-  .editable-text[contenteditable="true"] {
-    outline: 1px dashed #1B3A8A;
-    background: #FFFBEA;
-    padding: 1px 3px;
-    border-radius: 2px;
-  }
-
-  .fee-tbl { width: 100%; border-collapse: collapse; margin: 8px 0 10px; font-size: 9pt; }
-  .fee-tbl th { background: #1B3A8A; color: #fff; padding: 6px 10px; text-align: left; font-size: 9pt; font-weight: 700; }
-  .fee-tbl td { border: 1px solid #C0CCE0; padding: 6px 10px; font-size: 9pt; }
-  .fee-tbl tr:nth-child(even) td { background: #EEF2FB; }
-  .fee-tbl .svc-name { font-weight: 700; color: #0F2561; }
-  .fee-tbl .rate { font-weight: 800; color: #1B3A8A; font-size: 10pt; }
-
-  .witness { font-size: 8.5pt; color: #666; font-style: italic; margin: 10px 0 8px; }
-
-  .sig-section { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; page-break-inside: avoid; }
-  .sig-blk { border-top: 3px solid #1B3A8A; padding-top: 7px; }
-  .sig-blk-title { font-size: 10.5pt; font-weight: 800; color: #1B3A8A; margin-bottom: 1px; text-transform: uppercase; }
-  .sig-blk-sub { font-size: 8pt; color: #777; margin-bottom: 6px; }
-  .sig-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 3px; border-bottom: 1px solid #D8E0EE; padding-bottom: 2px; }
-  .sig-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; white-space: nowrap; min-width: 68px; }
-  .sig-val { font-size: 9pt; color: #111; flex: 1; }
-  .sig-canvas-wrap { margin-top: 6px; }
-  .sig-canvas-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; margin-bottom: 2px; }
-  .sig-canvas { display: block; width: 100%; height: 46px; border-bottom: 1px solid #AAB; }
-
-  .provider-sig-block { margin-top: 4px; }
-  .provider-sig-font { font-family: 'Great Vibes', cursive; font-size: 30pt; color: #0F2561; line-height: 1; margin-left: 8px; transform: rotate(-2.5deg); display: inline-block; }
-  </style>
+.doc-settlement .doc-title { font-size: 13.5pt; margin: 4px 0 14px; padding-bottom: 8px; }
+.doc-settlement .sec-head { font-size: 9.5pt; padding: 5px 12px; margin: 14px 0 10px; }
+.doc-settlement .doc-p { font-size: 9.8pt; line-height: 1.55; margin-bottom: 9px; }
+.doc-settlement .sig-section { margin-top: auto; padding-top: 30px; gap: 40px; }
+.doc-settlement .sig-blk-title { font-size: 10.5pt; }
+.doc-settlement .provider-sig-font { font-size: 28pt; }
+</style>
 </head>
 <body>
 
@@ -374,7 +302,6 @@
 
 <!-- APP -->
 <div id="appContent" class="app-content">
-
   <div class="topbar">
     <div class="topbar-brand">
       <span class="topbar-mark">PUREMD GROUP LLC</span>
@@ -385,7 +312,6 @@
   </div>
 
   <div class="wrap">
-
     <!-- SETTINGS PANEL -->
     <div class="panel">
       <div class="panel-head">
@@ -406,31 +332,66 @@
             <span class="card-name">HIPAA</span>
             <span class="card-desc">Confidentiality agreement</span>
           </div>
+          <div class="doc-type-card" id="cardSettlement" onclick="switchTemplate('settlement')">
+            <span class="card-icon">💵</span>
+            <span class="card-name">Settlement</span>
+            <span class="card-desc">Claim confirmation letter</span>
+          </div>
         </div>
 
-        <div class="section-label">👤 Client Information</div>
-        <div class="fg"><label>Agreement Date</label><input type="date" id="pDate" value="2026-06-16"></div>
-        <div class="fg"><label>Practice Name</label><input type="text" id="pPractice" value="Collazo Chiropractic"></div>
-        <div class="fg"><label>Practice Address</label><input type="text" id="pAddr" value="400 N Ford Blvd, Los Angeles, CA 90022"></div>
-        <div class="fg"><label>Authorized Doctor / Owner</label><input type="text" id="pDoctor" value="Dr. Jean Collazo"></div>
-
-        <div class="section-label">🏢 Service Provider</div>
-        <div class="provider-box">
-          <div class="fg"><label>Signatory Name</label><input type="text" id="pProviderName" value="Elijah Perez"></div>
-          <div class="fg" style="margin-bottom:0"><label>Title / Position</label><input type="text" id="pProviderTitle" value="Vice President, PureMD Group LLC"></div>
+        <!-- CLIENT INFO — business / hipaa -->
+        <div id="clientInfoWrapper">
+          <div class="section-label">👤 Client Information</div>
+          <div class="fg"><label>Agreement Date</label><input type="date" id="pDate" value="2026-06-16"></div>
+          <div class="fg"><label>Practice Name</label><input type="text" id="pPractice" value="Collazo Chiropractic"></div>
+          <div class="fg"><label>Practice Address</label><input type="text" id="pAddr" value="400 N Ford Blvd, Los Angeles, CA 90022"></div>
+          <div class="fg"><label>Authorized Doctor / Owner</label><input type="text" id="pDoctor" value="Dr. Jean Collazo"></div>
         </div>
 
+        <!-- PROVIDER SIGNER (PureMD staff) — business / hipaa -->
+        <div id="providerBoxWrapper">
+          <div class="section-label">🏢 Service Provider</div>
+          <div class="provider-box">
+            <div class="fg"><label>Signatory Name</label><input type="text" id="pProviderName" value="Elijah Perez"></div>
+            <div class="fg" style="margin-bottom:0"><label>Title / Position</label><input type="text" id="pProviderTitle" value="Vice President, PureMD Group LLC"></div>
+          </div>
+        </div>
+
+        <!-- SERVICES — business only -->
         <div id="servicesConfigWrapper">
           <div class="section-label">🛠 Services Configuration</div>
           <div id="servicesFormContainer"></div>
           <button type="button" class="add-btn" onclick="addServiceRow()">＋ Add Service Row</button>
         </div>
 
+        <!-- SETTLEMENT — settlement only -->
+        <div id="settlementConfigWrapper" style="display:none">
+          <div class="section-label">🩺 Provider Letterhead</div>
+          <div class="fg"><label>Agreement / Letter Date</label><input type="date" id="pDate2" value="2026-06-30"></div>
+          <div class="fg"><label>Doctor Name</label><input type="text" id="sDrName" value="Jeffrey Steinhardt, DC"></div>
+          <div class="fg"><label>License #</label><input type="text" id="sDrLicense" value="DC16214"></div>
+          <div class="fg"><label>Tax ID</label><input type="text" id="sTaxId" value="330110464"></div>
+          <div class="fg"><label>Office Address</label><input type="text" id="sDrAddr" value="2707 Congress St., Ste. 2A, San Diego, CA 92110"></div>
+          <div class="fg"><label>Phone</label><input type="text" id="sDrPhone" value="619-222-0651"></div>
+          <div class="fg"><label>Fax</label><input type="text" id="sDrFax" value="619-807-1077"></div>
+
+          <div class="section-label">💵 Settlement Details</div>
+          <div class="fg"><label>Patient Name</label><input type="text" id="sPatientName" value="Magallanes, Jose"></div>
+          <div class="fg"><label>Insurance</label><input type="text" id="sInsurance" value="LWP Claims Solutions"></div>
+          <div class="fg"><label>Claim #</label><input type="text" id="sClaimNumber" value="SAC0000158836"></div>
+          <div class="fg"><label>Settlement Amount ($)</label><input type="text" id="sAmount" value="2,125.00"></div>
+          <div class="fg"><label>Adjuster Name (signature)</label><input type="text" id="sAdjusterName" value="Seth Morgan"></div>
+
+          <div class="section-label">📎 Attach W-9</div>
+          <input type="file" id="w9FileInput" accept="application/pdf,.pdf" style="display:none" onchange="handleW9Select(event)">
+          <button type="button" class="add-btn" onclick="document.getElementById('w9FileInput').click()">📎 Choose W-9 PDF</button>
+          <div id="w9FileName" style="font-size:.72rem;color:var(--muted);margin-top:4px;"></div>
+        </div>
+
         <button class="btn-primary" id="downloadBtn" onclick="genPDF()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download PDF
         </button>
-
       </div>
     </div>
 
@@ -438,9 +399,7 @@
     <div class="panel preview-panel">
       <div class="preview-head-row">
         <h2>📄 Live Preview</h2>
-        <button type="button" id="editToggle" class="edit-toggle-btn" onclick="toggleTextEditing()">
-          ✏️ Edit Wording
-        </button>
+        <button type="button" id="editToggle" class="edit-toggle-btn" onclick="toggleTextEditing()">✏️ Edit Wording</button>
       </div>
       <div class="scroll">
         <div class="scroll-inner">
@@ -448,13 +407,17 @@
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="app-footer">
+    <span class="credit-mark">AK</span>
+    <span>Designed &amp; maintained by <strong>Aarij Khan</strong></span>
   </div>
 </div>
 
 <script src="Bagreement.html"></script>
 <script src="Hagreement.html"></script>
-
+<script src="Sagreement.html"></script>
 <script>
 // ===== AUTH =====
 function checkLogin() {
@@ -471,7 +434,6 @@ function checkLogin() {
     document.getElementById('passwordInput').focus();
   }
 }
-// Enter key on either field
 ['usernameInput','passwordInput'].forEach(id => {
   document.getElementById(id).addEventListener('keyup', e => { if (e.key === 'Enter') checkLogin(); });
 });
@@ -482,25 +444,34 @@ let currentActiveTemplate = 'business';
 function switchTemplate(type) {
   const mount = document.getElementById('agreementMount');
   const svcWrap = document.getElementById('servicesConfigWrapper');
+  const clientWrap = document.getElementById('clientInfoWrapper');
+  const providerWrap = document.getElementById('providerBoxWrapper');
+  const settlementWrap = document.getElementById('settlementConfigWrapper');
 
-  // Reset edit mode when switching
   if (isEditingMode) toggleTextEditing();
-
   currentActiveTemplate = type;
 
   document.getElementById('cardBusiness').classList.toggle('selected', type === 'business');
   document.getElementById('cardHIPAA').classList.toggle('selected', type === 'hipaa');
+  document.getElementById('cardSettlement').classList.toggle('selected', type === 'settlement');
+
+  svcWrap.style.display = (type === 'business') ? 'block' : 'none';
+  clientWrap.style.display = (type === 'settlement') ? 'none' : 'block';
+  providerWrap.style.display = (type === 'settlement') ? 'none' : 'block';
+  settlementWrap.style.display = (type === 'settlement') ? 'block' : 'none';
 
   if (type === 'business') {
-    svcWrap.style.display = 'block';
     mount.innerHTML = (typeof AGREEMENT_TEMPLATE !== 'undefined')
       ? AGREEMENT_TEMPLATE
       : '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">AGREEMENT_TEMPLATE not found.</div>';
-  } else {
-    svcWrap.style.display = 'none';
+  } else if (type === 'hipaa') {
     mount.innerHTML = (typeof HIPAA_TEMPLATE !== 'undefined')
       ? HIPAA_TEMPLATE
       : '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">HIPAA_TEMPLATE not found.</div>';
+  } else {
+    mount.innerHTML = (typeof SETTLEMENT_TEMPLATE !== 'undefined')
+      ? SETTLEMENT_TEMPLATE
+      : '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">SETTLEMENT_TEMPLATE not found.</div>';
   }
 
   renderServiceConfiguration();
@@ -509,12 +480,10 @@ function switchTemplate(type) {
 
 // ===== EDIT MODE =====
 let isEditingMode = false;
-
 function toggleTextEditing() {
   isEditingMode = !isEditingMode;
   const btn = document.getElementById('editToggle');
   const paragraphs = document.querySelectorAll('.editable-text');
-
   if (isEditingMode) {
     btn.textContent = '💾 Save Wording';
     btn.classList.add('active-edit');
@@ -528,15 +497,14 @@ function toggleTextEditing() {
 
 // ===== SERVICES STATE =====
 let servicesData = [
-  { id: 'col', name: 'A/R Collection',  desc: "Workers' Compensation Claims Collection", fee: '10' },
-  { id: 'bil', name: 'Billing',          desc: "Workers' Compensation Claims Billing",    fee: '5'  }
+  { id: 'col', name: 'A/R Collection', desc: "Workers' Compensation Claims Collection", fee: '10' },
+  { id: 'bil', name: 'Billing', desc: "Workers' Compensation Claims Billing", fee: '5' }
 ];
 
 function renderServiceConfiguration() {
   const container = document.getElementById('servicesFormContainer');
   if (!container) return;
   container.innerHTML = '';
-
   servicesData.forEach((svc, i) => {
     const div = document.createElement('div');
     div.className = 'service-block';
@@ -561,13 +529,11 @@ function addServiceRow() {
   renderServiceConfiguration();
   sync();
 }
-
 function removeServiceRow(id) {
   servicesData = servicesData.filter(s => s.id !== id);
   renderServiceConfiguration();
   sync();
 }
-
 function updateServiceField(id, field, value) {
   const target = servicesData.find(s => s.id === id);
   if (target) { target[field] = value; sync(); }
@@ -581,84 +547,152 @@ function fmtDate(s) {
 
 // ===== SYNC =====
 function sync() {
-  const date      = fmtDate(document.getElementById('pDate').value);
-  const practice  = document.getElementById('pPractice').value  || '___________';
-  const addr      = document.getElementById('pAddr').value      || '___________';
-  const doctor    = document.getElementById('pDoctor').value    || '___________';
-  const provName  = document.getElementById('pProviderName').value  || '___________';
-  const provTitle = document.getElementById('pProviderTitle').value || '___________';
-
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
-  set('vDate',         date);
-  set('vDateSig',      date);
-  // vDateClient intentionally left blank — client fills in manually
-  set('vPractice',     practice);
-  set('vPracticeSig',  practice);
-  set('vAddr',         addr);
-  set('vDoctor',       doctor);
-  set('vSigName',      doctor);
-  set('vSigPractice',  practice);
-  set('vSigAddr',      addr);
-  set('vProviderName', provName);
-  set('vProviderTitle',provTitle);
-  set('vProviderSig',  provName);
+  // ---- Business / HIPAA fields ----
+  const date = fmtDate(document.getElementById('pDate').value);
+  const practice = document.getElementById('pPractice').value || '___________';
+  const addr = document.getElementById('pAddr').value || '___________';
+  const doctor = document.getElementById('pDoctor').value || '___________';
+  const provName = document.getElementById('pProviderName').value || '___________';
+  const provTitle = document.getElementById('pProviderTitle').value || '___________';
+
+  if (currentActiveTemplate !== 'settlement') {
+    set('vDate', date);
+    set('vDateSig', date);
+    set('vPractice', practice);
+    set('vPracticeSig', practice);
+    set('vAddr', addr);
+    set('vDoctor', doctor);
+    set('vSigName', doctor);
+    set('vSigPractice', practice);
+    set('vSigAddr', addr);
+    set('vProviderName', provName);
+    set('vProviderTitle', provTitle);
+    set('vProviderSig', provName);
+  }
 
   // Fee table (business only)
   const tbody = document.getElementById('feeTableBody');
-  if (!tbody) return;
-  tbody.innerHTML = '';
-
-  if (servicesData.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#999;font-style:italic;padding:12px;">No services configured.</td></tr>`;
-    return;
+  if (tbody) {
+    tbody.innerHTML = '';
+    if (servicesData.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#999;font-style:italic;padding:12px;">No services configured.</td></tr>`;
+    } else {
+      servicesData.forEach(svc => {
+        const tr = document.createElement('tr');
+        let fee = (svc.fee || '0').trim();
+        if (/^\d+(\.\d+)?$/.test(fee)) fee += '%';
+        tr.innerHTML = `<td class="svc-name">${svc.name || '—'}</td><td>${svc.desc || '—'}</td><td class="rate">${fee}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
   }
 
-  servicesData.forEach(svc => {
-    const tr = document.createElement('tr');
-    let fee = (svc.fee || '0').trim();
-    // Append % only if purely numeric
-    if (/^\d+(\.\d+)?$/.test(fee)) fee += '%';
-    tr.innerHTML = `
-      <td class="svc-name">${svc.name || '—'}</td>
-      <td>${svc.desc || '—'}</td>
-      <td class="rate">${fee}</td>
-    `;
-    tbody.appendChild(tr);
-  });
+  // ---- Settlement fields ----
+  if (currentActiveTemplate === 'settlement') {
+    const sDate = fmtDate(document.getElementById('pDate2').value);
+    set('vDate', sDate);
+    set('vDrName', document.getElementById('sDrName').value || '___________');
+    set('vDcLicense', document.getElementById('sDrLicense').value || '');
+    set('vTaxId', document.getElementById('sTaxId').value || '');
+    set('vDrAddr', document.getElementById('sDrAddr').value || '');
+    set('vDrPhone', document.getElementById('sDrPhone').value || '');
+    set('vDrFax', document.getElementById('sDrFax').value || '');
+    set('vProviderSig2', document.getElementById('sDrName').value || '___________');
+    set('vPatientName', document.getElementById('sPatientName').value || '___________');
+    set('vInsurance', document.getElementById('sInsurance').value || '___________');
+    set('vClaimNumber', document.getElementById('sClaimNumber').value || '___________');
+    set('vAmount', document.getElementById('sAmount').value || '0.00');
+    set('vAdjusterName', document.getElementById('sAdjusterName').value || '___________');
+    set('vAdjusterSig', document.getElementById('sAdjusterName').value || '___________');
+  }
 }
 
 // Input listeners
-['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle'].forEach(id => {
+['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle',
+ 'pDate2','sDrName','sDrLicense','sTaxId','sDrAddr','sDrPhone','sDrFax',
+ 'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName'].forEach(id => {
   const el = document.getElementById(id);
   if (el) { el.addEventListener('input', sync); el.addEventListener('change', sync); }
 });
 
+// ===== W-9 ATTACHMENT (Settlement only) =====
+let w9File = null;
+function handleW9Select(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
+    alert('Please select a PDF file.');
+    e.target.value = '';
+    return;
+  }
+  w9File = f;
+  document.getElementById('w9FileName').textContent = '✅ ' + f.name;
+}
+
 // ===== PDF EXPORT =====
 function genPDF() {
   if (isEditingMode) toggleTextEditing();
-
   const btn = document.getElementById('downloadBtn');
   btn.classList.add('loading');
   btn.innerHTML = '⏳ Generating…';
 
-  const el   = document.getElementById('contract-pdf');
-  const name = (document.getElementById('pPractice').value || 'Agreement').replace(/\s+/g, '_');
-  const file = currentActiveTemplate === 'business'
-    ? `PureMD_Business_Agreement_${name}.pdf`
-    : `PureMD_HIPAA_Agreement_${name}.pdf`;
+  const resetBtn = () => {
+    btn.classList.remove('loading');
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
+  };
 
-  html2pdf().set({
+  const el = document.getElementById('contract-pdf');
+
+  let file;
+  if (currentActiveTemplate === 'business') {
+    const name = (document.getElementById('pPractice').value || 'Agreement').replace(/\s+/g, '_');
+    file = `PureMD_Business_Agreement_${name}.pdf`;
+  } else if (currentActiveTemplate === 'hipaa') {
+    const name = (document.getElementById('pPractice').value || 'Agreement').replace(/\s+/g, '_');
+    file = `PureMD_HIPAA_Agreement_${name}.pdf`;
+  } else {
+    const name = (document.getElementById('sPatientName').value || 'Patient').replace(/\s+/g, '_');
+    file = `Settlement_Agreement_${name}.pdf`;
+  }
+
+  const opts = {
     margin: [0.42, 0.48, 0.42, 0.48],
     filename: file,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, logging: false, allowTaint: true, scrollY: 0, scrollX: 0 },
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'] }
-  }).from(el).save().then(() => {
-    btn.classList.remove('loading');
-    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
-  });
+  };
+
+  if (currentActiveTemplate === 'settlement' && w9File) {
+    // Build settlement PDF in memory, then splice in W-9 pages via pdf-lib
+    html2pdf().set(opts).from(el).toPdf().outputPdf('arraybuffer')
+      .then(async (mainBuf) => {
+        const { PDFDocument } = PDFLib;
+        const mainDoc = await PDFDocument.load(mainBuf);
+        const w9Buf = await w9File.arrayBuffer();
+        const w9Doc = await PDFDocument.load(w9Buf);
+        const copied = await mainDoc.copyPages(w9Doc, w9Doc.getPageIndices());
+        copied.forEach(p => mainDoc.addPage(p));
+        const mergedBytes = await mainDoc.save();
+        const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = file;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+        resetBtn();
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error attaching W-9: ' + err.message);
+        resetBtn();
+      });
+  } else {
+    html2pdf().set(opts).from(el).save().then(resetBtn);
+  }
 }
 </script>
 </body>
