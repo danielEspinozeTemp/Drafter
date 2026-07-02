@@ -1,17 +1,7 @@
 const SETTLEMENT_TEMPLATE = `
 <div id="contract-pdf" class="doc-settlement">
 
-  <!-- HEADER: PureMD Group letterhead (matches Bagreement/Hagreement) -->
-  <div class="doc-header">
-    <img src="https://raw.githubusercontent.com/danielEspinozeTemp/Drafter/main/logo.png" alt="PureMD Logo">
-    <div class="hdr-text">
-      <div class="hdr-company">PUREMD GROUP LLC</div>
-      <div class="hdr-sub">Medical Billing &amp; Collections Services</div>
-    </div>
-    <div class="hdr-addr">100 N Brand Blvd S-522<br>Glendale, CA 91203</div>
-  </div>
-
-  <!-- DOCTOR SUB-LETTERHEAD -->
+  <!-- LETTERHEAD: doctor/client info (PureMD branding removed) -->
   <div class="doc-subhead">
     <div class="subhead-row">
       <span class="subhead-name" id="vDrName">Jeffrey Steinhardt, DC</span>
@@ -44,6 +34,12 @@ const SETTLEMENT_TEMPLATE = `
   <p class="doc-p editable-text">Once the payment is received in our bank, the remaining balance will be withdrawn.</p>
   <p class="doc-p editable-text"><strong>Payment is expected in our office within 30 calendar days of this agreement. Interest and penalties will apply to begin the 31st day until payment is received. Please note that payments made via wire transfer or electronic transfer are not accepted.</strong></p>
   <p class="doc-p editable-text">Thank you for your time and cooperation in this matter.</p>
+
+  <div class="payee-block">
+    <div class="payee-lbl">Please make checks payable to:</div>
+    <div class="payee-name" id="vPayeeName">Prospice Medical Centers</div>
+    <div class="payee-addr" id="vPayeeAddr">PO BOX 25551, SANTA ANA, CA 92799</div>
+  </div>
 
   <div class="sig-section">
     <div class="sig-blk">

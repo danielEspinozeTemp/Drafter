@@ -252,22 +252,18 @@ body {
   flex-direction: column;
   padding: 0 60px 30px;
 }
-.doc-settlement .doc-header { padding-bottom: 12px; margin-bottom: 0; }
-.doc-settlement .hdr-company { font-size: 21pt; }
-.doc-settlement .hdr-sub { font-size: 8.5pt; margin-top: 3px; }
-.doc-settlement .hdr-addr { font-size: 8.5pt; line-height: 1.7; }
 
 .doc-subhead {
-  border-bottom: 1px solid #C8D4EA;
-  padding: 10px 0 12px;
-  margin-bottom: 14px;
+  border-bottom: 3px solid #1B3A8A;
+  padding: 18px 0 12px;
+  margin-bottom: 16px;
 }
 .doc-subhead .subhead-row {
   display: flex; align-items: baseline; justify-content: space-between;
 }
-.doc-subhead .subhead-name { font-size: 12.5pt; font-weight: 800; color: #0F2561; }
-.doc-subhead .subhead-meta { font-size: 8.5pt; color: #555; font-weight: 600; }
-.doc-subhead .subhead-addr { font-size: 8.5pt; color: #555; margin-top: 3px; }
+.doc-subhead .subhead-name { font-size: 16pt; font-weight: 900; color: #1B3A8A; letter-spacing: .3px; }
+.doc-subhead .subhead-meta { font-size: 9pt; color: #555; font-weight: 700; }
+.doc-subhead .subhead-addr { font-size: 9pt; color: #555; margin-top: 4px; }
 
 .settlement-meta { margin: 4px 0 16px; }
 .settlement-meta td { padding: 7px 12px; font-size: 9.5pt; }
@@ -275,7 +271,19 @@ body {
 .doc-settlement .doc-title { font-size: 13.5pt; margin: 4px 0 14px; padding-bottom: 8px; }
 .doc-settlement .sec-head { font-size: 9.5pt; padding: 5px 12px; margin: 14px 0 10px; }
 .doc-settlement .doc-p { font-size: 9.8pt; line-height: 1.55; margin-bottom: 9px; }
-.doc-settlement .sig-section { margin-top: auto; padding-top: 30px; gap: 40px; }
+
+.payee-block {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #F0F4FF;
+  border: 1.5px solid #C5D0EB;
+  border-radius: 4px;
+}
+.payee-lbl { font-size: 9pt; font-weight: 700; color: #0F2561; margin-bottom: 3px; }
+.payee-name { font-size: 10.5pt; font-weight: 800; color: #111; }
+.payee-addr { font-size: 9.5pt; color: #333; margin-top: 1px; }
+
+.doc-settlement .sig-section { margin-top: auto; padding-top: 24px; gap: 40px; }
 .doc-settlement .sig-blk-title { font-size: 10.5pt; }
 .doc-settlement .provider-sig-font { font-size: 28pt; }
 </style>
@@ -381,6 +389,10 @@ body {
           <div class="fg"><label>Claim #</label><input type="text" id="sClaimNumber" value="SAC0000158836"></div>
           <div class="fg"><label>Settlement Amount ($)</label><input type="text" id="sAmount" value="2,125.00"></div>
           <div class="fg"><label>Adjuster Name (signature)</label><input type="text" id="sAdjusterName" value="Seth Morgan"></div>
+
+          <div class="section-label">💳 Payment Instructions</div>
+          <div class="fg"><label>Payable To (Name)</label><input type="text" id="sPayeeName" value="Prospice Medical Centers"></div>
+          <div class="fg"><label>Delivery Address</label><input type="text" id="sPayeeAddr" value="PO BOX 25551, SANTA ANA, CA 92799"></div>
 
           <div class="section-label">📎 Attach W-9</div>
           <input type="file" id="w9FileInput" accept="application/pdf,.pdf" style="display:none" onchange="handleW9Select(event)">
@@ -606,13 +618,15 @@ function sync() {
     set('vAmount', document.getElementById('sAmount').value || '0.00');
     set('vAdjusterName', document.getElementById('sAdjusterName').value || '___________');
     set('vAdjusterSig', document.getElementById('sAdjusterName').value || '___________');
+    set('vPayeeName', document.getElementById('sPayeeName').value || '___________');
+    set('vPayeeAddr', document.getElementById('sPayeeAddr').value || '___________');
   }
 }
 
 // Input listeners
 ['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle',
  'pDate2','sDrName','sDrLicense','sTaxId','sDrAddr','sDrPhone','sDrFax',
- 'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName'].forEach(id => {
+ 'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName','sPayeeName','sPayeeAddr'].forEach(id => {
   const el = document.getElementById(id);
   if (el) { el.addEventListener('input', sync); el.addEventListener('change', sync); }
 });
