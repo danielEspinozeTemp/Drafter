@@ -193,6 +193,51 @@ body {
 }
 .edit-toggle-btn:hover { border-color: var(--brand); background: var(--brand-lt); }
 .edit-toggle-btn.active-edit { background: #FEF2F2; border-color: var(--red); color: var(--red); }
+/* TEMPLATE SAVE/LOAD */
+.btn-template {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 14px;
+  background: #fff; border: 1.5px solid var(--border);
+  color: var(--brand); font-size: .78rem; font-weight: 700;
+  font-family: inherit; border-radius: var(--radius);
+  cursor: pointer; transition: all .15s;
+  margin-top: 8px;
+}
+.btn-template:hover { border-color: var(--brand); background: var(--brand-lt); }
+.tpl-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  transition: background .12s;
+}
+.tpl-item:last-child { border-bottom: none; }
+.tpl-item:hover { background: #F8FAFF; }
+.tpl-item-name { font-size: .82rem; font-weight: 600; color: var(--text); }
+.tpl-item-provider { font-size: .7rem; color: var(--muted); margin-top: 1px; }
+.tpl-item-date { font-size: .65rem; color: #999; margin-top: 1px; }
+.tpl-load-btn {
+  padding: 5px 12px; background: var(--brand); color: #fff;
+  border: none; border-radius: 4px;
+  font-size: .72rem; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: background .12s;
+}
+.tpl-load-btn:hover { background: var(--brand-dk); }
+.tpl-del-btn {
+  padding: 5px 8px; background: none;
+  border: 1px solid #FECACA; color: var(--red);
+  border-radius: 4px; font-size: .68rem; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all .12s;
+}
+.tpl-del-btn:hover { background: #FEF2F2; }
+.tpl-empty {
+  text-align: center; padding: 20px 12px;
+  color: var(--muted); font-size: .78rem;
+}
+.tpl-tag {
+  display: inline-block; font-size: .62rem; font-weight: 700;
+  background: #EEF2FB; color: var(--brand); padding: 2px 7px;
+  border-radius: 3px; text-transform: uppercase; letter-spacing: .3px;
+}
 .scroll { padding: 12px; background: #5A6070; min-height: 600px; }
 .scroll-inner { background: #fff; border-radius: 2px; box-shadow: 0 2px 20px rgba(0,0,0,.3); }
 /* ===== CONTRACT DOCUMENT ===== */
@@ -423,6 +468,24 @@ body {
           <button type="button" class="add-btn" onclick="document.getElementById('w9FileInput').click()">📎 Choose W-9 PDF</button>
           <div id="w9FileName" style="font-size:.72rem;color:var(--muted);margin-top:4px;"></div>
         </div>
+
+        <!-- ===== TEMPLATE SAVE / LOAD (Settlement only) ===== -->
+        <div class="section-label">💾 Provider Templates</div>
+        <p style="font-size:.7rem;color:var(--muted);margin:0 0 6px;line-height:1.4;">
+          Save the current provider's details as a reusable template. Load it later to quickly fill in repeat information.
+        </p>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn-template" onclick="saveSettlementTemplate()" style="flex:1">💾 Save Template</button>
+          <button type="button" class="btn-template" onclick="toggleTemplateList()" style="flex:1">📂 Load Template</button>
+        </div>
+        <div id="templateListContainer" style="display:none;margin-top:8px;border:1.5px solid var(--border);border-radius:var(--radius);background:#FAFBFF;">
+          <div id="templateListHeader" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);background:#F8FAFF;border-radius:5px 5px 0 0;">
+            <span style="font-size:.7rem;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.4px;">Saved Templates</span>
+            <span id="templateCount" style="font-size:.68rem;color:var(--muted);">0 saved</span>
+          </div>
+          <div id="templateList" style="max-height:260px;overflow-y:auto;"></div>
+        </div>
+        <!-- ===== END TEMPLATES ===== -->
 
         <button class="btn-primary" id="downloadBtn" onclick="genPDF()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -701,6 +764,230 @@ function handleW9Select(e) {
   }
   w9File = f;
   document.getElementById('w9FileName').textContent = '✅ ' + f.name;
+}
+
+// ===== SETTLEMENT TEMPLATE SAVE / LOAD =====
+
+/** Collect all settlement form field values into a plain object. */
+function getSettlementFormData() {
+  return {
+    pDate2:           document.getElementById('pDate2').value,
+    sDrName:          document.getElementById('sDrName').value,
+    sDrLicense:       document.getElementById('sDrLicense').value,
+    sTaxId:           document.getElementById('sTaxId').value,
+    sDrAddr:          document.getElementById('sDrAddr').value,
+    sDrPhone:         document.getElementById('sDrPhone').value,
+    sDrFax:           document.getElementById('sDrFax').value,
+    sPatientName:     document.getElementById('sPatientName').value,
+    sInsurance:       document.getElementById('sInsurance').value,
+    sClaimNumber:     document.getElementById('sClaimNumber').value,
+    sAmount:          document.getElementById('sAmount').value,
+    sAdjusterName:    document.getElementById('sAdjusterName').value,
+    sAcceptedByName:  document.getElementById('sAcceptedByName').value,
+    dateRangeOption:  (document.querySelector('input[name="dateRangeOption"]:checked') || {}).value || 'all',
+    sSpecificDate:    document.getElementById('sSpecificDate').value,
+    sDateFrom:        document.getElementById('sDateFrom').value,
+    sDateTo:          document.getElementById('sDateTo').value,
+    sPayeeName:       document.getElementById('sPayeeName').value,
+    sPayeeAddr:       document.getElementById('sPayeeAddr').value
+  };
+}
+
+/** Apply a saved data object back onto every settlement form field and sync preview. */
+function applySettlementFormData(data) {
+  if (!data) return;
+
+  // Restore date-range radio
+  var radios = document.querySelectorAll('input[name="dateRangeOption"]');
+  radios.forEach(function(r) { r.checked = r.value === data.dateRangeOption; });
+  handleDateRangeChange(); // show/hide conditional date fields
+
+  // Restore every input
+  var fields = [
+    'pDate2','sDrName','sDrLicense','sTaxId','sDrAddr','sDrPhone','sDrFax',
+    'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName','sAcceptedByName',
+    'sSpecificDate','sDateFrom','sDateTo','sPayeeName','sPayeeAddr'
+  ];
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && data[id] !== undefined) el.value = data[id];
+  });
+
+  sync();
+}
+
+/** Get the array of saved template names from localStorage. */
+function getSavedTemplateNames() {
+  try {
+    var raw = localStorage.getItem('drafter_settlement_templates_index');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+/** Persist the template-name index. */
+function saveTemplateIndex(names) {
+  localStorage.setItem('drafter_settlement_templates_index', JSON.stringify(names));
+}
+
+/** Build the storage key for a named template. */
+function templateStorageKey(name) {
+  return 'drafter_settlement_template_' + name;
+}
+
+/** Return a safe file-system-friendly label from a doctor name. */
+function deriveTemplateName(drName) {
+  return (drName || 'provider')
+    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .toLowerCase() + '-template';
+}
+
+/** Save the current settlement form as a reusable template. */
+function saveSettlementTemplate() {
+  if (currentActiveTemplate !== 'settlement') {
+    alert('Template saving is only available for Settlement agreements.');
+    return;
+  }
+
+  var data = getSettlementFormData();
+  var suggested = deriveTemplateName(data.sDrName);
+  var name = prompt('Save current form as template.\nEnter a name for this template:', suggested);
+  if (!name || !name.trim()) return;
+
+  name = name.trim();
+  var names = getSavedTemplateNames();
+
+  if (names.indexOf(name) !== -1) {
+    if (!confirm('A template named "' + name + '" already exists. Overwrite it?')) return;
+  } else {
+    names.push(name);
+    saveTemplateIndex(names);
+  }
+
+  var templateData = {
+    name: name,
+    savedAt: new Date().toISOString(),
+    providerName: data.sDrName || '',
+    fields: data
+  };
+
+  localStorage.setItem(templateStorageKey(name), JSON.stringify(templateData));
+
+  // Update load-panel if it's open
+  if (document.getElementById('templateListContainer').style.display !== 'none') {
+    renderTemplateList();
+  }
+
+  alert('Template "' + name + '" saved successfully!');
+}
+
+/** Toggle the load-template panel open/closed. */
+function toggleTemplateList() {
+  var container = document.getElementById('templateListContainer');
+  if (container.style.display !== 'none') {
+    container.style.display = 'none';
+    return;
+  }
+  renderTemplateList();
+  container.style.display = 'block';
+}
+
+/** Render the list of saved templates into the panel. */
+function renderTemplateList() {
+  var list = document.getElementById('templateList');
+  var countEl = document.getElementById('templateCount');
+  var names = getSavedTemplateNames();
+
+  if (!list) return;
+  countEl.textContent = names.length + ' saved';
+
+  if (names.length === 0) {
+    list.innerHTML = '<div class="tpl-empty">📭 No saved templates yet.<br><span style="font-size:.72rem;">Fill in the settlement form and click Save Template above.</span></div>';
+    return;
+  }
+
+  // Build list in reverse chronological (newest first)
+  var items = names.map(function(name) {
+    var raw = localStorage.getItem(templateStorageKey(name));
+    if (!raw) return null;
+    try {
+      var tpl = JSON.parse(raw);
+      return {
+        name: name,
+        provider: tpl.providerName || (tpl.fields ? tpl.fields.sDrName : '') || '',
+        savedAt: tpl.savedAt ? new Date(tpl.savedAt) : null
+      };
+    } catch(e) { return null; }
+  }).filter(Boolean);
+
+  items.sort(function(a, b) {
+    return (b.savedAt || 0) - (a.savedAt || 0);
+  });
+
+  list.innerHTML = items.map(function(item) {
+    var dateStr = '';
+    if (item.savedAt) {
+      try {
+        dateStr = item.savedAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      } catch(e) { dateStr = ''; }
+    }
+    var encName = encodeURIComponent(item.name);
+    return '<div class="tpl-item">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="tpl-item-name">' + escapeHtml(item.name) + '</div>' +
+        '<div class="tpl-item-provider">' + escapeHtml(item.provider) + '</div>' +
+        '<div class="tpl-item-date">' + (dateStr ? 'Saved ' + dateStr : '') + '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:4px;flex-shrink:0;align-items:center">' +
+        '<span class="tpl-tag">Settlement</span>' +
+        '<button class="tpl-load-btn" onclick="loadSettlementTemplate(\'' + encName + '\')">Load</button>' +
+        '<button class="tpl-del-btn" onclick="deleteSettlementTemplate(\'' + encName + '\')">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/** Minimal HTML-escaping helper for template names (user input). */
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/** Load a saved template's values into the settlement form. */
+function loadSettlementTemplate(encodedName) {
+  var name = decodeURIComponent(encodedName);
+  var raw = localStorage.getItem(templateStorageKey(name));
+  if (!raw) {
+    alert('Template "' + name + '" not found. It may have been deleted.');
+    renderTemplateList();
+    return;
+  }
+
+  var template = JSON.parse(raw);
+
+  // Switch to settlement view if not already there
+  if (currentActiveTemplate !== 'settlement') {
+    switchTemplate('settlement');
+  }
+
+  applySettlementFormData(template.fields);
+  document.getElementById('templateListContainer').style.display = 'none';
+
+  var provider = template.providerName || (template.fields ? template.fields.sDrName : '') || name;
+  alert('Template "' + name + '" loaded for ' + provider +
+        '.\n\nMake any changes (dates, amounts, patient info) then click Download PDF.');
+}
+
+/** Delete a saved template after confirmation. */
+function deleteSettlementTemplate(encodedName) {
+  var name = decodeURIComponent(encodedName);
+  if (!confirm('Delete template "' + name + '" permanently?')) return;
+
+  localStorage.removeItem(templateStorageKey(name));
+  var names = getSavedTemplateNames().filter(function(n) { return n !== name; });
+  saveTemplateIndex(names);
+  renderTemplateList();
 }
 
 // ===== PDF EXPORT =====
