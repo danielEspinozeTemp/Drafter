@@ -75,10 +75,99 @@ body {
 .topbar-badge { font-size: .7rem; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); padding: 3px 9px; border-radius: 20px; }
 .wrap {
   max-width: 1360px; margin: 0 auto;
-  display: grid; grid-template-columns: 380px 1fr;
-  gap: 14px; align-items: start;
+  display: grid; grid-template-columns: auto 380px 1fr;
+  gap: 10px; align-items: start;
 }
-/* PANEL */
+/* SIDEBAR */
+.sidebar {
+  width: 88px;
+  background: var(--brand-dk);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  gap: 1px;
+  position: sticky;
+  top: 14px;
+  transition: width .2s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.sidebar.collapsed {
+  width: 28px;
+  cursor: pointer;
+}
+.sidebar.collapsed:hover {
+  background: #1a2550;
+}
+.sidebar-toggle {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all .15s;
+  color: rgba(255,255,255,.5);
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.sidebar-toggle:hover {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+.sidebar.collapsed .sidebar-toggle {
+  width: 28px;
+  height: 28px;
+  font-size: 11px;
+  margin: 0 auto;
+}
+.sidebar-section {
+  font-size: .5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  color: rgba(255,255,255,.35);
+  padding: 6px 0 3px;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  transition: opacity .15s;
+}
+.sidebar.collapsed .sidebar-section { opacity: 0; }
+.sidebar.collapsed .sidebar-item { opacity: 0; pointer-events: none; }
+.sidebar.collapsed .sidebar-divider { opacity: 0; }
+.sidebar-item {
+  width: 100%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+  flex-shrink: 0;
+  font-size: .7rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  letter-spacing: .1px;
+}
+.sidebar-item:hover { background: rgba(255,255,255,.12); }
+.sidebar-item.active { background: rgba(255,255,255,.18); box-shadow: 0 0 0 1.5px rgba(255,255,255,.2); }
+.sidebar-item.disabled { opacity: .25; cursor: default; pointer-events: none; }
+.sidebar-divider {
+  width: 32px;
+  height: 1px;
+  background: rgba(255,255,255,.1);
+  margin: 4px 0;
+  flex-shrink: 0;
+}
 .panel { background: var(--panel); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
 .panel-head {
   padding: 14px 18px;
@@ -115,22 +204,6 @@ body {
 .fg input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); background: #fff; }
 /* PROVIDER BOX */
 .provider-box { background: #F0F4FF; border: 1.5px solid #C5D0EB; border-radius: var(--radius); padding: 12px; margin-bottom: 2px; }
-/* TEMPLATE SELECTOR */
-.doc-type-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 4px; }
-.doc-type-card {
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 10px 9px;
-  cursor: pointer;
-  transition: all .15s;
-  background: #FAFBFF;
-  display: flex; flex-direction: column; gap: 3px;
-}
-.doc-type-card:hover { border-color: var(--accent); background: #F0F5FF; }
-.doc-type-card.selected { border-color: var(--brand); background: #EEF2FB; box-shadow: 0 0 0 1px var(--brand); }
-.doc-type-card .card-icon { font-size: 16px; }
-.doc-type-card .card-name { font-size: .75rem; font-weight: 700; color: var(--brand); }
-.doc-type-card .card-desc { font-size: .67rem; color: var(--muted); line-height: 1.3; }
 /* SERVICES BUILDER */
 .service-block { background: var(--brand-lt); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 12px; margin-bottom: 8px; position: relative; }
 .service-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
@@ -390,6 +463,20 @@ body {
   </div>
 
   <div class="wrap">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="mainSidebar">
+      <div class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">◀</div>
+      <div class="sidebar-section">Docs</div>
+      <div class="sidebar-item active" id="sideBusiness" onclick="switchTemplate('business')">Business</div>
+      <div class="sidebar-item" id="sideHIPAA" onclick="switchTemplate('hipaa')">HIPAA</div>
+      <div class="sidebar-item" id="sideSettlement" onclick="switchTemplate('settlement')">Settlement</div>
+      <div class="sidebar-item" id="sideVOB" onclick="switchTemplate('vob')">VOB</div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">More</div>
+      <div class="sidebar-item disabled">Signatures</div>
+      <div class="sidebar-item disabled">Settings</div>
+    </div>
+
     <!-- SETTINGS PANEL -->
     <div class="panel">
       <div class="panel-head">
@@ -398,33 +485,9 @@ body {
       </div>
       <div class="panel-body">
 
-        <div class="section-label">📋 Document Type</div>
-        <div class="doc-type-grid">
-          <div class="doc-type-card selected" id="cardBusiness" onclick="switchTemplate('business')">
-            <span class="card-icon">📄</span>
-            <span class="card-name">Business</span>
-            <span class="card-desc">Services &amp; fee agreement</span>
-          </div>
-          <div class="doc-type-card" id="cardHIPAA" onclick="switchTemplate('hipaa')">
-            <span class="card-icon">🔒</span>
-            <span class="card-name">HIPAA</span>
-            <span class="card-desc">Confidentiality agreement</span>
-          </div>
-          <div class="doc-type-card" id="cardSettlement" onclick="switchTemplate('settlement')">
-            <span class="card-icon">💵</span>
-            <span class="card-name">Settlement</span>
-            <span class="card-desc">Claim confirmation letter</span>
-          </div>
-          <div class="doc-type-card" id="cardVOB" onclick="switchTemplate('vob')">
-            <span class="card-icon">✅</span>
-            <span class="card-name">VOB</span>
-            <span class="card-desc">Benefits verification agreement</span>
-          </div>
-        </div>
-
-        <!-- CLIENT INFO — business / hipaa -->
+<!-- CLIENT INFO — business / hipaa -->
         <div id="clientInfoWrapper">
-          <div class="section-label">👤 Client Information</div>
+          <div class="section-label">Client Information</div>
           <div class="fg"><label>Agreement Date</label><input type="date" id="pDate"></div>
           <div class="fg"><label>Practice Name</label><input type="text" id="pPractice" placeholder="e.g. Paradise Chiropractic"></div>
           <div class="fg"><label>Practice Address</label><input type="text" id="pAddr" placeholder="Street, City, State ZIP"></div>
@@ -433,7 +496,7 @@ body {
 
         <!-- PROVIDER SIGNER (PureMD staff) — business / hipaa -->
         <div id="providerBoxWrapper">
-          <div class="section-label">🏢 Service Provider</div>
+          <div class="section-label">Service Provider</div>
           <div class="provider-box">
             <div class="fg"><label>Signatory Name</label><input type="text" id="pProviderName" placeholder="e.g. Elijah Perez"></div>
             <div class="fg" style="margin-bottom:0"><label>Title / Position</label><input type="text" id="pProviderTitle" placeholder="e.g. Vice President"></div>
@@ -442,14 +505,14 @@ body {
 
         <!-- SERVICES — business only -->
         <div id="servicesConfigWrapper">
-          <div class="section-label">🛠 Services Configuration</div>
+          <div class="section-label">Services Configuration</div>
           <div id="servicesFormContainer"></div>
           <button type="button" class="add-btn" onclick="addServiceRow()">＋ Add Service Row</button>
         </div>
 
         <!-- VOB PRICING — vob only -->
         <div id="vobConfigWrapper" style="display:none">
-          <div class="section-label">💰 VOB Fee &amp; Pricing</div>
+          <div class="section-label">VOB Fee &amp; Pricing</div>
           <div style="margin-bottom:8px">
             <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
               <input type="radio" name="vobPricingModel" value="flat" checked onchange="handleVobPricingChange()">
@@ -471,7 +534,7 @@ body {
 
         <!-- SETTLEMENT — settlement only -->
         <div id="settlementConfigWrapper" style="display:none">
-          <div class="section-label">🩺 Provider Letterhead</div>
+          <div class="section-label">Provider Letterhead</div>
           <div class="fg"><label>Agreement / Letter Date</label><input type="date" id="pDate2"></div>
           <div class="fg"><label>Doctor Name</label><input type="text" id="sDrName" placeholder="Full name"></div>
           <div class="fg"><label>License #</label><input type="text" id="sDrLicense" placeholder="License number"></div>
@@ -480,7 +543,7 @@ body {
           <div class="fg"><label>Phone</label><input type="text" id="sDrPhone" placeholder="Phone number"></div>
           <div class="fg"><label>Fax</label><input type="text" id="sDrFax" placeholder="Fax number"></div>
 
-          <div class="section-label">💵 Settlement Details</div>
+          <div class="section-label">Settlement Details</div>
           <div class="fg"><label>Patient Name</label><input type="text" id="sPatientName" placeholder="Full name"></div>
           <div class="fg"><label>Insurance</label><input type="text" id="sInsurance" placeholder="Insurance company name"></div>
           <div class="fg"><label>Claim #</label><input type="text" id="sClaimNumber" placeholder="Claim number"></div>
@@ -488,7 +551,7 @@ body {
           <div class="fg"><label>Collector Name (signature)</label><input type="text" id="sAdjusterName" placeholder="Full name"></div>
           <div class="fg"><label>Accepted By (Name)</label><input type="text" id="sAcceptedByName" placeholder="Full name"></div>
 
-          <div class="section-label">📅 Dates of Service</div>
+          <div class="section-label">Dates of Service</div>
           <div style="margin-bottom:8px">
             <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
               <input type="radio" name="dateRangeOption" value="all" checked onchange="handleDateRangeChange()">
@@ -511,24 +574,24 @@ body {
             </div>
           </div>
 
-          <div class="section-label">💳 Payment Instructions</div>
+          <div class="section-label">Payment Instructions</div>
           <div class="fg"><label>Payable To (Name)</label><input type="text" id="sPayeeName" placeholder="Full name or business name"></div>
           <div class="fg"><label>Delivery Address</label><input type="text" id="sPayeeAddr" placeholder="Street or PO Box, City, State ZIP"></div>
 
-          <div class="section-label">📎 Attach W-9</div>
+          <div class="section-label">Attach W-9</div>
           <input type="file" id="w9FileInput" accept="application/pdf,.pdf" style="display:none" onchange="handleW9Select(event)">
-          <button type="button" class="add-btn" onclick="document.getElementById('w9FileInput').click()">📎 Choose W-9 PDF</button>
+          <button type="button" class="add-btn" onclick="document.getElementById('w9FileInput').click()">Choose W-9 PDF</button>
           <div id="w9FileName" style="font-size:.72rem;color:var(--muted);margin-top:4px;"></div>
         </div>
 
         <!-- ===== TEMPLATE SAVE / LOAD (Settlement only) ===== -->
-        <div class="section-label">💾 Provider Templates</div>
+        <div class="section-label">Provider Templates</div>
         <p style="font-size:.7rem;color:var(--muted);margin:0 0 6px;line-height:1.4;">
           Save the current provider's details as a reusable template. Load it later to quickly fill in repeat information.
         </p>
         <div style="display:flex;gap:8px;">
-          <button type="button" class="btn-template" onclick="saveSettlementTemplate()" style="flex:1">💾 Save Template</button>
-          <button type="button" class="btn-template" onclick="toggleTemplateList()" style="flex:1">📂 Load Template</button>
+          <button type="button" class="btn-template" onclick="saveSettlementTemplate()" style="flex:1">Save Template</button>
+          <button type="button" class="btn-template" onclick="toggleTemplateList()" style="flex:1">Load Template</button>
         </div>
         <div id="templateListContainer" style="display:none;margin-top:8px;border:1.5px solid var(--border);border-radius:var(--radius);background:#FAFBFF;">
           <div id="templateListHeader" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);background:#F8FAFF;border-radius:5px 5px 0 0;">
@@ -549,8 +612,8 @@ body {
     <!-- PREVIEW PANEL -->
     <div class="panel preview-panel">
       <div class="preview-head-row">
-        <h2>📄 Live Preview</h2>
-        <button type="button" id="editToggle" class="edit-toggle-btn" onclick="toggleTextEditing()">✏️ Edit Wording</button>
+        <h2>Live Preview</h2>
+        <button type="button" id="editToggle" class="edit-toggle-btn" onclick="toggleTextEditing()">Edit Wording</button>
       </div>
       <div class="scroll">
         <div class="scroll-inner">
@@ -590,6 +653,14 @@ function checkLogin() {
   document.getElementById(id).addEventListener('keyup', e => { if (e.key === 'Enter') checkLogin(); });
 });
 
+// ===== SIDEBAR =====
+function toggleSidebar() {
+  const sb = document.getElementById('mainSidebar');
+  sb.classList.toggle('collapsed');
+  const btn = sb.querySelector('.sidebar-toggle');
+  btn.textContent = sb.classList.contains('collapsed') ? '▶' : '◀';
+}
+
 // ===== TEMPLATE SWITCHING =====
 let currentActiveTemplate = 'business';
 
@@ -604,10 +675,10 @@ function switchTemplate(type) {
   if (isEditingMode) toggleTextEditing();
   currentActiveTemplate = type;
 
-  document.getElementById('cardBusiness').classList.toggle('selected', type === 'business');
-  document.getElementById('cardHIPAA').classList.toggle('selected', type === 'hipaa');
-  document.getElementById('cardSettlement').classList.toggle('selected', type === 'settlement');
-  document.getElementById('cardVOB').classList.toggle('selected', type === 'vob');
+  document.getElementById('sideBusiness').classList.toggle('active', type === 'business');
+  document.getElementById('sideHIPAA').classList.toggle('active', type === 'hipaa');
+  document.getElementById('sideSettlement').classList.toggle('active', type === 'settlement');
+  document.getElementById('sideVOB').classList.toggle('active', type === 'vob');
 
   svcWrap.style.display = (type === 'business') ? 'block' : 'none';
   clientWrap.style.display = (type === 'settlement') ? 'none' : 'block';
@@ -644,11 +715,11 @@ function toggleTextEditing() {
   const btn = document.getElementById('editToggle');
   const paragraphs = document.querySelectorAll('.editable-text');
   if (isEditingMode) {
-    btn.textContent = '💾 Save Wording';
+    btn.textContent = 'Save Wording';
     btn.classList.add('active-edit');
     paragraphs.forEach(el => el.setAttribute('contenteditable', 'true'));
   } else {
-    btn.textContent = '✏️ Edit Wording';
+    btn.textContent = 'Edit Wording';
     btn.classList.remove('active-edit');
     paragraphs.forEach(el => el.setAttribute('contenteditable', 'false'));
   }
@@ -846,7 +917,7 @@ function handleW9Select(e) {
     return;
   }
   w9File = f;
-  document.getElementById('w9FileName').textContent = '✅ ' + f.name;
+  document.getElementById('w9FileName').textContent = f.name + ' selected';
 }
 
 // ===== SETTLEMENT TEMPLATE SAVE / LOAD =====
@@ -986,7 +1057,7 @@ function renderTemplateList() {
   countEl.textContent = names.length + ' saved';
 
   if (names.length === 0) {
-    list.innerHTML = '<div class="tpl-empty">📭 No saved templates yet.<br><span style="font-size:.72rem;">Fill in the settlement form and click Save Template above.</span></div>';
+    list.innerHTML = '<div class="tpl-empty">No saved templates yet.<br><span style="font-size:.72rem;">Fill in the settlement form and click Save Template above.</span></div>';
     return;
   }
 
