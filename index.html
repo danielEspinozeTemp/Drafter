@@ -48,15 +48,8 @@ body {
   width: 100%; max-width: 400px;
   border: 1px solid var(--g-border);
 }
-.login-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
-.login-logo-mark {
-  width: 40px; height: 40px;
-  background: var(--g-blue);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-weight: 500; font-size: 14px;
-}
-.login-logo-text h2 { font-size: 1.3rem; font-weight: 400; color: var(--g-text); line-height: 1.3; }
+.login-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
+.login-logo-text h2 { font-size: 1.35rem; font-weight: 700; color: var(--g-text); line-height: 1.3; }
 .login-logo-text p { font-size: .82rem; color: var(--g-text-secondary); }
 .login-divider { border: none; border-top: 1px solid var(--g-border); margin-bottom: 24px; }
 .error-msg { color: var(--g-error); font-size: .78rem; margin-bottom: 16px; display: none; background: #FCE8E6; border-radius: 4px; padding: 10px 14px; }
@@ -107,15 +100,18 @@ body {
   transition: var(--g-trans); flex-shrink: 0;
 }
 .g-hamburger:hover { background: rgba(60,64,67,.08); }
-.g-brand { display: flex; align-items: center; gap: 10px; }
-.g-brand-dot {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--g-blue);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 11px; font-weight: 500; letter-spacing: -.2px;
+.g-brand { display: flex; align-items: center; gap: 6px; }
+.g-brand-name { font-size: 1.35rem; font-weight: 700; color: var(--g-text); letter-spacing: .1px; }
+.g-brand-blue { color: var(--g-blue); }
+.g-brand-sep {
+  width: 1px; height: 16px;
+  background: var(--g-border);
+  margin: 0 10px;
   flex-shrink: 0;
 }
-.g-brand-name { font-size: 1.05rem; font-weight: 500; color: var(--g-text); letter-spacing: .1px; }
+.g-brand-author {
+  font-size: .7rem; color: var(--g-text-secondary); white-space: nowrap;
+}
 .g-topbar-badge {
   margin-left: auto;
   font-size: .75rem; color: var(--g-text-secondary); font-weight: 400;
@@ -366,20 +362,6 @@ body {
 .sig-canvas { display: block; width: 100%; height: 46px; border-bottom: 1px solid #AAB; }
 .provider-sig-block { margin-top: 4px; }
 .provider-sig-font { font-family: 'Great Vibes', cursive; font-size: 30pt; color: #0F2561; line-height: 1; margin-left: 8px; transform: rotate(-2.5deg); display: inline-block; }
-/* ===== FOOTER CREDIT ===== */
-.g-footer {
-  margin-top: 24px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  font-size: .75rem; color: var(--g-text-secondary);
-  padding: 8px;
-}
-.g-footer .credit-mark {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--g-blue); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 500;
-  flex-shrink: 0;
-}
 /* ===== SETTLEMENT — single-page letter layout ===== */
 #contract-pdf.doc-settlement {
   height: 9.9in;
@@ -449,9 +431,9 @@ body {
 <div id="loginScreen" class="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <div class="login-logo-mark">PM</div>
+      <img src="logo.png" alt="PureDOCS Logo" style="height:40px; width:auto; object-fit:contain;">
       <div class="login-logo-text">
-        <h2>PureMD Group LLC</h2>
+        <h2>Pure<span class="g-brand-blue">DOCS</span></h2>
         <p>Agreement Generator Portal</p>
       </div>
     </div>
@@ -469,10 +451,11 @@ body {
     <div class="g-topbar-inner">
       <button class="g-hamburger" onclick="toggleSidebar()" title="Toggle sidebar">☰</button>
       <div class="g-brand">
-        <div class="g-brand-dot">PM</div>
-        <span class="g-brand-name">PureMD Group LLC</span>
+        <img src="logo.png" alt="PureDOCS Logo" style="height:40px; width:auto; object-fit:contain;">
+        <span class="g-brand-name">Pure<span class="g-brand-blue">DOCS</span></span>
+        <span class="g-brand-sep"></span>
+        <span class="g-brand-author">Designed &amp; maintained by Aarij Khan</span>
       </div>
-      <span class="g-topbar-badge">Agreement Generator</span>
     </div>
   </header>
 
@@ -638,10 +621,6 @@ body {
 
     </div><!-- .g-main-inner -->
 
-    <footer class="g-footer">
-      <span class="credit-mark">AK</span>
-      <span>Designed &amp; maintained by <strong>Aarij Khan</strong></span>
-    </footer>
   </main>
 </div><!-- .g-layout -->
 
