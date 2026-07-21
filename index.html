@@ -425,18 +425,18 @@ body {
         <!-- CLIENT INFO — business / hipaa -->
         <div id="clientInfoWrapper">
           <div class="section-label">👤 Client Information</div>
-          <div class="fg"><label>Agreement Date</label><input type="date" id="pDate" value="2026-06-16"></div>
-          <div class="fg"><label>Practice Name</label><input type="text" id="pPractice" value="Collazo Chiropractic"></div>
-          <div class="fg"><label>Practice Address</label><input type="text" id="pAddr" value="400 N Ford Blvd, Los Angeles, CA 90022"></div>
-          <div class="fg"><label>Authorized Doctor / Owner</label><input type="text" id="pDoctor" value="Dr. Jean Collazo"></div>
+          <div class="fg"><label>Agreement Date</label><input type="date" id="pDate"></div>
+          <div class="fg"><label>Practice Name</label><input type="text" id="pPractice" placeholder="e.g. Paradise Chiropractic"></div>
+          <div class="fg"><label>Practice Address</label><input type="text" id="pAddr" placeholder="Street, City, State ZIP"></div>
+          <div class="fg"><label>Authorized Doctor / Owner</label><input type="text" id="pDoctor" placeholder="Full name"></div>
         </div>
 
         <!-- PROVIDER SIGNER (PureMD staff) — business / hipaa -->
         <div id="providerBoxWrapper">
           <div class="section-label">🏢 Service Provider</div>
           <div class="provider-box">
-            <div class="fg"><label>Signatory Name</label><input type="text" id="pProviderName" value="Elijah Perez"></div>
-            <div class="fg" style="margin-bottom:0"><label>Title / Position</label><input type="text" id="pProviderTitle" value="Vice President, PureMD Group LLC"></div>
+            <div class="fg"><label>Signatory Name</label><input type="text" id="pProviderName" placeholder="e.g. Elijah Perez"></div>
+            <div class="fg" style="margin-bottom:0"><label>Title / Position</label><input type="text" id="pProviderTitle" placeholder="e.g. Vice President"></div>
           </div>
         </div>
 
@@ -461,32 +461,32 @@ body {
             </label>
           </div>
           <div id="vobPricingFlatWrapper">
-            <div class="fg"><label>Monthly Fee ($)</label><input type="text" id="vobMonthlyFee" value="500.00" placeholder="0.00"></div>
+            <div class="fg"><label>Monthly Fee ($)</label><input type="text" id="vobMonthlyFee" placeholder="0.00"></div>
           </div>
           <div id="vobPricingPerVobWrapper" style="display:none">
-            <div class="fg"><label>Fee per VOB ($)</label><input type="text" id="vobPerVobFee" value="3.00" placeholder="0.00"></div>
-            <div class="fg"><label>Estimated Monthly Volume (optional)</label><input type="text" id="vobVolume" value="" placeholder="e.g. 200 VOBs per month"></div>
+            <div class="fg"><label>Fee per VOB ($)</label><input type="text" id="vobPerVobFee" placeholder="0.00"></div>
+            <div class="fg"><label>Estimated Monthly Volume (optional)</label><input type="text" id="vobVolume" placeholder="e.g. 200 VOBs per month"></div>
           </div>
         </div>
 
         <!-- SETTLEMENT — settlement only -->
         <div id="settlementConfigWrapper" style="display:none">
           <div class="section-label">🩺 Provider Letterhead</div>
-          <div class="fg"><label>Agreement / Letter Date</label><input type="date" id="pDate2" value="2026-06-30"></div>
-          <div class="fg"><label>Doctor Name</label><input type="text" id="sDrName" value="Jeffrey Steinhardt, DC"></div>
-          <div class="fg"><label>License #</label><input type="text" id="sDrLicense" value="DC16214"></div>
-          <div class="fg"><label>Tax ID</label><input type="text" id="sTaxId" value="330110464"></div>
-          <div class="fg"><label>Office Address</label><input type="text" id="sDrAddr" value="2707 Congress St., Ste. 2A, San Diego, CA 92110"></div>
-          <div class="fg"><label>Phone</label><input type="text" id="sDrPhone" value="619-222-0651"></div>
-          <div class="fg"><label>Fax</label><input type="text" id="sDrFax" value="619-807-1077"></div>
+          <div class="fg"><label>Agreement / Letter Date</label><input type="date" id="pDate2"></div>
+          <div class="fg"><label>Doctor Name</label><input type="text" id="sDrName" placeholder="Full name"></div>
+          <div class="fg"><label>License #</label><input type="text" id="sDrLicense" placeholder="License number"></div>
+          <div class="fg"><label>Tax ID</label><input type="text" id="sTaxId" placeholder="Tax ID number"></div>
+          <div class="fg"><label>Office Address</label><input type="text" id="sDrAddr" placeholder="Street, City, State ZIP"></div>
+          <div class="fg"><label>Phone</label><input type="text" id="sDrPhone" placeholder="Phone number"></div>
+          <div class="fg"><label>Fax</label><input type="text" id="sDrFax" placeholder="Fax number"></div>
 
           <div class="section-label">💵 Settlement Details</div>
-          <div class="fg"><label>Patient Name</label><input type="text" id="sPatientName" value="Magallanes, Jose"></div>
-          <div class="fg"><label>Insurance</label><input type="text" id="sInsurance" value="LWP Claims Solutions"></div>
-          <div class="fg"><label>Claim #</label><input type="text" id="sClaimNumber" value="SAC0000158836"></div>
-          <div class="fg"><label>Settlement Amount ($)</label><input type="text" id="sAmount" value="2,125.00"></div>
-          <div class="fg"><label>Collector Name (signature)</label><input type="text" id="sAdjusterName" value="Seth Morgan"></div>
-          <div class="fg"><label>Accepted By (Name)</label><input type="text" id="sAcceptedByName" value=""></div>
+          <div class="fg"><label>Patient Name</label><input type="text" id="sPatientName" placeholder="Full name"></div>
+          <div class="fg"><label>Insurance</label><input type="text" id="sInsurance" placeholder="Insurance company name"></div>
+          <div class="fg"><label>Claim #</label><input type="text" id="sClaimNumber" placeholder="Claim number"></div>
+          <div class="fg"><label>Settlement Amount ($)</label><input type="text" id="sAmount" placeholder="0.00"></div>
+          <div class="fg"><label>Collector Name (signature)</label><input type="text" id="sAdjusterName" placeholder="Full name"></div>
+          <div class="fg"><label>Accepted By (Name)</label><input type="text" id="sAcceptedByName" placeholder="Full name"></div>
 
           <div class="section-label">📅 Dates of Service</div>
           <div style="margin-bottom:8px">
@@ -512,8 +512,8 @@ body {
           </div>
 
           <div class="section-label">💳 Payment Instructions</div>
-          <div class="fg"><label>Payable To (Name)</label><input type="text" id="sPayeeName" value="Prospice Medical Centers"></div>
-          <div class="fg"><label>Delivery Address</label><input type="text" id="sPayeeAddr" value="PO BOX 25551, SANTA ANA, CA 92799"></div>
+          <div class="fg"><label>Payable To (Name)</label><input type="text" id="sPayeeName" placeholder="Full name or business name"></div>
+          <div class="fg"><label>Delivery Address</label><input type="text" id="sPayeeAddr" placeholder="Street or PO Box, City, State ZIP"></div>
 
           <div class="section-label">📎 Attach W-9</div>
           <input type="file" id="w9FileInput" accept="application/pdf,.pdf" style="display:none" onchange="handleW9Select(event)">
@@ -655,10 +655,7 @@ function toggleTextEditing() {
 }
 
 // ===== SERVICES STATE =====
-let servicesData = [
-  { id: 'col', name: 'A/R Collection', desc: "Workers' Compensation Claims Collection", fee: '10' },
-  { id: 'bil', name: 'Billing', desc: "Workers' Compensation Claims Billing", fee: '5' }
-];
+let servicesData = [];
 
 function renderServiceConfiguration() {
   const container = document.getElementById('servicesFormContainer');

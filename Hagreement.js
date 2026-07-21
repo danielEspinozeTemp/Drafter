@@ -15,8 +15,8 @@ const HIPAA_TEMPLATE = `
 
   <!-- INTRO -->
   <p class="doc-p editable-text" style="margin: 0; padding: 0;">
-    This Confidentiality/HIPAA Agreement between <strong><span id="vDoctor" contenteditable="false">Dr. Jean Collazo</span></strong> (hereinafter <strong>"<span id="vPractice" contenteditable="false">Collazo Chiropractic</span>"</strong>) and 
-    <strong>PUREMD Group, LLC</strong> (hereinafter <strong>"Contractor"</strong>) is effective as of <strong><span id="vDate" contenteditable="false">06/16/2026</span></strong>.
+    This Confidentiality/HIPAA Agreement between <strong><span id="vDoctor" contenteditable="false">____________</span></strong> (hereinafter <strong>"<span id="vPractice" contenteditable="false">____________</span>"</strong>) and
+    <strong>PUREMD Group, LLC</strong> (hereinafter <strong>"Contractor"</strong>) is effective as of <strong><span id="vDate" contenteditable="false">____________</span></strong>.
   </p>
 
   <!-- BODY CONTENT -->
@@ -47,9 +47,9 @@ const HIPAA_TEMPLATE = `
     <!-- CLIENT -->
     <div class="sig-blk" style="border-top: 3px solid #1B3A8A; padding-top: 5px;">
       <div class="sig-blk-title" style="font-size: 11pt; font-weight: 800; color: #1B3A8A; text-transform: uppercase;">Client</div>
-      <div class="sig-blk-sub" style="font-size: 8.5pt; color: #666;"><span id="vPracticeSig">Collazo Chiropractic</span></div>
+      <div class="sig-blk-sub" style="font-size: 8.5pt; color: #666;"><span id="vPracticeSig">____________</span></div>
       <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">By:</span><span class="sig-val" style="height:14px;">&nbsp;</span></div>
-      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Name:</span><span class="sig-val" id="vSigName">Dr. Jean Collazo</span></div>
+      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Name:</span><span class="sig-val" id="vSigName">____________</span></div>
       <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Date:</span><span class="sig-val" id="vDateClient">&nbsp;</span></div>
       <div class="sig-canvas-wrap" style="margin-top: 5px;">
         <div class="sig-canvas-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561;">Signature:</div>
@@ -61,13 +61,13 @@ const HIPAA_TEMPLATE = `
     <div class="sig-blk" style="border-top: 3px solid #1B3A8A; padding-top: 5px;">
       <div class="sig-blk-title" style="font-size: 11pt; font-weight: 800; color: #1B3A8A; text-transform: uppercase;">Contractor</div>
       <div class="sig-blk-sub" style="font-size: 8.5pt; color: #666;">PureMD Group LLC</div>
-      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">By:</span><span class="sig-val" id="vProviderName">Elijah Perez</span></div>
-      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Title:</span><span class="sig-val" id="vProviderTitle">Vice President, PureMD Group LLC</span></div>
-      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Date:</span><span class="sig-val" id="vDateSig">06/16/2026</span></div>
+      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">By:</span><span class="sig-val" id="vProviderName">____________</span></div>
+      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Title:</span><span class="sig-val" id="vProviderTitle">____________</span></div>
+      <div class="sig-row" style="display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0;"><span class="sig-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px;">Date:</span><span class="sig-val" id="vDateSig">____________</span></div>
       <div class="sig-canvas-wrap" style="margin-top: 5px;">
         <div class="sig-canvas-lbl" style="font-size: 8.5pt; font-weight: 700; color: #0F2561;">Signature:</div>
         <div class="provider-sig-block" style="display: flex; flex-direction: column; margin-top: 2px;">
-          <div class="provider-sig-font" id="vProviderSig" style="font-family:'Great Vibes',cursive; font-size: 28pt; color: #0F2561; line-height: 1; margin-left: 5px; transform: rotate(-2deg); margin-bottom: -5px;">Elijah Perez</div>
+          <div class="provider-sig-font" id="vProviderSig" style="font-family:'Great Vibes',cursive; font-size: 28pt; color: #0F2561; line-height: 1; margin-left: 5px; transform: rotate(-2deg); margin-bottom: -5px;">____________</div>
         </div>
       </div>
     </div>

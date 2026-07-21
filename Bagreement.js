@@ -15,10 +15,10 @@ const AGREEMENT_TEMPLATE = `
 
   <!-- INTRO -->
   <p class="doc-p editable-text">
-    This Agreement is made on <strong><span id="vDate" contenteditable="false">06/16/2026</span></strong> between <strong>PureMD Group LLC</strong>
+    This Agreement is made on <strong><span id="vDate" contenteditable="false">____________</span></strong> between <strong>PureMD Group LLC</strong>
     (principal office: 100 N Brand Blvd S-522, Glendale, CA 91203) and
-    <strong>"<span id="vPractice" contenteditable="false">Collazo Chiropractic</span>"</strong>
-    (principal office: <span id="vAddr" contenteditable="false">400 N Ford Blvd, Los Angeles, CA 90022</span>), the <strong>"Client."</strong>
+    <strong>"<span id="vPractice" contenteditable="false">____________</span>"</strong>
+    (principal office: <span id="vAddr" contenteditable="false">____________</span>), the <strong>"Client."</strong>
   </p>
   <p class="doc-p editable-text"><strong>WHEREAS</strong> PureMD Group LLC provides medical billing, collections, coding, credentialing, and administrative services to healthcare providers; and</p>
   <p class="doc-p editable-text"><strong>WHEREAS</strong> Client wishes to retain PureMD Group LLC to provide accounts payable/receivable services pursuant to the terms herein.</p>
@@ -81,10 +81,10 @@ const AGREEMENT_TEMPLATE = `
 
     <div class="sig-blk">
       <div class="sig-blk-title">Client</div>
-      <div class="sig-blk-sub"><span id="vDoctor">Dr. Jean Collazo</span>, Owner of "<span id="vPracticeSig">Collazo Chiropractic</span>"</div>
-      <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val" id="vSigName">Dr. Jean Collazo</span></div>
-      <div class="sig-row"><span class="sig-lbl">Practice:</span><span class="sig-val" id="vSigPractice">Collazo Chiropractic</span></div>
-      <div class="sig-row"><span class="sig-lbl">Address:</span><span class="sig-val" id="vSigAddr">400 N Ford Blvd, Los Angeles, CA 90022</span></div>
+      <div class="sig-blk-sub"><span id="vDoctor">____________</span>, Owner of "<span id="vPracticeSig">____________</span>"</div>
+      <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val" id="vSigName">____________</span></div>
+      <div class="sig-row"><span class="sig-lbl">Practice:</span><span class="sig-val" id="vSigPractice">____________</span></div>
+      <div class="sig-row"><span class="sig-lbl">Address:</span><span class="sig-val" id="vSigAddr">____________</span></div>
       <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val" id="vDateClient">&nbsp;</span></div>
       <div class="sig-canvas-wrap">
         <div class="sig-canvas-lbl">Signature:</div>
@@ -95,14 +95,14 @@ const AGREEMENT_TEMPLATE = `
     <div class="sig-blk">
       <div class="sig-blk-title">Service Provider</div>
       <div class="sig-blk-sub">PureMD Group LLC — Glendale, CA 91203</div>
-      <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val" id="vProviderName">Elijah Perez</span></div>
-      <div class="sig-row"><span class="sig-lbl">Title:</span><span class="sig-val" id="vProviderTitle">Vice President, PureMD Group LLC</span></div>
+      <div class="sig-row"><span class="sig-lbl">Name:</span><span class="sig-val" id="vProviderName">____________</span></div>
+      <div class="sig-row"><span class="sig-lbl">Title:</span><span class="sig-val" id="vProviderTitle">____________</span></div>
       <div class="sig-row"><span class="sig-lbl">Address:</span><span class="sig-val">100 N Brand Blvd S-522, Glendale, CA 91203</span></div>
-      <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val" id="vDateSig">06/16/2026</span></div>
+      <div class="sig-row"><span class="sig-lbl">Date:</span><span class="sig-val" id="vDateSig">____________</span></div>
       <div class="sig-canvas-wrap">
         <div class="sig-canvas-lbl">Signature:</div>
         <div class="provider-sig-block">
-          <div class="provider-sig-font" id="vProviderSig">Elijah Perez</div>
+          <div class="provider-sig-font" id="vProviderSig">____________</div>
         </div>
       </div>
     </div>
