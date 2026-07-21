@@ -116,7 +116,7 @@ body {
 /* PROVIDER BOX */
 .provider-box { background: #F0F4FF; border: 1.5px solid #C5D0EB; border-radius: var(--radius); padding: 12px; margin-bottom: 2px; }
 /* TEMPLATE SELECTOR */
-.doc-type-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+.doc-type-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 4px; }
 .doc-type-card {
   border: 2px solid var(--border);
   border-radius: var(--radius);
@@ -329,6 +329,31 @@ body {
 .payee-addr { font-size: 9.5pt; color: #333; margin-top: 1px; }
 
 .doc-settlement .sig-section { margin-top: auto; padding-top: 24px; gap: 40px; }
+
+/* ===== VOB — single-page layout ===== */
+#contract-pdf.doc-vob {
+  height: 9.9in;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0 28px 16px;
+}
+.doc-vob .doc-header { gap: 10px; padding-bottom: 4px; margin-bottom: 3px; }
+.doc-vob .doc-header img { width: 52px; height: 52px; }
+.doc-vob .hdr-company { font-size: 19pt; }
+.doc-vob .hdr-addr { font-size: 7.5pt; }
+.doc-vob .doc-title { font-size: 13pt; margin: 7px 0 7px; padding-bottom: 5px; }
+.doc-vob .sec-head { font-size: 9.5pt; padding: 4px 10px; margin: 9px 0 4px; }
+.doc-vob .doc-p { font-size: 9.5pt; line-height: 1.45; margin-bottom: 5px; }
+.doc-vob .sig-section { margin-top: auto; padding-top: 12px; gap: 24px; }
+.doc-vob .sig-blk-title { font-size: 10.5pt; }
+.doc-vob .sig-blk-sub { font-size: 8.5pt; }
+.doc-vob .sig-row { margin-bottom: 2px; }
+.doc-vob .sig-val { font-size: 9pt; }
+.doc-vob .sig-lbl { font-size: 8.5pt; min-width: 56px; }
+.doc-vob .sig-canvas { height: 38px; }
+.doc-vob .provider-sig-font { font-size: 26pt; }
+.doc-vob .witness { margin: 6px 0 3px; font-size: 9pt; }
 .doc-settlement .sig-blk-title { font-size: 10.5pt; }
 .doc-settlement .provider-sig-font { font-size: 28pt; }
 </style>
@@ -390,6 +415,11 @@ body {
             <span class="card-name">Settlement</span>
             <span class="card-desc">Claim confirmation letter</span>
           </div>
+          <div class="doc-type-card" id="cardVOB" onclick="switchTemplate('vob')">
+            <span class="card-icon">✅</span>
+            <span class="card-name">VOB</span>
+            <span class="card-desc">Benefits verification agreement</span>
+          </div>
         </div>
 
         <!-- CLIENT INFO — business / hipaa -->
@@ -415,6 +445,28 @@ body {
           <div class="section-label">🛠 Services Configuration</div>
           <div id="servicesFormContainer"></div>
           <button type="button" class="add-btn" onclick="addServiceRow()">＋ Add Service Row</button>
+        </div>
+
+        <!-- VOB PRICING — vob only -->
+        <div id="vobConfigWrapper" style="display:none">
+          <div class="section-label">💰 VOB Fee &amp; Pricing</div>
+          <div style="margin-bottom:8px">
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
+              <input type="radio" name="vobPricingModel" value="flat" checked onchange="handleVobPricingChange()">
+              Flat Monthly Fee
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.82rem;font-weight:500">
+              <input type="radio" name="vobPricingModel" value="per-vob" onchange="handleVobPricingChange()">
+              Per VOB Charge
+            </label>
+          </div>
+          <div id="vobPricingFlatWrapper">
+            <div class="fg"><label>Monthly Fee ($)</label><input type="text" id="vobMonthlyFee" value="500.00" placeholder="0.00"></div>
+          </div>
+          <div id="vobPricingPerVobWrapper" style="display:none">
+            <div class="fg"><label>Fee per VOB ($)</label><input type="text" id="vobPerVobFee" value="3.00" placeholder="0.00"></div>
+            <div class="fg"><label>Estimated Monthly Volume (optional)</label><input type="text" id="vobVolume" value="" placeholder="e.g. 200 VOBs per month"></div>
+          </div>
         </div>
 
         <!-- SETTLEMENT — settlement only -->
@@ -517,6 +569,7 @@ body {
 <script src="Bagreement.js"></script>
 <script src="Hagreement.js"></script>
 <script src="Sagreement.js"></script>
+<script src="Vagreement.js"></script>
 <script>
 // ===== AUTH =====
 function checkLogin() {
@@ -546,6 +599,7 @@ function switchTemplate(type) {
   const clientWrap = document.getElementById('clientInfoWrapper');
   const providerWrap = document.getElementById('providerBoxWrapper');
   const settlementWrap = document.getElementById('settlementConfigWrapper');
+  const vobWrap = document.getElementById('vobConfigWrapper');
 
   if (isEditingMode) toggleTextEditing();
   currentActiveTemplate = type;
@@ -553,11 +607,13 @@ function switchTemplate(type) {
   document.getElementById('cardBusiness').classList.toggle('selected', type === 'business');
   document.getElementById('cardHIPAA').classList.toggle('selected', type === 'hipaa');
   document.getElementById('cardSettlement').classList.toggle('selected', type === 'settlement');
+  document.getElementById('cardVOB').classList.toggle('selected', type === 'vob');
 
   svcWrap.style.display = (type === 'business') ? 'block' : 'none';
   clientWrap.style.display = (type === 'settlement') ? 'none' : 'block';
   providerWrap.style.display = (type === 'settlement') ? 'none' : 'block';
   settlementWrap.style.display = (type === 'settlement') ? 'block' : 'none';
+  vobWrap.style.display = (type === 'vob') ? 'block' : 'none';
 
   if (type === 'business') {
     mount.innerHTML = (typeof AGREEMENT_TEMPLATE !== 'undefined')
@@ -567,6 +623,10 @@ function switchTemplate(type) {
     mount.innerHTML = (typeof HIPAA_TEMPLATE !== 'undefined')
       ? HIPAA_TEMPLATE
       : '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">HIPAA_TEMPLATE not found.</div>';
+  } else if (type === 'vob') {
+    mount.innerHTML = (typeof VOB_TEMPLATE !== 'undefined')
+      ? VOB_TEMPLATE
+      : '<div style="padding:40px;text-align:center;color:#dc2626;font-weight:700">VOB_TEMPLATE not found.</div>';
   } else {
     mount.innerHTML = (typeof SETTLEMENT_TEMPLATE !== 'undefined')
       ? SETTLEMENT_TEMPLATE
@@ -649,6 +709,14 @@ function handleDateRangeChange() {
   const val = document.querySelector('input[name="dateRangeOption"]:checked').value;
   document.getElementById('specificDateWrapper').style.display = val === 'specific' ? 'block' : 'none';
   document.getElementById('dateRangeWrapper').style.display = val === 'range' ? 'block' : 'none';
+  sync();
+}
+
+// ===== VOB PRICING TOGGLE =====
+function handleVobPricingChange() {
+  const val = document.querySelector('input[name="vobPricingModel"]:checked').value;
+  document.getElementById('vobPricingFlatWrapper').style.display = val === 'flat' ? 'block' : 'none';
+  document.getElementById('vobPricingPerVobWrapper').style.display = val === 'per-vob' ? 'block' : 'none';
   sync();
 }
 
@@ -741,13 +809,31 @@ function sync() {
     }
     set('vDateRangeText', dateText);
   }
+
+  // ---- VOB pricing fields ----
+  if (currentActiveTemplate === 'vob') {
+    const model = document.querySelector('input[name="vobPricingModel"]:checked');
+    if (model && model.value === 'flat') {
+      const fee = document.getElementById('vobMonthlyFee').value || '0.00';
+      set('vPricingModel', 'a Flat Monthly Fee');
+      set('vPricingRate', fee);
+      set('vPricingDetail', 'for verification of benefits services rendered each month.');
+    } else if (model && model.value === 'per-vob') {
+      const fee = document.getElementById('vobPerVobFee').value || '0.00';
+      const vol = document.getElementById('vobVolume').value || '';
+      set('vPricingModel', 'a Per VOB Charge');
+      set('vPricingRate', fee);
+      set('vPricingDetail', 'per individual Verification of Benefits processed.' + (vol ? ' (Estimated monthly volume: ' + vol + ')' : ''));
+    }
+  }
 }
 
 // Input listeners
 ['pDate','pPractice','pAddr','pDoctor','pProviderName','pProviderTitle',
  'pDate2','sDrName','sDrLicense','sTaxId','sDrAddr','sDrPhone','sDrFax',
  'sPatientName','sInsurance','sClaimNumber','sAmount','sAdjusterName','sPayeeName','sPayeeAddr',
- 'sSpecificDate','sDateFrom','sDateTo','sAcceptedByName'].forEach(id => {
+ 'sSpecificDate','sDateFrom','sDateTo','sAcceptedByName',
+ 'vobMonthlyFee','vobPerVobFee','vobVolume'].forEach(id => {
   const el = document.getElementById(id);
   if (el) { el.addEventListener('input', sync); el.addEventListener('change', sync); }
 });
@@ -1011,6 +1097,9 @@ function genPDF() {
   } else if (currentActiveTemplate === 'hipaa') {
     const name = (document.getElementById('pPractice').value || 'Agreement').replace(/\s+/g, '_');
     file = `PureMD_HIPAA_Agreement_${name}.pdf`;
+  } else if (currentActiveTemplate === 'vob') {
+    const name = (document.getElementById('pPractice').value || 'Agreement').replace(/\s+/g, '_');
+    file = `PureMD_VOB_Agreement_${name}.pdf`;
   } else {
     const name = (document.getElementById('sPatientName').value || 'Patient').replace(/\s+/g, '_');
     file = `Settlement_Agreement_${name}.pdf`;
