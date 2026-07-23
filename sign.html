@@ -539,6 +539,7 @@ var activeSignTab = 'type';
 var drawStrokes = [];
 var currentStroke = [];
 var isDrawing = false;
+var drawCanvasReady = false;
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function () {
@@ -556,7 +557,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderDocument(signData);
   setupTypeInput();
-  setupDrawCanvas();
   setTodayDates();
 });
 
@@ -901,10 +901,13 @@ function switchSignTab(tab) {
   document.getElementById('panelType').classList.toggle('active', tab === 'type');
   document.getElementById('panelDraw').classList.toggle('active', tab === 'draw');
 
-  // Sync signatures between tabs
-  if (tab === 'draw') {
-    // If user typed a name, we keep the cursive in the document
-    // If user draws, the canvas draws will take over
+  // Initialize canvas on first show (needs visible DOM to measure size)
+  if (tab === 'draw' && !drawCanvasReady) {
+    // Small delay so the panel is rendered and has layout dimensions
+    setTimeout(function () {
+      setupDrawCanvas();
+      drawCanvasReady = true;
+    }, 50);
   }
 }
 
