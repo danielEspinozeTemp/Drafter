@@ -503,7 +503,7 @@ body {
       <div class="g-sidebar-divider"></div>
       <div class="g-sidebar-section">More</div>
       <div class="g-sidebar-item disabled">Signatures</div>
-      <div class="g-sidebar-item disabled">Settings</div>
+      <div class="g-sidebar-item" id="sideSettings" onclick="showSettings()">Settings</div>
     </nav>
 
     <main class="g-main">
@@ -616,6 +616,19 @@ body {
           <div id="w9FileName" style="font-size:.72rem;color:var(--g-text-secondary);margin-top:4px;"></div>
         </div>
 
+        <!-- ===== BIT.LY URL SHORTENER ===== -->
+        <div id="bitlySettingsSection">
+          <div class="section-label">URL Shortener</div>
+          <p style="font-size:.7rem;color:var(--g-text-secondary);margin:0 0 8px;line-height:1.4;">
+            Paste your Bit.ly access token to shorten signing links. Get a free token at <a href="https://app.bitly.com/settings/api/" target="_blank" style="color:var(--g-blue);">app.bitly.com/settings/api</a>
+          </p>
+          <div class="fg" style="margin-bottom:0">
+            <label>Bit.ly Access Token</label>
+            <input type="password" id="bitlyTokenInput" placeholder="e.g. abc123def456..." onchange="saveBitlyToken()" style="font-family:monospace;font-size:.8rem;">
+          </div>
+          <div id="bitlyStatus" style="font-size:.72rem;margin-top:4px;display:none;"></div>
+        </div>
+
         <!-- ===== TEMPLATE SAVE / LOAD (Settlement only) ===== -->
         <div class="section-label">Provider Templates</div>
         <p style="font-size:.7rem;color:var(--g-text-secondary);margin:0 0 6px;line-height:1.4;">
@@ -677,6 +690,7 @@ function checkLogin() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appContent').style.display = 'block';
     switchTemplate('business');
+    loadBitlyToken();
   } else {
     err.style.display = 'block';
     document.getElementById('passwordInput').value = '';
@@ -686,6 +700,42 @@ function checkLogin() {
 ['usernameInput','passwordInput'].forEach(id => {
   document.getElementById(id).addEventListener('keyup', e => { if (e.key === 'Enter') checkLogin(); });
 });
+
+// ===== BIT.LY TOKEN =====
+var bitlyToken = '';
+function loadBitlyToken() {
+  bitlyToken = localStorage.getItem('drafter_bitly_token') || '';
+  var input = document.getElementById('bitlyTokenInput');
+  if (input && bitlyToken) input.value = bitlyToken;
+  updateBitlyStatus();
+}
+function saveBitlyToken() {
+  var input = document.getElementById('bitlyTokenInput');
+  bitlyToken = (input.value || '').trim();
+  if (bitlyToken) {
+    localStorage.setItem('drafter_bitly_token', bitlyToken);
+  } else {
+    localStorage.removeItem('drafter_bitly_token');
+  }
+  updateBitlyStatus();
+}
+function updateBitlyStatus() {
+  var el = document.getElementById('bitlyStatus');
+  if (!el) return;
+  if (bitlyToken) {
+    el.style.display = 'block';
+    el.style.color = '#1E8E3E';
+    el.textContent = '✓ Token saved — signing links will use Bit.ly';
+  } else {
+    el.style.display = 'block';
+    el.style.color = '#5F6368';
+    el.textContent = 'No token set — signing links will use full URL';
+  }
+}
+function showSettings() {
+  var section = document.getElementById('bitlySettingsSection');
+  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
 // ===== SIDEBAR =====
 function toggleSidebar() {
@@ -1316,7 +1366,7 @@ function requestSignature() {
   // Show modal immediately with the full link (in case shortening fails)
   showLinkModal(fullLink, false, true);
 
-  // Try to shorten via TinyURL (free, no API key)
+  // Try to shorten the link
   shortenUrl(fullLink, function (shortUrl) {
     if (shortUrl) {
       document.getElementById('linkModalInput').value = shortUrl;
@@ -1334,36 +1384,98 @@ function requestSignature() {
   });
 }
 
-// ===== URL Shortener using is.gd (free, JSONP, no API key) =====
+// ===== URL SHORTENER =====
+// Tries: Bit.ly (if token set) → Cleanuri → full URL fallback
 function shortenUrl(longUrl, callback) {
-  var cbName = '_isgd_cb_' + Math.floor(Math.random() * 100000);
-  var script = document.createElement('script');
-  script.src = 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(longUrl) + '&callback=' + cbName;
+  // If user has a Bit.ly token, use it first (most reliable)
+  if (bitlyToken) {
+    tryBitly(longUrl, function (result) {
+      if (result) return callback(result);
+      // Bit.ly failed, try Cleanuri
+      tryCleanuri(longUrl, callback);
+    });
+  } else {
+    // No Bit.ly token, try Cleanuri directly
+    tryCleanuri(longUrl, callback);
+  }
+}
 
+function tryBitly(longUrl, callback) {
   var done = false;
   var timeout = setTimeout(function () {
-    if (!done) { done = true; cleanup(); callback(null); }
-  }, 6000);
+    if (!done) { done = true; callback(null); }
+  }, 5000);
 
-  window[cbName] = function (data) {
+  fetch('https://api-ssl.bitly.com/v4/shorten', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + bitlyToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ long_url: longUrl, domain: 'bit.ly' })
+  })
+  .then(function (resp) {
+    if (!resp.ok) throw new Error('Bit.ly API error');
+    return resp.json();
+  })
+  .then(function (data) {
     if (!done) {
       done = true;
       clearTimeout(timeout);
-      cleanup();
-      callback(data && data.shorturl ? data.shorturl : null);
+      callback(data && data.link ? data.link : null);
     }
-  };
+  })
+  .catch(function () {
+    if (!done) { done = true; clearTimeout(timeout); callback(null); }
+  });
+}
 
-  function cleanup() {
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-  }
+function tryCleanuri(longUrl, callback) {
+  var done = false;
+  var timeout = setTimeout(function () {
+    if (!done) { done = true; callback(null); }
+  }, 5000);
 
-  script.onerror = function () {
-    if (!done) { done = true; clearTimeout(timeout); cleanup(); callback(null); }
-  };
+  fetch('https://cleanuri.com/api/v1/shorten', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'url=' + encodeURIComponent(longUrl)
+  })
+  .then(function (resp) { return resp.json(); })
+  .then(function (data) {
+    if (!done) {
+      done = true;
+      clearTimeout(timeout);
+      callback(data && data.result_url ? data.result_url : null);
+    }
+  })
+  .catch(function () {
+    if (!done) { done = true; clearTimeout(timeout); callback(null); }
+  });
+}
 
-  document.body.appendChild(script);
+function tryTinyViaProxy(longUrl, callback) {
+  var done = false;
+  var timeout = setTimeout(function () {
+    if (!done) { done = true; callback(null); }
+  }, 5000);
+
+  var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(longUrl));
+
+  fetch(proxyUrl)
+  .then(function (resp) { return resp.text(); })
+  .then(function (text) {
+    if (!done) {
+      done = true;
+      clearTimeout(timeout);
+      // TinyURL returns the short URL as plain text
+      var trimmed = (text || '').trim();
+      callback(trimmed.indexOf('http') === 0 ? trimmed : null);
+    }
+  })
+  .catch(function () {
+    if (!done) { done = true; clearTimeout(timeout); callback(null); }
+  });
 }
 
 function showLinkModal(link, copied, loading) {
