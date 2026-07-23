@@ -473,6 +473,7 @@ body {
       <input id="linkModalInput" type="text" readonly style="flex:1; padding:10px 12px; border:1px solid var(--g-border); border-radius:4px; font-size:.78rem; font-family:monospace; color:var(--g-text); background:#f8f9fa; min-width:0;">
       <button onclick="copyLinkModal()" id="copyLinkBtn" style="padding:10px 16px; background:var(--g-blue); color:#fff; border:none; border-radius:4px; font-size:.82rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:var(--g-trans);">Copy Link</button>
     </div>
+    <div id="linkModalLoading" style="font-size:.78rem; color:var(--g-text-secondary); display:none; margin-bottom:12px;">⏳ Shortening link…</div>
     <div id="linkModalCopyMsg" style="font-size:.78rem; color:var(--g-green); display:none; margin-bottom:12px;">✓ Copied to clipboard!</div>
     <button onclick="closeLinkModal()" style="width:100%; padding:10px; background:none; border:1px solid var(--g-border); border-radius:4px; font-size:.82rem; font-weight:500; cursor:pointer; color:var(--g-text-secondary); transition:var(--g-trans);">Close</button>
   </div>
@@ -1310,25 +1311,66 @@ function requestSignature() {
   // Build the signing URL — works both locally (file://) and on GitHub Pages (https://)
   var path = window.location.pathname;
   var dir = path.substring(0, path.lastIndexOf('/') + 1);
-  var link = window.location.origin + dir + 'sign.html#' + compressed;
+  var fullLink = window.location.origin + dir + 'sign.html#' + compressed;
 
-  // Try to copy to clipboard, then show modal
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(link).then(function () {
-      showLinkModal(link, true);
-    }).catch(function () {
-      showLinkModal(link, false);
-    });
-  } else {
-    showLinkModal(link, false);
-  }
+  // Show modal immediately with the full link (in case shortening fails)
+  showLinkModal(fullLink, false, true);
+
+  // Try to shorten via TinyURL (free, no API key)
+  shortenUrl(fullLink, function (shortUrl) {
+    if (shortUrl) {
+      document.getElementById('linkModalInput').value = shortUrl;
+      document.getElementById('linkModalLoading').style.display = 'none';
+      // Auto-copy the shortened link
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shortUrl).then(function () {
+          document.getElementById('linkModalCopyMsg').style.display = 'block';
+        });
+      }
+    } else {
+      // Shortening failed — keep the full URL
+      document.getElementById('linkModalLoading').innerHTML = '⚠ Could not shorten link — using full URL';
+    }
+  });
 }
 
-function showLinkModal(link, copied) {
+// ===== URL Shortener using is.gd (free, JSONP, no API key) =====
+function shortenUrl(longUrl, callback) {
+  var cbName = '_isgd_cb_' + Math.floor(Math.random() * 100000);
+  var script = document.createElement('script');
+  script.src = 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(longUrl) + '&callback=' + cbName;
+
+  var done = false;
+  var timeout = setTimeout(function () {
+    if (!done) { done = true; cleanup(); callback(null); }
+  }, 6000);
+
+  window[cbName] = function (data) {
+    if (!done) {
+      done = true;
+      clearTimeout(timeout);
+      cleanup();
+      callback(data && data.shorturl ? data.shorturl : null);
+    }
+  };
+
+  function cleanup() {
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+  }
+
+  script.onerror = function () {
+    if (!done) { done = true; clearTimeout(timeout); cleanup(); callback(null); }
+  };
+
+  document.body.appendChild(script);
+}
+
+function showLinkModal(link, copied, loading) {
   document.getElementById('linkModalInput').value = link;
   document.getElementById('linkModal').style.display = 'flex';
-  var msg = document.getElementById('linkModalCopyMsg');
-  msg.style.display = copied ? 'block' : 'none';
+  document.getElementById('linkModalCopyMsg').style.display = copied ? 'block' : 'none';
+  document.getElementById('linkModalLoading').style.display = loading ? 'block' : 'none';
 }
 
 function closeLinkModal() {
