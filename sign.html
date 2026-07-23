@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Agreement — PureMD Group LLC</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="compress.js"></script>
+<script src="Bagreement.js"></script>
+<script src="Hagreement.js"></script>
+<script src="Sagreement.js"></script>
+<script src="Vagreement.js"></script>
+<style>
+/* ===== BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --g-blue: #1A73E8;
+  --g-blue-dark: #1557B0;
+  --g-blue-hover: #1765CC;
+  --g-blue-light: #E8F0FE;
+  --g-bg: #F8F9FA;
+  --g-surface: #FFFFFF;
+  --g-text: #202124;
+  --g-text-secondary: #5F6368;
+  --g-border: #DADCE0;
+  --g-error: #D93025;
+  --g-green: #1E8E3E;
+  --g-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+  --g-radius: 8px;
+  --g-trans: all .18s ease;
+}
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.sign-header {
+  background: var(--g-surface);
+  border-bottom: 3px solid #1B3A8A;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+.sign-header img { height: 40px; width: auto; object-fit: contain; }
+.sign-header-brand { font-size: 1.3rem; font-weight: 700; color: var(--g-text); }
+.sign-header-brand span { color: var(--g-blue); }
+.sign-header-sep { width: 1px; height: 20px; background: var(--g-border); margin: 0 8px; }
+.sign-doc-type {
+  font-size: .82rem; font-weight: 500;
+  color: var(--g-blue); background: var(--g-blue-light);
+  padding: 4px 12px; border-radius: 20px;
+  letter-spacing: .2px;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.sign-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ===== INSTRUCTIONS ===== */
+.sign-instructions {
+  background: var(--g-blue-light);
+  border: 1px solid #C2D7FA;
+  border-radius: var(--g-radius);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .88rem;
+  line-height: 1.5;
+  color: var(--g-text);
+}
+.sign-instructions-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+
+/* ===== DOCUMENT ===== */
+.sign-document {
+  background: var(--g-surface);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius);
+  overflow: hidden;
+  box-shadow: var(--g-shadow);
+  margin-bottom: 24px;
+}
+.sign-document-inner {
+  padding: 16px;
+  background: #E8EAED;
+}
+.sign-document-paper {
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px 0 rgba(60,64,67,.3);
+}
+
+/* ===== CONTRACT DOCUMENT STYLES ===== */
+#sign-contract { background: #fff; padding: 0 44px 22px; font-family: Arial, sans-serif; font-size: 9.5pt; line-height: 1.4; color: #111; width: 100%; }
+.doc-header { display: flex; align-items: center; gap: 12px; padding-bottom: 5px; margin-bottom: 4px; border-bottom: 3px solid #1B3A8A; }
+.doc-header img { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
+.hdr-text { flex: 1; }
+.hdr-company { font-size: 20pt; font-weight: 900; color: #1B3A8A; letter-spacing: .4px; line-height: 1.1; }
+.hdr-sub { font-size: 8pt; color: #666; margin-top: 2px; }
+.hdr-addr { text-align: right; font-size: 8pt; color: #555; line-height: 1.6; }
+.doc-title { text-align: center; font-size: 12.5pt; font-weight: 800; color: #1B3A8A; text-transform: uppercase; letter-spacing: .6px; margin: 10px 0 10px; padding-bottom: 7px; border-bottom: 1px solid #C8D4EA; }
+.sec-head { font-size: 9.5pt; font-weight: 800; color: #fff; background: #1B3A8A; text-transform: uppercase; letter-spacing: .5px; padding: 4px 10px; margin: 10px 0 5px; border-radius: 2px; }
+.doc-p { margin-bottom: 5px; font-size: 9.5pt; line-height: 1.45; color: #111; }
+.doc-p strong { color: #0F2561; }
+.fee-tbl { width: 100%; border-collapse: collapse; margin: 8px 0 10px; font-size: 9pt; }
+.fee-tbl th { background: #1B3A8A; color: #fff; padding: 6px 10px; text-align: left; font-size: 9pt; font-weight: 700; }
+.fee-tbl td { border: 1px solid #C0CCE0; padding: 6px 10px; font-size: 9pt; }
+.fee-tbl tr:nth-child(even) td { background: #EEF2FB; }
+.fee-tbl .svc-name { font-weight: 700; color: #0F2561; }
+.fee-tbl .rate { font-weight: 800; color: #1B3A8A; font-size: 10pt; }
+.witness { font-size: 8.5pt; color: #666; font-style: italic; margin: 10px 0 8px; }
+.sig-section { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; page-break-inside: avoid; }
+.sig-blk { border-top: 3px solid #1B3A8A; padding-top: 7px; }
+.sig-blk-title { font-size: 10.5pt; font-weight: 800; color: #1B3A8A; margin-bottom: 1px; text-transform: uppercase; }
+.sig-blk-sub { font-size: 8pt; color: #777; margin-bottom: 6px; }
+.sig-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 3px; border-bottom: 1px solid #D8E0EE; padding-bottom: 2px; }
+.sig-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; white-space: nowrap; min-width: 68px; }
+.sig-val { font-size: 9pt; color: #111; flex: 1; }
+.sig-canvas-wrap { margin-top: 6px; }
+.sig-canvas-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; margin-bottom: 2px; }
+.sig-canvas { display: block; width: 100%; height: 46px; border-bottom: 1px solid #AAB; }
+.provider-sig-block { margin-top: 4px; }
+.provider-sig-font { font-family: 'Great Vibes', cursive; font-size: 30pt; color: #0F2561; line-height: 1; margin-left: 8px; transform: rotate(-2.5deg); display: inline-block; }
+/* Settlement */
+#sign-contract.doc-settlement { height: 9.9in; overflow: hidden; display: flex; flex-direction: column; padding: 0 60px 30px; }
+.doc-subhead { border-bottom: 3px solid #1B3A8A; padding: 18px 0 12px; margin-bottom: 16px; }
+.doc-subhead .subhead-row { display: flex; align-items: baseline; justify-content: space-between; }
+.doc-subhead .subhead-name { font-size: 16pt; font-weight: 900; color: #1B3A8A; letter-spacing: .3px; }
+.doc-subhead .subhead-meta { font-size: 9pt; color: #555; font-weight: 700; }
+.doc-subhead .subhead-addr { font-size: 9pt; color: #555; margin-top: 4px; }
+.settlement-meta { margin: 4px 0 16px; }
+.settlement-meta td { padding: 7px 12px; font-size: 9.5pt; }
+.doc-settlement .doc-title { font-size: 13.5pt; margin: 4px 0 14px; padding-bottom: 8px; }
+.doc-settlement .sec-head { font-size: 9.5pt; padding: 5px 12px; margin: 14px 0 10px; }
+.doc-settlement .doc-p { font-size: 9.8pt; line-height: 1.55; margin-bottom: 9px; }
+.payee-block { margin-top: 12px; padding: 10px 14px; background: #F0F4FF; border: 1.5px solid #C5D0EB; border-radius: 4px; }
+.payee-lbl { font-size: 9pt; font-weight: 700; color: #0F2561; margin-bottom: 3px; }
+.payee-name { font-size: 10.5pt; font-weight: 800; color: #111; }
+.payee-addr { font-size: 9.5pt; color: #333; margin-top: 1px; }
+.doc-settlement .sig-section { margin-top: auto; padding-top: 24px; gap: 40px; }
+.doc-settlement .sig-blk-title { font-size: 10.5pt; }
+.doc-settlement .provider-sig-font { font-size: 28pt; }
+/* VOB */
+#sign-contract.doc-vob { height: 9.9in; overflow: hidden; display: flex; flex-direction: column; padding: 0 28px 16px; }
+.doc-vob .doc-header { gap: 10px; padding-bottom: 4px; margin-bottom: 3px; }
+.doc-vob .doc-header img { width: 52px; height: 52px; }
+.doc-vob .hdr-company { font-size: 19pt; }
+.doc-vob .hdr-addr { font-size: 7.5pt; }
+.doc-vob .doc-title { font-size: 13pt; margin: 7px 0 7px; padding-bottom: 5px; }
+.doc-vob .sec-head { font-size: 9.5pt; padding: 4px 10px; margin: 9px 0 4px; }
+.doc-vob .doc-p { font-size: 9.5pt; line-height: 1.45; margin-bottom: 5px; }
+.doc-vob .sig-section { margin-top: auto; padding-top: 12px; gap: 24px; }
+.doc-vob .sig-blk-title { font-size: 10.5pt; }
+.doc-vob .sig-blk-sub { font-size: 8.5pt; }
+.doc-vob .sig-row { margin-bottom: 2px; }
+.doc-vob .sig-val { font-size: 9pt; }
+.doc-vob .sig-lbl { font-size: 8.5pt; min-width: 56px; }
+.doc-vob .sig-canvas { height: 38px; }
+.doc-vob .provider-sig-font { font-size: 26pt; }
+.doc-vob .witness { margin: 6px 0 3px; font-size: 9pt; }
+/* HIPAA overrides */
+#sign-contract .sig-blk { border-top: 3px solid #1B3A8A; padding-top: 5px; }
+#sign-contract .sig-blk-title { font-size: 11pt; font-weight: 800; color: #1B3A8A; text-transform: uppercase; }
+#sign-contract .sig-blk-sub { font-size: 8.5pt; color: #666; }
+#sign-contract .sig-row { display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid #d0d8e8; padding: 0; margin: 0; }
+#sign-contract .sig-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; min-width: 45px; }
+#sign-contract .sig-canvas-lbl { font-size: 8.5pt; font-weight: 700; color: #0F2561; }
+#sign-contract .provider-sig-font { font-family:'Great Vibes',cursive; font-size: 28pt; color: #0F2561; line-height: 1; margin-left: 5px; transform: rotate(-2deg); margin-bottom: -5px; }
+
+/* Client signature placeholder in document (replaced by interactive) */
+.sig-canvas.client-active {
+  border-bottom: none;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+}
+.sig-canvas.client-active img {
+  max-height: 46px;
+  max-width: 100%;
+}
+.sig-canvas.client-active .client-cursive-sig {
+  font-family: 'Great Vibes', cursive;
+  font-size: 30pt;
+  color: #0F2561;
+  line-height: 1;
+  transform: rotate(-2.5deg);
+  display: inline-block;
+}
+
+/* ===== SIGNING CARD ===== */
+.sign-cta {
+  background: var(--g-surface);
+  border: 2px solid var(--g-blue);
+  border-radius: var(--g-radius);
+  padding: 28px 32px;
+  box-shadow: 0 2px 8px rgba(26,115,232,.1);
+}
+.sign-cta h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--g-text);
+  margin-bottom: 4px;
+}
+.sign-cta > p {
+  font-size: .85rem;
+  color: var(--g-text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* ===== TABS ===== */
+.sign-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border: 1px solid var(--g-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.sign-tab {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--g-surface);
+  border: none;
+  font-family: inherit;
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--g-text-secondary);
+  cursor: pointer;
+  transition: var(--g-trans);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.sign-tab + .sign-tab { border-left: 1px solid var(--g-border); }
+.sign-tab.active {
+  background: var(--g-blue);
+  color: #fff;
+}
+.sign-tab:not(.active):hover { background: var(--g-bg); }
+.sign-tab-panel { display: none; }
+.sign-tab-panel.active { display: block; }
+
+/* ===== TYPE NAME PANEL ===== */
+.sign-name-field { margin-bottom: 16px; }
+.sign-name-field label {
+  display: block;
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--g-text);
+  margin-bottom: 6px;
+}
+.sign-name-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--g-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--g-text);
+  background: var(--g-surface);
+  transition: var(--g-trans);
+}
+.sign-name-input:focus {
+  outline: none;
+  border-color: var(--g-blue);
+  box-shadow: inset 0 0 0 1px var(--g-blue);
+}
+.sign-name-input.error { border-color: var(--g-error); box-shadow: inset 0 0 0 1px var(--g-error); }
+.sign-name-input::placeholder { color: #9AA0A6; }
+
+.sign-preview-box {
+  background: #FAFBFF;
+  border: 1px solid var(--g-border);
+  border-radius: 6px;
+  padding: 16px 20px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.sign-preview-label {
+  font-size: .72rem;
+  color: var(--g-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 8px;
+}
+.sign-preview-cursive {
+  font-family: 'Great Vibes', cursive;
+  font-size: 36pt;
+  color: #0F2561;
+  line-height: 1.2;
+  transform: rotate(-2deg);
+  min-height: 44px;
+  transition: opacity .2s ease;
+}
+.sign-preview-placeholder {
+  font-size: .85rem;
+  color: #9AA0A6;
+  font-style: italic;
+}
+.sign-date-display {
+  font-size: .82rem;
+  color: var(--g-text-secondary);
+  text-align: center;
+}
+
+/* ===== DRAW PANEL ===== */
+.sign-canvas-wrap {
+  margin-bottom: 16px;
+}
+.sign-canvas-label {
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--g-text);
+  margin-bottom: 6px;
+}
+#signatureCanvas {
+  width: 100%;
+  height: 150px;
+  border: 1.5px solid var(--g-border);
+  border-radius: 6px;
+  background: #FAFBFF;
+  cursor: crosshair;
+  touch-action: none;
+}
+#signatureCanvas.has-sig {
+  border-color: var(--g-blue);
+}
+.sign-canvas-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.sign-canvas-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--g-border);
+  border-radius: 4px;
+  background: var(--g-surface);
+  color: var(--g-text-secondary);
+  font-size: .78rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--g-trans);
+}
+.sign-canvas-btn:hover { background: var(--g-bg); border-color: #bbb; }
+.sign-canvas-btn.undo-btn:hover { color: var(--g-error); border-color: #F6CECB; }
+
+/* ===== ERROR ===== */
+.sign-error {
+  color: var(--g-error);
+  font-size: .8rem;
+  margin-bottom: 12px;
+  display: none;
+  background: #FCE8E6;
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.sign-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--g-blue);
+  color: #fff;
+  border: none;
+  padding: 13px 24px;
+  font-size: .95rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--g-trans);
+  margin-top: 20px;
+}
+.sign-download-btn:hover { background: var(--g-blue-hover); box-shadow: 0 2px 6px rgba(26,115,232,.3); }
+.sign-download-btn:active { background: var(--g-blue-dark); }
+.sign-download-btn:disabled { opacity: .6; cursor: not-allowed; }
+.sign-download-btn.loading { opacity: .7; pointer-events: none; }
+
+/* ===== FOOTER ===== */
+.sign-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: .75rem;
+  color: var(--g-text-secondary);
+}
+.sign-footer a { color: var(--g-blue); text-decoration: none; }
+
+/* ===== ERROR PAGE ===== */
+.sign-error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 40px;
+}
+.sign-error-page h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+.sign-error-page p { color: var(--g-text-secondary); font-size: .9rem; line-height: 1.5; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .sign-main { padding: 16px; }
+  .sign-cta { padding: 20px; }
+  .sign-document-inner { padding: 8px; }
+  .sign-header { padding: 10px 16px; }
+  .sign-header-brand { font-size: 1.1rem; }
+}
+@media (max-width: 640px) {
+  #sign-contract { min-width: 600px; font-size: 8pt; padding: 0 20px 16px; }
+  .sign-document { overflow-x: auto; }
+  .sign-canvas-wrap { overflow-x: auto; }
+  .sign-tabs { flex-direction: column; }
+  .sign-tab + .sign-tab { border-left: none; border-top: 1px solid var(--g-border); }
+  .sign-preview-cursive { font-size: 28pt; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="sign-header">
+  <img src="logo.png" alt="PureMD Logo">
+  <span class="sign-header-brand">Pure<span>DOCS</span></span>
+  <span class="sign-header-sep"></span>
+  <span class="sign-doc-type" id="docTypeLabel">Agreement</span>
+</header>
+
+<!-- MAIN -->
+<main class="sign-main" id="signMain">
+
+  <!-- INSTRUCTIONS -->
+  <div class="sign-instructions">
+    <span class="sign-instructions-icon">📄</span>
+    <div>
+      <strong>Please review this agreement carefully.</strong><br>
+      When ready, enter your full legal name in the signature field below to electronically sign this document. You can then download the signed copy as a PDF.
+    </div>
+  </div>
+
+  <!-- DOCUMENT PREVIEW -->
+  <div class="sign-document">
+    <div class="sign-document-inner">
+      <div class="sign-document-paper">
+        <div id="agreementMount"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNING CTA -->
+  <div class="sign-cta">
+    <h3>✍️ Electronic Signature</h3>
+    <p>Type your full legal name below to sign this document, or draw your signature using your mouse or finger.</p>
+
+    <!-- TABS -->
+    <div class="sign-tabs">
+      <button class="sign-tab active" onclick="switchSignTab('type')" id="tabType">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        Type Name
+      </button>
+      <button class="sign-tab" onclick="switchSignTab('draw')" id="tabDraw">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        Draw Signature
+      </button>
+    </div>
+
+    <!-- TYPE NAME PANEL -->
+    <div class="sign-tab-panel active" id="panelType">
+      <div class="sign-name-field">
+        <label for="clientNameInput">Your Full Legal Name</label>
+        <input type="text" id="clientNameInput" class="sign-name-input" placeholder="e.g. Jane Doe" autocomplete="off">
+      </div>
+      <div class="sign-preview-box">
+        <div class="sign-preview-label">Signature Preview</div>
+        <div id="sigPreviewCursive" class="sign-preview-cursive sign-preview-placeholder">Your signature will appear here</div>
+      </div>
+      <div class="sign-date-display" id="typeDateDisplay">Date: —</div>
+    </div>
+
+    <!-- DRAW SIGNATURE PANEL -->
+    <div class="sign-tab-panel" id="panelDraw">
+      <div class="sign-canvas-wrap">
+        <div class="sign-canvas-label">Draw your signature below</div>
+        <canvas id="signatureCanvas" width="600" height="150"></canvas>
+        <div class="sign-canvas-actions">
+          <button class="sign-canvas-btn undo-btn" onclick="undoDraw()">↩ Undo</button>
+          <button class="sign-canvas-btn" onclick="clearDraw()">✕ Clear</button>
+        </div>
+      </div>
+      <div class="sign-date-display" id="drawDateDisplay">Date: —</div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="sign-error" id="signError">Please enter your name or draw your signature to sign.</div>
+
+    <!-- DOWNLOAD -->
+    <button class="sign-download-btn" id="downloadSignedBtn" onclick="downloadSignedPDF()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Signed PDF
+    </button>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="sign-footer">
+  Powered by <a href="#">PureDOCS</a> &mdash; Agreement Generator Portal
+</footer>
+
+<script>
+// ===== GLOBALS =====
+var signData = null;
+var activeSignTab = 'type';
+var drawStrokes = [];
+var currentStroke = [];
+var isDrawing = false;
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function () {
+  var hash = window.location.hash.substring(1);
+  if (!hash) {
+    showErrorPage('No signing data found', 'This link does not contain any agreement data. Please request a new signing link from the document creator.');
+    return;
+  }
+
+  signData = decompressData(hash);
+  if (!signData || !signData.t) {
+    showErrorPage('Invalid or expired link', 'The signing link could not be read. It may have been corrupted or expired. Please request a new link from the document creator.');
+    return;
+  }
+
+  renderDocument(signData);
+  setupTypeInput();
+  setupDrawCanvas();
+  setTodayDates();
+});
+
+// ===== ERROR PAGE =====
+function showErrorPage(title, msg) {
+  document.getElementById('signMain').innerHTML =
+    '<div class="sign-error-page">' +
+      '<div style="font-size:3rem;margin-bottom:16px;">⚠️</div>' +
+      '<h2>' + title + '</h2>' +
+      '<p>' + msg + '</p>' +
+    '</div>';
+}
+
+// ===== RENDER DOCUMENT =====
+function renderDocument(d) {
+  var mount = document.getElementById('agreementMount');
+  var templates = {
+    business: typeof AGREEMENT_TEMPLATE !== 'undefined' ? AGREEMENT_TEMPLATE : null,
+    hipaa: typeof HIPAA_TEMPLATE !== 'undefined' ? HIPAA_TEMPLATE : null,
+    vob: typeof VOB_TEMPLATE !== 'undefined' ? VOB_TEMPLATE : null,
+    settlement: typeof SETTLEMENT_TEMPLATE !== 'undefined' ? SETTLEMENT_TEMPLATE : null
+  };
+
+  var html = templates[d.t];
+  if (!html) {
+    showErrorPage('Unknown agreement type', 'This link references an unrecognized document type.');
+    return;
+  }
+
+  // Use a unique root ID to avoid conflicts with any existing DOM
+  html = html.replace('id="contract-pdf"', 'id="sign-contract"');
+  mount.innerHTML = html;
+
+  // Apply template-specific class
+  var root = document.getElementById('sign-contract');
+  if (root) {
+    if (d.t === 'settlement') root.classList.add('doc-settlement');
+    if (d.t === 'vob') root.classList.add('doc-vob');
+  }
+
+  // Update doc type label
+  var labels = {
+    business: 'Business Agreement',
+    hipaa: 'HIPAA Agreement',
+    vob: 'VOB Agreement',
+    settlement: 'Settlement Agreement'
+  };
+  document.getElementById('docTypeLabel').textContent = labels[d.t] || 'Agreement';
+
+  syncAgreement(d);
+}
+
+// ===== SYNC FIELDS =====
+function syncAgreement(d) {
+  var set = function (id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+
+  if (d.t !== 'settlement') {
+    set('vDate', d.d || '____________');
+    set('vDateSig', d.d || '____________');
+    set('vPractice', d.p || '____________');
+    set('vPracticeSig', d.p || '____________');
+    set('vAddr', d.a || '____________');
+    set('vDoctor', d.doc || '____________');
+    set('vSigName', d.doc || '____________');
+    set('vSigPractice', d.p || '____________');
+    set('vSigAddr', d.a || '____________');
+    set('vProviderName', d.pn || '____________');
+    set('vProviderTitle', d.pt || '____________');
+    set('vProviderSig', d.pn || '____________');
+
+    // Fee table (business)
+    if (d.t === 'business' && d.svc) renderFeeTable(d.svc);
+  }
+
+  // VOB pricing
+  if (d.t === 'vob') {
+    var rate = d.vm === 'flat' ? (d.vf || '0.00') : (d.vp || '0.00');
+    var model = d.vm === 'flat' ? 'a Flat Monthly Fee' : 'a Per VOB Charge';
+    var detail = d.vm === 'flat'
+      ? 'for verification of benefits services rendered each month.'
+      : 'per individual Verification of Benefits processed.' + (d.vv ? ' (Est. volume: ' + d.vv + ')' : '');
+    set('vPricingModel', model);
+    set('vPricingRate', rate);
+    set('vPricingDetail', detail);
+  }
+
+  // Settlement
+  if (d.t === 'settlement') {
+    var sDate = fmtDate(d.d2);
+    set('vDate', sDate);
+    set('vDateAdjuster', sDate);
+    set('vDrName', d.sdr || '____________');
+    set('vDcLicense', d.lic || '');
+    var licBlock = document.getElementById('vLicenseBlock');
+    if (licBlock) licBlock.style.display = d.lic ? '' : 'none';
+    set('vTaxId', d.tid || '');
+    set('vDrAddr', d.sdA || '');
+    set('vDrPhone', d.sdP || '');
+    set('vDrFax', d.sdF || '');
+    set('vProviderSig2', d.sdr || '____________');
+    set('vPatientName', d.spN || '____________');
+    set('vInsurance', d.spI || '____________');
+    set('vClaimNumber', d.spC || '____________');
+    set('vAmount', d.spA || '0.00');
+    set('vAdjusterName', d.sAN || '___________');
+    set('vAdjusterSig', d.sAN || '___________');
+    set('vPayeeName', d.sPN || '____________');
+    set('vPayeeAddr', d.sPA || '____________');
+    set('vAcceptedByName', d.sAB || '____________');
+
+    // Date range text
+    var dateText = 'for all dates of service';
+    if (d.dro === 'specific') {
+      var dd = fmtDate(d.spD);
+      if (dd && dd !== '__/__/____') dateText = 'for the date of service: ' + dd;
+    } else if (d.dro === 'range') {
+      var from = fmtDate(d.sDF);
+      var to = fmtDate(d.sDT);
+      if (from !== '__/__/____' && to !== '__/__/____') dateText = 'for dates of service: ' + from + ' to ' + to;
+    }
+    set('vDateRangeText', dateText);
+  }
+}
+
+// ===== FEE TABLE RENDERER =====
+function renderFeeTable(svcArr) {
+  var tbody = document.getElementById('feeTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (!svcArr || svcArr.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;font-style:italic;padding:12px;">No services configured.</td></tr>';
+    return;
+  }
+  svcArr.forEach(function (svc) {
+    var tr = document.createElement('tr');
+    var fee = (svc.fee || '0').trim();
+    if (/^\d+(\.\d+)?$/.test(fee)) fee += '%';
+    tr.innerHTML = '<td class="svc-name">' + escapeHtml(svc.name || '—') + '</td><td>' + escapeHtml(svc.desc || '—') + '</td><td class="rate">' + escapeHtml(fee) + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ===== TYPE NAME INPUT =====
+function setupTypeInput() {
+  var input = document.getElementById('clientNameInput');
+  var preview = document.getElementById('sigPreviewCursive');
+
+  input.addEventListener('input', function () {
+    var name = this.value.trim();
+    var errorEl = document.getElementById('signError');
+    errorEl.style.display = 'none';
+    this.classList.remove('error');
+
+    if (name) {
+      preview.textContent = name;
+      preview.classList.remove('sign-preview-placeholder');
+      // Also update the in-document signature block
+      updateDocSignature(name);
+    } else {
+      preview.textContent = 'Your signature will appear here';
+      preview.classList.add('sign-preview-placeholder');
+      clearDocSignature();
+    }
+  });
+}
+
+// ===== DRAW SIGNATURE CANVAS =====
+function setupDrawCanvas() {
+  var canvas = document.getElementById('signatureCanvas');
+  var ctx = canvas.getContext('2d');
+
+  // Set actual canvas size (handle DPR)
+  var rect = canvas.getBoundingClientRect();
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+
+  // Drawing styles
+  ctx.strokeStyle = '#0F2561';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  function getPos(e) {
+    var r = canvas.getBoundingClientRect();
+    var clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    return { x: clientX - r.left, y: clientY - r.top };
+  }
+
+  function startDraw(e) {
+    e.preventDefault();
+    isDrawing = true;
+    currentStroke = [];
+    var pos = getPos(e);
+    currentStroke.push(pos);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    var pos = getPos(e);
+    currentStroke.push(pos);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  }
+
+  function endDraw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    isDrawing = false;
+    if (currentStroke.length > 0) {
+      drawStrokes.push(currentStroke.slice());
+      currentStroke = [];
+    }
+    canvas.classList.add('has-sig');
+    updateDocSignature(null, canvas.toDataURL());
+    // Clear error
+    document.getElementById('signError').style.display = 'none';
+    document.getElementById('clientNameInput').classList.remove('error');
+  }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  canvas.addEventListener('touchend', endDraw, { passive: false });
+}
+
+function undoDraw() {
+  if (drawStrokes.length === 0) return;
+  drawStrokes.pop();
+  redrawCanvas();
+}
+
+function clearDraw() {
+  drawStrokes = [];
+  currentStroke = [];
+  redrawCanvas();
+  var canvas = document.getElementById('signatureCanvas');
+  canvas.classList.remove('has-sig');
+  clearDocSignature();
+}
+
+function redrawCanvas() {
+  var canvas = document.getElementById('signatureCanvas');
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var w = canvas.width / dpr;
+  var h = canvas.height / dpr;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = '#0F2561';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  drawStrokes.forEach(function (stroke) {
+    if (stroke.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(stroke[0].x, stroke[0].y);
+    for (var i = 1; i < stroke.length; i++) {
+      ctx.lineTo(stroke[i].x, stroke[i].y);
+    }
+    ctx.stroke();
+  });
+
+  if (drawStrokes.length > 0) {
+    canvas.classList.add('has-sig');
+    updateDocSignature(null, canvas.toDataURL());
+  } else {
+    canvas.classList.remove('has-sig');
+    clearDocSignature();
+  }
+}
+
+// ===== IN-DOCUMENT SIGNATURE UPDATE =====
+function updateDocSignature(name, imageData) {
+  // Find all .sig-canvas elements in the document (client side)
+  // For business/hipaa/vob: the FIRST sig-canvas is the client's
+  // For settlement: the SECOND sig-canvas is the client's ("Accepted by")
+  var canvases = document.querySelectorAll('#sign-contract .sig-canvas');
+  var targetIndex = (signData && signData.t === 'settlement') ? 1 : 0;
+  var target = canvases[targetIndex];
+  if (!target) return;
+
+  target.classList.add('client-active');
+  target.innerHTML = '';
+
+  if (imageData) {
+    // Draw signature image
+    var img = document.createElement('img');
+    img.src = imageData;
+    img.style.maxHeight = '46px';
+    img.style.maxWidth = '100%';
+    target.appendChild(img);
+  } else if (name) {
+    // Cursive text signature
+    var span = document.createElement('span');
+    span.className = 'client-cursive-sig';
+    span.textContent = name;
+    target.appendChild(span);
+  }
+}
+
+function clearDocSignature() {
+  var canvases = document.querySelectorAll('#sign-contract .sig-canvas');
+  var targetIndex = (signData && signData.t === 'settlement') ? 1 : 0;
+  var target = canvases[targetIndex];
+  if (target) {
+    target.classList.remove('client-active');
+    target.innerHTML = '';
+  }
+}
+
+// ===== TAB SWITCHING =====
+function switchSignTab(tab) {
+  activeSignTab = tab;
+  document.getElementById('tabType').classList.toggle('active', tab === 'type');
+  document.getElementById('tabDraw').classList.toggle('active', tab === 'draw');
+  document.getElementById('panelType').classList.toggle('active', tab === 'type');
+  document.getElementById('panelDraw').classList.toggle('active', tab === 'draw');
+
+  // Sync signatures between tabs
+  if (tab === 'draw') {
+    // If user typed a name, we keep the cursive in the document
+    // If user draws, the canvas draws will take over
+  }
+}
+
+// ===== TODAY'S DATE =====
+function setTodayDates() {
+  var today = new Date();
+  var dateStr = fmtDate(today.getFullYear() + '-' +
+    String(today.getMonth() + 1).padStart(2, '0') + '-' +
+    String(today.getDate()).padStart(2, '0'));
+  document.getElementById('typeDateDisplay').textContent = 'Date: ' + dateStr;
+  document.getElementById('drawDateDisplay').textContent = 'Date: ' + dateStr;
+  // Set the client date in the document
+  var el = document.getElementById('vDateClient');
+  if (el) el.textContent = dateStr;
+}
+
+// ===== DOWNLOAD PDF =====
+function downloadSignedPDF() {
+  var nameInput = document.getElementById('clientNameInput');
+  var name = nameInput.value.trim();
+  var canvas = document.getElementById('signatureCanvas');
+  var hasDrawing = drawStrokes.length > 0;
+  var errorEl = document.getElementById('signError');
+
+  if (!name && !hasDrawing) {
+    errorEl.style.display = 'block';
+    nameInput.classList.add('error');
+    nameInput.focus();
+    return;
+  }
+
+  errorEl.style.display = 'none';
+  nameInput.classList.remove('error');
+
+  // If user typed a name but is on draw tab with no drawing, use typed name
+  // If user drew but has no name, that's fine for the PDF
+  if (!name && hasDrawing) {
+    // Use a generic name or empty for drawn-only
+    // The signature image is already in the document
+  }
+
+  // Set the client name in the document fields if typed
+  if (name) {
+    // Update client-specific name fields (NOT vSigName — it's shared with provider block)
+    if (signData.t === 'settlement') {
+      var el = document.getElementById('vAcceptedByName');
+      if (el && (el.textContent === '____________' || el.textContent === '___________')) el.textContent = name;
+    } else {
+      var el2 = document.getElementById('vDoctor');
+      if (el2 && (el2.textContent === '____________' || el2.textContent === '___________')) el2.textContent = name;
+    }
+    // Update client sig-blk-sub spans (vPracticeSig in client block only)
+    var allSubs = document.querySelectorAll('#sign-contract .sig-blk-sub');
+    allSubs.forEach(function (sub) {
+      // Only update spans in client blocks (first sig-blk for business/hipaa/vob, second for settlement)
+      var isClientBlock = (signData.t === 'settlement')
+        ? (sub.closest('.sig-blk') === document.querySelectorAll('#sign-contract .sig-blk')[1])
+        : (sub.closest('.sig-blk') === document.querySelectorAll('#sign-contract .sig-blk')[0]);
+      if (isClientBlock) {
+        sub.querySelectorAll('span').forEach(function (span) {
+          if (span.textContent === '____________' || span.textContent === '___________') {
+            span.textContent = name;
+          }
+        });
+      }
+    });
+  }
+
+  var btn = document.getElementById('downloadSignedBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '⏳ Generating PDF…';
+
+  var el = document.getElementById('sign-contract');
+  var filename = getSignedFilename();
+
+  var opts = {
+    margin: [0.42, 0.48, 0.42, 0.48],
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: false, allowTaint: true, scrollY: 0, scrollX: 0 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] }
+  };
+
+  html2pdf().set(opts).from(el).save().then(function () {
+    btn.classList.remove('loading');
+    btn.innerHTML =
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Downloaded! Click to download again';
+  }).catch(function (err) {
+    console.error(err);
+    btn.classList.remove('loading');
+    btn.innerHTML = '⚠ Error generating PDF. Click to retry.';
+  });
+}
+
+function getSignedFilename() {
+  if (!signData) return 'Signed_Agreement.pdf';
+  if (signData.t === 'settlement') {
+    return 'Settlement_Agreement_' + (signData.spN || 'Patient') + '_SIGNED.pdf';
+  }
+  var practice = signData.p || 'Agreement';
+  return 'PureMD_' + signData.t.toUpperCase() + '_Agreement_' + practice + '_SIGNED.pdf';
+}
+
+// ===== HELPERS =====
+function fmtDate(s) {
+  if (!s) return '__/__/____';
+  var p = s.split('-');
+  return p.length === 3 ? p[1] + '/' + p[2] + '/' + p[0] : s;
+}
+</script>
+</body>
+</html>

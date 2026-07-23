@@ -260,6 +260,20 @@ body {
 .btn-primary:hover { background: var(--g-blue-hover); box-shadow: 0 1px 2px 0 rgba(26,115,232,.3); }
 .btn-primary:active { background: var(--g-blue-dark); }
 .btn-primary.loading { opacity: .7; pointer-events: none; }
+/* REQUEST SIGNATURE */
+.btn-secondary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; background: var(--g-surface);
+  color: var(--g-blue); border: 1.5px solid var(--g-blue);
+  padding: 11px 24px; font-size: .88rem; font-weight: 500;
+  font-family: inherit; border-radius: 4px;
+  cursor: pointer; letter-spacing: .2px;
+  transition: var(--g-trans);
+  margin-top: 10px;
+}
+.btn-secondary:hover { background: var(--g-blue-light); }
+.btn-secondary:active { background: #D2E3FC; }
+.btn-secondary.loading { opacity: .7; pointer-events: none; }
 /* PREVIEW PANEL */
 .g-preview-card { position: relative; }
 .g-preview-card .g-card-head {
@@ -445,6 +459,25 @@ body {
   </div>
 </div>
 
+<!-- SIGNING LINK MODAL -->
+<div id="linkModal" style="display:none; position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,.45); align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,.2); width:100%; max-width:520px; padding:32px; border:1px solid var(--g-border); margin:16px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="font-size:1.5rem;">🔗</span>
+      <h3 style="font-size:1.1rem; font-weight:700; color:var(--g-text); margin:0;">Signing Link Generated</h3>
+    </div>
+    <p style="font-size:.82rem; color:var(--g-text-secondary); margin-bottom:16px; line-height:1.5;">
+      Share this link with your client. They can review the agreement, type their name or draw their signature, and download the signed PDF.
+    </p>
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <input id="linkModalInput" type="text" readonly style="flex:1; padding:10px 12px; border:1px solid var(--g-border); border-radius:4px; font-size:.78rem; font-family:monospace; color:var(--g-text); background:#f8f9fa; min-width:0;">
+      <button onclick="copyLinkModal()" id="copyLinkBtn" style="padding:10px 16px; background:var(--g-blue); color:#fff; border:none; border-radius:4px; font-size:.82rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:var(--g-trans);">Copy Link</button>
+    </div>
+    <div id="linkModalCopyMsg" style="font-size:.78rem; color:var(--g-green); display:none; margin-bottom:12px;">✓ Copied to clipboard!</div>
+    <button onclick="closeLinkModal()" style="width:100%; padding:10px; background:none; border:1px solid var(--g-border); border-radius:4px; font-size:.82rem; font-weight:500; cursor:pointer; color:var(--g-text-secondary); transition:var(--g-trans);">Close</button>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="appContent" class="app-content">
   <header class="g-topbar">
@@ -604,6 +637,10 @@ body {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download PDF
         </button>
+        <button class="btn-secondary" id="requestSigBtn" onclick="requestSignature()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+          Request Signature
+        </button>
       </div>
     </div>
 
@@ -628,6 +665,7 @@ body {
 <script src="Hagreement.js"></script>
 <script src="Sagreement.js"></script>
 <script src="Vagreement.js"></script>
+<script src="compress.js"></script>
 <script>
 // ===== AUTH =====
 function checkLogin() {
@@ -1203,6 +1241,123 @@ function genPDF() {
     html2pdf().set(opts).from(el).save().then(resetBtn);
   }
 }
+
+// ===== REQUEST SIGNATURE =====
+function collectSignatureData() {
+  var base = {
+    t: currentActiveTemplate,
+    d: fmtDate(document.getElementById('pDate').value),
+    p: document.getElementById('pPractice').value,
+    a: document.getElementById('pAddr').value,
+    doc: document.getElementById('pDoctor').value,
+    pn: document.getElementById('pProviderName').value,
+    pt: document.getElementById('pProviderTitle').value
+  };
+
+  if (currentActiveTemplate === 'business' || currentActiveTemplate === 'hipaa') {
+    base.svc = JSON.parse(JSON.stringify(servicesData));
+  }
+
+  if (currentActiveTemplate === 'vob') {
+    base.vm = (document.querySelector('input[name="vobPricingModel"]:checked') || {}).value || 'flat';
+    base.vf = document.getElementById('vobMonthlyFee').value;
+    base.vp = document.getElementById('vobPerVobFee').value;
+    base.vv = document.getElementById('vobVolume').value;
+  }
+
+  if (currentActiveTemplate === 'settlement') {
+    base.d2 = document.getElementById('pDate2').value;
+    base.sdr = document.getElementById('sDrName').value;
+    base.lic = document.getElementById('sDrLicense').value;
+    base.tid = document.getElementById('sTaxId').value;
+    base.sdA = document.getElementById('sDrAddr').value;
+    base.sdP = document.getElementById('sDrPhone').value;
+    base.sdF = document.getElementById('sDrFax').value;
+    base.spN = document.getElementById('sPatientName').value;
+    base.spI = document.getElementById('sInsurance').value;
+    base.spC = document.getElementById('sClaimNumber').value;
+    base.spA = document.getElementById('sAmount').value;
+    base.sAN = document.getElementById('sAdjusterName').value;
+    base.sAB = document.getElementById('sAcceptedByName').value;
+    base.dro = (document.querySelector('input[name="dateRangeOption"]:checked') || {}).value || 'all';
+    base.spD = document.getElementById('sSpecificDate').value;
+    base.sDF = document.getElementById('sDateFrom').value;
+    base.sDT = document.getElementById('sDateTo').value;
+    base.sPN = document.getElementById('sPayeeName').value;
+    base.sPA = document.getElementById('sPayeeAddr').value;
+  }
+
+  return base;
+}
+
+function requestSignature() {
+  // Collect all form data
+  var data = collectSignatureData();
+
+  // Compress the data
+  var compressed = compressData(data);
+  if (!compressed) {
+    alert('Failed to generate signing link. Please check your form data and try again.');
+    return;
+  }
+
+  // Warn if URL is too long (browsers typically support ~8000 chars)
+  if (compressed.length > 4000) {
+    alert('Agreement data is too large for a shareable link (' + compressed.length + ' chars).\n\nTip: Shorten service descriptions, reduce the number of service rows, or simplify the agreement text, then try again.');
+    return;
+  }
+
+  // Build the signing URL — works both locally (file://) and on GitHub Pages (https://)
+  var path = window.location.pathname;
+  var dir = path.substring(0, path.lastIndexOf('/') + 1);
+  var link = window.location.origin + dir + 'sign.html#' + compressed;
+
+  // Try to copy to clipboard, then show modal
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(function () {
+      showLinkModal(link, true);
+    }).catch(function () {
+      showLinkModal(link, false);
+    });
+  } else {
+    showLinkModal(link, false);
+  }
+}
+
+function showLinkModal(link, copied) {
+  document.getElementById('linkModalInput').value = link;
+  document.getElementById('linkModal').style.display = 'flex';
+  var msg = document.getElementById('linkModalCopyMsg');
+  msg.style.display = copied ? 'block' : 'none';
+}
+
+function closeLinkModal() {
+  document.getElementById('linkModal').style.display = 'none';
+}
+
+function copyLinkModal() {
+  var input = document.getElementById('linkModalInput');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(input.value).then(function () {
+      document.getElementById('linkModalCopyMsg').style.display = 'block';
+      document.getElementById('copyLinkBtn').textContent = 'Copied!';
+      setTimeout(function () {
+        document.getElementById('copyLinkBtn').textContent = 'Copy Link';
+      }, 2000);
+    });
+  } else {
+    document.execCommand('copy');
+    document.getElementById('linkModalCopyMsg').style.display = 'block';
+  }
+}
+
+// Close modal on backdrop click
+document.addEventListener('click', function (e) {
+  var modal = document.getElementById('linkModal');
+  if (e.target === modal) closeLinkModal();
+});
 </script>
 </body>
 </html>
